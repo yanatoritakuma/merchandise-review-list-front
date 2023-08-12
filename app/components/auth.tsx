@@ -5,9 +5,9 @@ import { createHeaders } from "@/utils/getCsrf";
 
 export default function Auth() {
   const [authState, setAuthState] = useState({
-    mail: "nextjs13@gmail.com",
-    password: "master0512",
-    name: "AAAAAAA",
+    mail: "",
+    password: "",
+    name: "",
   });
   const [isLogin, setIsLogin] = useState(true);
 

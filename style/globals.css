@@ -32,10 +32,11 @@ body {
    */
 
 main {
-  margin: 0 auto;
-  margin-top: 80px;
-  max-width: 1440px;
+  margin-top: 60px;
   display: block;
+  overflow: hidden;
+  white-space: normal;
+  word-wrap: break-word;
 }
 
 /**

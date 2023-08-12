@@ -1,9 +1,27 @@
-.page {
-  h1 {
-    color: red;
-  }
+.topPage {
+  width: 100%;
+  background-color: #ffd900;
+}
 
-  p {
-    background-color: skyblue;
+.topPage__box {
+  margin: 0 auto;
+  max-width: 1440px;
+}
+
+.topPage__titleBox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h1 {
+    padding: 0 24px 0 64px;
+    color: #333;
+    font-size: 60px;
+  }
+  img {
+    width: 74%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 0 0 0 30px;
   }
 }
