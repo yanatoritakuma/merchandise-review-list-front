@@ -1,6 +1,10 @@
 import Header from "@/app/components/layout/header";
+import { BackdropProvider } from "@/provider/BackdropProvider";
 import "@/style/globals.css";
 import { headers } from "next/headers";
+import { SnackbarBox } from "@/app/components/elements/SnackbarBox";
+import { MessageProvider } from "@/provider/MessageProvider";
+import { BackdropBox } from "@/app/components/elements/BackdropBox";
 
 export const metadata = {
   title: "merchandise-review-list",
@@ -45,7 +49,13 @@ export default async function RootLayout({
     <html lang="ja">
       <body>
         <Header loginUser={loginUser} />
-        {children}
+        <MessageProvider>
+          <BackdropProvider>
+            <SnackbarBox />
+            <BackdropBox />
+            {children}
+          </BackdropProvider>
+        </MessageProvider>
       </body>
     </html>
   );

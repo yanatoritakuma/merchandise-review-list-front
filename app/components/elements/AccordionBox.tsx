@@ -1,11 +1,11 @@
-import { css } from '@emotion/react';
-import { memo } from 'react';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Link from 'next/link';
+import { memo } from "react";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Typography from "@mui/material/Typography";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Link from "next/link";
+import "@/style/elements/accordion.scss";
 
 type TLinks = {
   name: string;
@@ -28,7 +28,7 @@ export const AccordionBox = memo((props: Props) => {
         </AccordionSummary>
         <AccordionDetails>
           <p>{text}</p>
-          <div css={linkBox}>
+          <div className="accordionBox">
             {links?.map((link, index) => (
               <Link key={index} href={link.url}>
                 {link.name}
@@ -41,14 +41,4 @@ export const AccordionBox = memo((props: Props) => {
   );
 });
 
-AccordionBox.displayName = 'AccordionBox';
-
-const linkBox = css`
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-
-  a {
-    margin: 10px;
-  }
-`;
+AccordionBox.displayName = "AccordionBox";
