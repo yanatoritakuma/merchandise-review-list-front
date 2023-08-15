@@ -2,7 +2,7 @@
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { memo, useContext } from "react";
-import { BackdropContext } from "@/provider/BackdropProvider";
+import { BackdropContext } from "@/app/provider/backdropProvider";
 
 export const BackdropBox = memo(() => {
   const { backdropFlag } = useContext(BackdropContext);

@@ -11,7 +11,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import Drawer from "@mui/material/Drawer";
 import { TLoginUser } from "@/app/api/loginUser";
-import { MessageContext } from "@/provider/MessageProvider";
+import { MessageContext } from "@/app/provider/messageProvider";
 
 type Props = {
   loginUser: TLoginUser;

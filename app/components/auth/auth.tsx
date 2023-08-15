@@ -6,7 +6,7 @@ import { createHeaders } from "@/utils/getCsrf";
 import { TextBox } from "@/app/components/elements/textBox";
 import { ButtonBox } from "@/app/components/elements/buttonBox";
 import { useRouter } from "next/navigation";
-import { MessageContext } from "@/provider/MessageProvider";
+import { MessageContext } from "@/app/provider/messageProvider";
 
 export default function Auth() {
   const router = useRouter();
