@@ -72,7 +72,7 @@ export default function Auth() {
           });
 
           if (res.ok) {
-            router.push("/");
+            router.push("/auth/profile-img-setting");
             router.refresh();
             setMessage({
               ...message,

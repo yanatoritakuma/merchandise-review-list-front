@@ -10,7 +10,7 @@ import LogoIcon from "@/images/logo.png";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import Drawer from "@mui/material/Drawer";
-import { TLoginUser } from "@/app/layout";
+import { TLoginUser } from "@/app/api/loginUser";
 import { MessageContext } from "@/provider/MessageProvider";
 
 type Props = {
@@ -97,16 +97,26 @@ export default function Header({ loginUser }: Props) {
               >
                 <div className="header__humMenuBox">
                   <CloseIcon onClick={() => setMenuFlag(false)} />
-                  <Link href="/">ホーム</Link>
-                  <Link href="/">検索</Link>
+                  <Link href="/" onClick={() => setMenuFlag(false)}>
+                    ホーム
+                  </Link>
+                  <Link href="/" onClick={() => setMenuFlag(false)}>
+                    検索
+                  </Link>
                   {loginUser.id !== undefined && (
-                    <Link href="/">マイページ</Link>
+                    <Link href="/" onClick={() => setMenuFlag(false)}>
+                      マイページ
+                    </Link>
                   )}
                   {loginUser.id !== undefined && (
-                    <Link href="/">レビュー投稿</Link>
+                    <Link href="/" onClick={() => setMenuFlag(false)}>
+                      レビュー投稿
+                    </Link>
                   )}
                   {loginUser.id !== undefined && (
-                    <Link href="/">タイムライン</Link>
+                    <Link href="/" onClick={() => setMenuFlag(false)}>
+                      タイムライン
+                    </Link>
                   )}
                   {loginUser.id !== undefined ? (
                     <>
@@ -114,7 +124,9 @@ export default function Header({ loginUser }: Props) {
                     </>
                   ) : (
                     <>
-                      <Link href="/auth">ログイン</Link>
+                      <Link href="/auth" onClick={() => setMenuFlag(false)}>
+                        ログイン
+                      </Link>
                     </>
                   )}
                 </div>

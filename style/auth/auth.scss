@@ -10,6 +10,19 @@
   max-width: 1440px;
 }
 
+.auth__loggedIn {
+  text-align: center;
+
+  h3 {
+    font-size: 40px;
+  }
+
+  a {
+    text-decoration: none;
+    color: #333;
+  }
+}
+
 // components/auth
 
 .authInputBox {
@@ -25,6 +38,11 @@
   background-color: #fffff9;
   border-radius: 10px;
   width: 60%;
+  min-width: 300px;
+
+  @media (max-width: 768px) {
+    padding: 18px;
+  }
 
   button {
     margin: 40px auto;
@@ -41,4 +59,6 @@
   margin: 20px 0;
   display: block;
   color: #aaa;
+  cursor: pointer;
+  width: fit-content;
 }
