@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { createHeaders } from "@/utils/getCsrf";
 import Image from "next/image";
 import "@/style/layout/header.scss";
@@ -11,6 +11,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import Drawer from "@mui/material/Drawer";
 import { TLoginUser } from "@/app/layout";
+import { MessageContext } from "@/provider/MessageProvider";
 
 type Props = {
   loginUser: TLoginUser;
@@ -18,6 +19,7 @@ type Props = {
 
 export default function Header({ loginUser }: Props) {
   console.log("loginUser", loginUser);
+  const { message, setMessage } = useContext(MessageContext);
   const router = useRouter();
 
   useEffect(() => {
@@ -41,6 +43,17 @@ export default function Header({ loginUser }: Props) {
       if (res.ok) {
         router.push("/");
         router.refresh();
+        setMessage({
+          ...message,
+          text: "ログアウトしました。",
+          type: "success",
+        });
+      } else {
+        setMessage({
+          ...message,
+          text: "ログアウトに失敗しました。",
+          type: "success",
+        });
       }
     } catch (err) {
       console.error(err);

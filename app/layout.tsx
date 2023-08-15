@@ -48,11 +48,11 @@ export default async function RootLayout({
   return (
     <html lang="ja">
       <body>
-        <Header loginUser={loginUser} />
         <MessageProvider>
           <BackdropProvider>
             <SnackbarBox />
             <BackdropBox />
+            <Header loginUser={loginUser} />
             {children}
           </BackdropProvider>
         </MessageProvider>

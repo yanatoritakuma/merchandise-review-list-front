@@ -1,14 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "@/style/auth/auth.scss";
 import { createHeaders } from "@/utils/getCsrf";
 import { TextBox } from "@/app/components/elements/TextBox";
 import { ButtonBox } from "../elements/ButtonBox";
 import { useRouter } from "next/navigation";
+import { MessageContext } from "@/provider/MessageProvider";
 
 export default function Auth() {
   const router = useRouter();
+  const { message, setMessage } = useContext(MessageContext);
   const [authState, setAuthState] = useState({
     mail: "",
     password: "",
@@ -35,6 +37,17 @@ export default function Auth() {
         if (res.ok) {
           router.push("/");
           router.refresh();
+          setMessage({
+            ...message,
+            text: "ログインしました。",
+            type: "success",
+          });
+        } else {
+          setMessage({
+            ...message,
+            text: "ログインに失敗しました。",
+            type: "error",
+          });
         }
       } catch (err) {
         console.error(err);
@@ -61,6 +74,17 @@ export default function Auth() {
           if (res.ok) {
             router.push("/");
             router.refresh();
+            setMessage({
+              ...message,
+              text: "アカウント作成しました。",
+              type: "success",
+            });
+          } else {
+            setMessage({
+              ...message,
+              text: "アカウント作成に失敗しました。",
+              type: "error",
+            });
           }
         }
       } catch (err) {
