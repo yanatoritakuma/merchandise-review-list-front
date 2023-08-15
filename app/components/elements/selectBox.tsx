@@ -1,9 +1,9 @@
-import { memo } from 'react';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { memo } from "react";
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 type Props = {
   label: string;
@@ -34,4 +34,4 @@ export const SelectBox = memo((props: Props) => {
   );
 });
 
-SelectBox.displayName = 'SelectBox';
+SelectBox.displayName = "SelectBox";

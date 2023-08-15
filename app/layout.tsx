@@ -1,9 +1,9 @@
 import Header from "@/app/components/layout/header";
-import { BackdropProvider } from "@/provider/BackdropProvider";
 import "@/style/globals.css";
-import { SnackbarBox } from "@/app/components/elements/SnackbarBox";
-import { MessageProvider } from "@/provider/MessageProvider";
-import { BackdropBox } from "@/app/components/elements/BackdropBox";
+import { BackdropProvider } from "@/app/provider/backdropProvider";
+import { MessageProvider } from "@/app/provider/messageProvider";
+import { SnackbarBox } from "@/app/components/elements/snackbarBox";
+import { BackdropBox } from "@/app/components/elements/backdropBox";
 import { fetchLoginUser } from "@/app/api/loginUser";
 
 export const metadata = {

@@ -1,5 +1,4 @@
-"use client";
-import { createContext, useState } from "react";
+import React, { createContext, useState } from "react";
 
 type TBackdrop = {
   backdropFlag: boolean;

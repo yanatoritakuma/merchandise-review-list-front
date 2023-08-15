@@ -3,8 +3,8 @@
 import { useContext, useState } from "react";
 import "@/style/auth/auth.scss";
 import { createHeaders } from "@/utils/getCsrf";
-import { TextBox } from "@/app/components/elements/TextBox";
-import { ButtonBox } from "../elements/ButtonBox";
+import { TextBox } from "@/app/components/elements/textBox";
+import { ButtonBox } from "@/app/components/elements/buttonBox";
 import { useRouter } from "next/navigation";
 import { MessageContext } from "@/provider/MessageProvider";
 
