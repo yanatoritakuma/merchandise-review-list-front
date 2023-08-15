@@ -1,5 +1,4 @@
-import Link from "next/link";
-import "@/style/home.scss";
+import "@/style/home/home.scss";
 import Image from "next/image";
 import TopIcon from "@/images/top2.avif";
 

@@ -51,12 +51,14 @@
     display: none;
   }
 
-  a {
+  a,
+  span {
     margin: 0 12px;
     display: block;
     color: #333;
     text-decoration: none;
     font-size: 14px;
+    cursor: pointer;
   }
 }
 
@@ -83,7 +85,8 @@
   top: 0;
   right: 0;
 
-  a {
+  a,
+  span {
     margin: 12px 0 0 auto;
     display: block;
     color: #333;

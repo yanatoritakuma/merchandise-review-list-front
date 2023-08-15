@@ -1,10 +1,12 @@
-import Auth from "@/app/components/auth";
+import Auth from "@/app/components/auth/auth";
+import "@/style/auth/auth.scss";
 
 export default function Page() {
   return (
-    <main>
-      <h2>ログイン</h2>
-      <Auth />
+    <main className="auth">
+      <div className="auth__box">
+        <Auth />
+      </div>
     </main>
   );
 }
