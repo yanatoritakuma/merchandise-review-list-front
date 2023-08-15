@@ -1,22 +1,23 @@
+import { use } from "react";
 import Header from "@/app/components/layout/header";
 import "@/style/globals.css";
 import { BackdropProvider } from "@/app/provider/backdropProvider";
 import { MessageProvider } from "@/app/provider/messageProvider";
 import { SnackbarBox } from "@/app/components/elements/snackbarBox";
 import { BackdropBox } from "@/app/components/elements/backdropBox";
-import { fetchLoginUser } from "@/app/api/loginUser";
+import { fetchLoginUser } from "@/app/api/fetchLoginUser";
 
 export const metadata = {
   title: "merchandise-review-list",
   description: "merchandise-review-list",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const loginUser = await fetchLoginUser();
+  const loginUser = use(fetchLoginUser());
 
   return (
     <html lang="ja">

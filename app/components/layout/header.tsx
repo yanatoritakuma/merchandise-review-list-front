@@ -10,7 +10,7 @@ import LogoIcon from "@/images/logo.png";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import Drawer from "@mui/material/Drawer";
-import { TLoginUser } from "@/app/api/loginUser";
+import { TLoginUser } from "@/app/api/fetchLoginUser";
 import { MessageContext } from "@/app/provider/messageProvider";
 
 type Props = {
@@ -18,7 +18,6 @@ type Props = {
 };
 
 export default function Header({ loginUser }: Props) {
-  console.log("loginUser", loginUser);
   const { message, setMessage } = useContext(MessageContext);
   const router = useRouter();
 

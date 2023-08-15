@@ -1,10 +1,11 @@
+import { use } from "react";
 import Auth from "@/app/components/auth/auth";
 import "@/style/auth/auth.scss";
-import { fetchLoginUser } from "@/app/api/loginUser";
+import { fetchLoginUser } from "@/app/api/fetchLoginUser";
 import Link from "next/link";
 
 export default async function Page() {
-  const loginUser = await fetchLoginUser();
+  const loginUser = use(fetchLoginUser());
   return (
     <main className="auth">
       <div className="auth__box">
