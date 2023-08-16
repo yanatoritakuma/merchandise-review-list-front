@@ -51,7 +51,7 @@ export default function Header({ loginUser }: Props) {
         setMessage({
           ...message,
           text: "ログアウトに失敗しました。",
-          type: "success",
+          type: "error",
         });
       }
     } catch (err) {

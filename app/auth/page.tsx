@@ -4,7 +4,7 @@ import "@/style/auth/auth.scss";
 import { fetchLoginUser } from "@/app/api/fetchLoginUser";
 import Link from "next/link";
 
-export default async function Page() {
+export default function Page() {
   const loginUser = use(fetchLoginUser());
   return (
     <main className="auth">

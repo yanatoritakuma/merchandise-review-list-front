@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { TLoginUser } from "@/app/api/fetchLoginUser";
 import { ButtonBox } from "../elements/buttonBox";
@@ -8,6 +8,9 @@ import { useRouter } from "next/navigation";
 import { UserValidation } from "@/utils/validations/userValidation";
 import { useChangeImage } from "@/app/hooks/useChangeImage";
 import { ImageRegistration } from "@/utils/imageRegistration";
+import { MessageContext } from "@/app/provider/messageProvider";
+import { createHeaders } from "@/utils/getCsrf";
+import { BackdropContext } from "@/app/provider/backdropProvider";
 
 type Props = {
   loginUser: TLoginUser;
@@ -16,6 +19,8 @@ type Props = {
 export default function ProfileImgSetting({ loginUser }: Props) {
   console.log("loginUser", loginUser);
   const router = useRouter();
+  const { message, setMessage } = useContext(MessageContext);
+  const { setBackdropFlag } = useContext(BackdropContext);
   const [previewUrl, setPreviewUrl] = useState("");
 
   const { accountRegisterValidation } = UserValidation();
@@ -23,18 +28,44 @@ export default function ProfileImgSetting({ loginUser }: Props) {
   const { onClickRegistration } = ImageRegistration();
 
   const registrationImage = async (file: string | null) => {
-    // try {
-    //   if (user) {
-    //     await updateUserMutation.mutateAsync({
-    //       name: user.name,
-    //       image: file ? file : user.image,
-    //       email: user.email,
-    //     });
-    //     await router.push("/");
-    //   }
-    // } catch (err) {
-    //   console.error(err);
-    // }
+    const headers = await createHeaders();
+    console.log("headers", headers);
+
+    const name = loginUser.name;
+    const email = loginUser.email;
+    const image = file;
+
+    try {
+      if (loginUser.id !== undefined) {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
+          method: "PUT",
+          headers: headers,
+          body: JSON.stringify({ name, email, image }),
+          cache: "force-cache",
+          credentials: "include",
+        });
+
+        if (res.ok) {
+          router.push("/");
+          router.refresh();
+          setMessage({
+            ...message,
+            text: "プロフィール画像の設定をしました。",
+            type: "success",
+          });
+          setBackdropFlag(false);
+        } else {
+          setMessage({
+            ...message,
+            text: "プロフィール画像の設定に失敗しました。",
+            type: "error",
+          });
+          setBackdropFlag(false);
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {
@@ -66,29 +97,31 @@ export default function ProfileImgSetting({ loginUser }: Props) {
       </p>
       <p>プロフィール画像の設定をしますか？</p>
       {previewUrl !== "" && (
-        <div>
-          <Image src={previewUrl} fill alt="プレビュー" />
+        <div className="profileImgSettingBox__preview">
+          <Image src={previewUrl} width={240} height={240} alt="プレビュー" />
         </div>
       )}
       <div className="profilePictureInBox__uploadIcon">
         <ButtonBox onChange={onChangeImageHandler} upload />
       </div>
-      <ButtonBox
-        onClick={() => {
-          if (accountRegisterValidation(photoUrl)) {
-            onClickRegistration(
-              photoUrl,
-              setPhotoUrl,
-              setPreviewUrl,
-              registrationImage
-            );
-          }
-        }}
-        disabled={photoUrl === null}
-      >
-        プロフィール画像設定
-      </ButtonBox>
-      <ButtonBox onClick={() => router.push("/")}>今は設定しない</ButtonBox>
+      <div className="profilePictureInBox__footBtnBox">
+        <ButtonBox
+          onClick={() => {
+            if (accountRegisterValidation(photoUrl)) {
+              onClickRegistration(
+                photoUrl,
+                setPhotoUrl,
+                setPreviewUrl,
+                registrationImage
+              );
+            }
+          }}
+          disabled={photoUrl === null}
+        >
+          プロフィール画像設定
+        </ButtonBox>
+        <ButtonBox onClick={() => router.push("/")}>今は設定しない</ButtonBox>
+      </div>
     </section>
   );
 }

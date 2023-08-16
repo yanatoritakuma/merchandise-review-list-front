@@ -14,7 +14,7 @@ export default function Page() {
             <br />
             List
           </h1>
-          <Image src={TopIcon} alt="backgImage" />
+          <Image src={TopIcon} alt="カート" />
         </div>
         <br />
         <p>aaaa</p>
