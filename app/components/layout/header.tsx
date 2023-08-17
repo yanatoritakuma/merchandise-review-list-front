@@ -72,7 +72,9 @@ export default function Header({ loginUser }: Props) {
           <div className="header__linkBox">
             <Link href="/">ホーム</Link>
             <Link href="/">検索</Link>
-            {loginUser.id !== undefined && <Link href="/">マイページ</Link>}
+            {loginUser.id !== undefined && (
+              <Link href="/mypage">マイページ</Link>
+            )}
             {loginUser.id !== undefined && <Link href="/">レビュー投稿</Link>}
             {loginUser.id !== undefined && <Link href="/">タイムライン</Link>}
             {loginUser.id !== undefined ? (

@@ -1,18 +1,12 @@
 "use client";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
-import { memo, useContext } from "react";
-import { BackdropContext } from "@/app/provider/backdropProvider";
+import { memo } from "react";
 
 export const BackdropBox = memo(() => {
-  const { backdropFlag } = useContext(BackdropContext);
-
   return (
     <div>
-      <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={backdropFlag}
-      >
+      <Backdrop open={true}>
         <CircularProgress color="inherit" />
       </Backdrop>
     </div>
