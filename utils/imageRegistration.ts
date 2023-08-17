@@ -1,14 +1,10 @@
 "use client";
 
-import { useContext } from "react";
 import firebase, { storage } from "@/firebase/initFirebase";
-import { BackdropContext } from "@/app/provider/backdropProvider";
 import { TLoginUser } from "@/app/api/fetchLoginUser";
 
 // 画像をfirebaseのstorageに保存
 export const ImageRegistration = () => {
-  const { setBackdropFlag } = useContext(BackdropContext);
-
   const onClickRegistration = (
     photoUrl: File | null,
     setPhotoUrl: React.Dispatch<React.SetStateAction<File | null>>,
@@ -16,12 +12,13 @@ export const ImageRegistration = () => {
     dbRegistration?: (file: string | null) => void,
     user?: TLoginUser
   ) => {
-    setBackdropFlag(true);
     if (photoUrl) {
       const S =
         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
       const N = 16;
-      const randomChar = Array.from(crypto.getRandomValues(new Uint32Array(N)))
+      const randomChar: any = Array.from(
+        crypto.getRandomValues(new Uint32Array(N))
+      )
         .map((n) => S[n % S.length])
         .join("");
       const fileName = randomChar + "_" + photoUrl.name;

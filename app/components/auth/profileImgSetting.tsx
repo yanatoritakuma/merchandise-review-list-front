@@ -10,7 +10,6 @@ import { useChangeImage } from "@/app/hooks/useChangeImage";
 import { ImageRegistration } from "@/utils/imageRegistration";
 import { MessageContext } from "@/app/provider/messageProvider";
 import { createHeaders } from "@/utils/getCsrf";
-import { BackdropContext } from "@/app/provider/backdropProvider";
 
 type Props = {
   loginUser: TLoginUser;
@@ -20,7 +19,6 @@ export default function ProfileImgSetting({ loginUser }: Props) {
   console.log("loginUser", loginUser);
   const router = useRouter();
   const { message, setMessage } = useContext(MessageContext);
-  const { setBackdropFlag } = useContext(BackdropContext);
   const [previewUrl, setPreviewUrl] = useState("");
 
   const { accountRegisterValidation } = UserValidation();
@@ -53,14 +51,12 @@ export default function ProfileImgSetting({ loginUser }: Props) {
             text: "プロフィール画像の設定をしました。",
             type: "success",
           });
-          setBackdropFlag(false);
         } else {
           setMessage({
             ...message,
             text: "プロフィール画像の設定に失敗しました。",
             type: "error",
           });
-          setBackdropFlag(false);
         }
       }
     } catch (err) {
