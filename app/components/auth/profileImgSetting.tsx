@@ -41,7 +41,7 @@ export default function ProfileImgSetting({ loginUser }: Props) {
           method: "PUT",
           headers: headers,
           body: JSON.stringify({ name, email, image }),
-          cache: "force-cache",
+          cache: "no-store",
           credentials: "include",
         });
 

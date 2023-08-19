@@ -19,7 +19,8 @@ export async function fetchLoginUser() {
       ...headers,
       Cookie: `${token}`,
     },
-    cache: "force-cache",
+    cache: "no-store",
+    // cache: "force-cache",
     credentials: "include",
   });
 

@@ -34,7 +34,7 @@ export default function Auth() {
           method: "POST",
           headers: headers,
           body: JSON.stringify({ email, password }),
-          cache: "force-cache",
+          cache: "no-store",
           credentials: "include",
         });
 
@@ -66,7 +66,7 @@ export default function Auth() {
           method: "POST",
           headers: headers,
           body: JSON.stringify({ email, password, name }),
-          cache: "force-cache",
+          cache: "no-store",
           credentials: "include",
         });
 
@@ -75,7 +75,7 @@ export default function Auth() {
             method: "POST",
             headers: headers,
             body: JSON.stringify({ email, password }),
-            cache: "force-cache",
+            cache: "no-store",
             credentials: "include",
           });
 

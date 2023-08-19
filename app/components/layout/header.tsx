@@ -36,7 +36,7 @@ export default function Header({ loginUser }: Props) {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/logout`, {
         method: "POST",
         headers: headers,
-        cache: "force-cache",
+        cache: "no-store",
         credentials: "include",
       });
       if (res.ok) {
