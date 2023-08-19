@@ -1,14 +1,33 @@
 "use client";
+
+import { BackdropContext } from "@/app/provider/backdropProvider";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
-import { memo } from "react";
+import { memo, useContext } from "react";
 
-export const BackdropBox = memo(() => {
+type Props = {
+  open: boolean;
+};
+
+export const BackdropBox = memo(({ open }: Props) => {
+  const { backdropFlag } = useContext(BackdropContext);
   return (
     <div>
-      <Backdrop open={true}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
+      {open ? (
+        <Backdrop
+          open={true}
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      ) : (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={backdropFlag}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
     </div>
   );
 });

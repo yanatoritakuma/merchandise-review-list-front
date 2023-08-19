@@ -30,7 +30,7 @@ export const AccordionBox = memo((props: Props) => {
           <p>{text}</p>
           <div className="accordionBox">
             {links?.map((link, index) => (
-              <Link key={index} href={link.url}>
+              <Link prefetch={false} key={index} href={link.url}>
                 {link.name}
               </Link>
             ))}

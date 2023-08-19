@@ -7,9 +7,11 @@ import { TextBox } from "@/app/components/elements/textBox";
 import { ButtonBox } from "@/app/components/elements/buttonBox";
 import { useRouter } from "next/navigation";
 import { MessageContext } from "@/app/provider/messageProvider";
+import { BackdropContext } from "@/app/provider/backdropProvider";
 
 export default function Auth() {
   const router = useRouter();
+  const { setBackdropFlag } = useContext(BackdropContext);
   const { message, setMessage } = useContext(MessageContext);
   const [authState, setAuthState] = useState({
     mail: "",
@@ -26,6 +28,8 @@ export default function Auth() {
     const headers = await createHeaders();
     if (isLogin) {
       try {
+        setBackdropFlag(true);
+        // await new Promise((resolve) => setTimeout(resolve, 3000));
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
           method: "POST",
           headers: headers,
@@ -37,12 +41,14 @@ export default function Auth() {
         if (res.ok) {
           router.push("/");
           router.refresh();
+          setBackdropFlag(false);
           setMessage({
             ...message,
             text: "ログインしました。",
             type: "success",
           });
         } else {
+          setBackdropFlag(false);
           setMessage({
             ...message,
             text: "ログインに失敗しました。",
@@ -54,6 +60,8 @@ export default function Auth() {
       }
     } else {
       try {
+        setBackdropFlag(true);
+        // await new Promise((resolve) => setTimeout(resolve, 3000));
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/signup`, {
           method: "POST",
           headers: headers,
@@ -74,12 +82,14 @@ export default function Auth() {
           if (res.ok) {
             router.push("/auth/profile-img-setting");
             router.refresh();
+            setBackdropFlag(false);
             setMessage({
               ...message,
               text: "アカウント作成しました。",
               type: "success",
             });
           } else {
+            setBackdropFlag(false);
             setMessage({
               ...message,
               text: "アカウント作成に失敗しました。",

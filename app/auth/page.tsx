@@ -11,7 +11,9 @@ export default async function Page() {
         {loginUser.id !== undefined ? (
           <div className="auth__loggedIn">
             <h3>ログイン済みです。</h3>
-            <Link href="/">ホームへ</Link>
+            <Link prefetch={false} href="/">
+              ホームへ
+            </Link>
           </div>
         ) : (
           <Auth />
