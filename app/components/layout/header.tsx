@@ -70,20 +70,36 @@ export default function Header({ loginUser }: Props) {
             <h2>MRL</h2>
           </div>
           <div className="header__linkBox">
-            <Link href="/">ホーム</Link>
-            <Link href="/">検索</Link>
+            <Link prefetch={false} href="/">
+              ホーム
+            </Link>
+            <Link prefetch={false} href="/">
+              検索
+            </Link>
             {loginUser.id !== undefined && (
-              <Link href="/mypage">マイページ</Link>
+              <Link prefetch={false} href="/mypage">
+                マイページ
+              </Link>
             )}
-            {loginUser.id !== undefined && <Link href="/">レビュー投稿</Link>}
-            {loginUser.id !== undefined && <Link href="/">タイムライン</Link>}
+            {loginUser.id !== undefined && (
+              <Link prefetch={false} href="/">
+                レビュー投稿
+              </Link>
+            )}
+            {loginUser.id !== undefined && (
+              <Link prefetch={false} href="/">
+                タイムライン
+              </Link>
+            )}
             {loginUser.id !== undefined ? (
               <>
                 <span onClick={() => onClikcLogOut()}>ログアウト</span>
               </>
             ) : (
               <>
-                <Link href="/auth">ログイン</Link>
+                <Link prefetch={false} href="/auth">
+                  ログイン
+                </Link>
               </>
             )}
           </div>
@@ -98,24 +114,44 @@ export default function Header({ loginUser }: Props) {
               >
                 <div className="header__humMenuBox">
                   <CloseIcon onClick={() => setMenuFlag(false)} />
-                  <Link href="/" onClick={() => setMenuFlag(false)}>
+                  <Link
+                    prefetch={false}
+                    href="/"
+                    onClick={() => setMenuFlag(false)}
+                  >
                     ホーム
                   </Link>
-                  <Link href="/" onClick={() => setMenuFlag(false)}>
+                  <Link
+                    prefetch={false}
+                    href="/"
+                    onClick={() => setMenuFlag(false)}
+                  >
                     検索
                   </Link>
                   {loginUser.id !== undefined && (
-                    <Link href="/" onClick={() => setMenuFlag(false)}>
+                    <Link
+                      prefetch={false}
+                      href="/"
+                      onClick={() => setMenuFlag(false)}
+                    >
                       マイページ
                     </Link>
                   )}
                   {loginUser.id !== undefined && (
-                    <Link href="/" onClick={() => setMenuFlag(false)}>
+                    <Link
+                      prefetch={false}
+                      href="/"
+                      onClick={() => setMenuFlag(false)}
+                    >
                       レビュー投稿
                     </Link>
                   )}
                   {loginUser.id !== undefined && (
-                    <Link href="/" onClick={() => setMenuFlag(false)}>
+                    <Link
+                      prefetch={false}
+                      href="/"
+                      onClick={() => setMenuFlag(false)}
+                    >
                       タイムライン
                     </Link>
                   )}
@@ -125,7 +161,11 @@ export default function Header({ loginUser }: Props) {
                     </>
                   ) : (
                     <>
-                      <Link href="/auth" onClick={() => setMenuFlag(false)}>
+                      <Link
+                        prefetch={false}
+                        href="/auth"
+                        onClick={() => setMenuFlag(false)}
+                      >
                         ログイン
                       </Link>
                     </>
