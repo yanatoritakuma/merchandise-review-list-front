@@ -1,13 +1,15 @@
-import "@/style/auth/auth.scss";
-import { fetchLoginUser } from "@/app/api/fetchLoginUser";
+import "@/style/mypage/mypage.scss";
+import Profile from "../components/mypage/profile";
+import { Suspense } from "react";
 
 export default async function Page() {
-  const loginUser = await fetchLoginUser();
   return (
-    <main className="auth">
-      <div className="auth__box">
-        <h2>{loginUser.name}</h2>
-        <h2>{loginUser.id}</h2>
+    <main className="mypage">
+      <div className="mypage__box">
+        <h2>マイページ</h2>
+        <Suspense fallback={"loading"}>
+          <Profile />
+        </Suspense>
       </div>
     </main>
   );
