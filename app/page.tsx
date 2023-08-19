@@ -1,5 +1,4 @@
-import Link from "next/link";
-import "@/style/home.scss";
+import "@/style/home/home.scss";
 import Image from "next/image";
 import TopIcon from "@/images/top2.avif";
 
@@ -15,7 +14,7 @@ export default function Page() {
             <br />
             List
           </h1>
-          <Image src={TopIcon} alt="backgImage" />
+          <Image src={TopIcon} alt="カート" />
         </div>
         <br />
         <p>aaaa</p>
