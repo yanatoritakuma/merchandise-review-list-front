@@ -1,9 +1,8 @@
-import { use } from "react";
 import "@/style/auth/auth.scss";
 import { fetchLoginUser } from "@/app/api/fetchLoginUser";
 
-export default function Page() {
-  const loginUser = use(fetchLoginUser());
+export default async function Page() {
+  const loginUser = await fetchLoginUser();
   return (
     <main className="auth">
       <div className="auth__box">

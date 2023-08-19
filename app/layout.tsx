@@ -1,4 +1,3 @@
-import { use } from "react";
 import Header from "@/app/components/layout/header";
 import "@/style/globals.css";
 import { MessageProvider } from "@/app/provider/messageProvider";
@@ -10,12 +9,12 @@ export const metadata = {
   description: "merchandise-review-list",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const loginUser = use(fetchLoginUser());
+  const loginUser = await fetchLoginUser();
 
   return (
     <html lang="ja">

@@ -1,10 +1,9 @@
-import { use } from "react";
 import { fetchLoginUser } from "@/app/api/fetchLoginUser";
 import ProfileImgSetting from "@/app/components/auth/profileImgSetting";
 import "@/style/auth/profile-img-setting.scss";
 
-export default function Page() {
-  const loginUser = use(fetchLoginUser());
+export default async function Page() {
+  const loginUser = await fetchLoginUser();
 
   return (
     <main className="profileImgSetting">
