@@ -17,18 +17,24 @@ export default async function Profile() {
 
   return (
     <section className="profile">
-      <div className="profile__imgBox">
-        <Image
-          src={loginUser.image}
-          width={80}
-          height={80}
-          alt="プロフィール画像"
-        />
-        <h4>{loginUser.name}</h4>
-      </div>
-      <span className="profile__useDate">
-        {formatDate(loginUser.created_at)}から利用しています
-      </span>
+      {loginUser.id !== undefined ? (
+        <>
+          <div className="profile__imgBox">
+            <Image
+              src={loginUser.image}
+              width={80}
+              height={80}
+              alt="プロフィール画像"
+            />
+            <h4>{loginUser.name}</h4>
+          </div>
+          <span className="profile__useDate">
+            {formatDate(loginUser.created_at)}から利用しています
+          </span>
+        </>
+      ) : (
+        <h4>ログインしていません。</h4>
+      )}
     </section>
   );
 }

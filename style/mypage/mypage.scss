@@ -47,3 +47,19 @@
   color: #aaa;
   font-size: 14px;
 }
+
+// components/profileSkeleton
+.profileSkeleton {
+  //   background-color: skyblue;
+  display: flex;
+  align-items: center;
+}
+
+.profileSkeleton__name {
+  margin-left: 18px;
+  width: 14%;
+}
+
+.profileSkeleton__useDate {
+  width: 30%;
+}
