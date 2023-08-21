@@ -10,7 +10,7 @@ export type TLoginUser = {
 };
 
 export async function fetchLoginUser() {
-  await new Promise((resolve) => setTimeout(resolve, 3000));
+  // await new Promise((resolve) => setTimeout(resolve, 3000));
   const headersList = headers();
   const token = headersList.get("cookie");
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
