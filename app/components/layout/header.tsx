@@ -73,8 +73,8 @@ export default function Header({ loginUser }: Props) {
             <Link prefetch={false} href="/">
               ホーム
             </Link>
-            <Link prefetch={false} href="/">
-              検索
+            <Link prefetch={false} href="/product-search">
+              商品検索
             </Link>
             {loginUser.id !== undefined && (
               <Link prefetch={false} href="/mypage">
@@ -123,15 +123,15 @@ export default function Header({ loginUser }: Props) {
                   </Link>
                   <Link
                     prefetch={false}
-                    href="/"
+                    href="/product-search"
                     onClick={() => setMenuFlag(false)}
                   >
-                    検索
+                    商品検索
                   </Link>
                   {loginUser.id !== undefined && (
                     <Link
                       prefetch={false}
-                      href="/"
+                      href="/mypage"
                       onClick={() => setMenuFlag(false)}
                     >
                       マイページ
