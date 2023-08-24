@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import "@/style/product-search/productSearch.scss";
 import { TextBox } from "@/app/components/elements/textBox";
 import { ButtonBox } from "@/app/components/elements/buttonBox";
