@@ -17,7 +17,9 @@ export function Search() {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
-      <ButtonBox onClick={() => router.push(`/product-search/${search}`)}>
+      <ButtonBox
+        onClick={() => router.push(`/product-search/${search}?page=1`)}
+      >
         検索
       </ButtonBox>
     </section>

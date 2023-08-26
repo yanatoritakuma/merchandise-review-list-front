@@ -1,15 +1,18 @@
-import Link from "next/link";
+import { ResultYahoo } from "@/app/components/product-search/resultYahoo";
 import "@/style/product-search/productSearch.scss";
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import Image from "next/image";
 
 type PageProps = {
   params: {
     product: string;
   };
+  searchParams: {
+    page: string;
+  };
 };
 
-type TProducts = {
+export type TProducts = {
   totalResultsAvailable: number; //総検索ヒット件数
   totalResultsReturned: number; //返却された商品件数
   firstResultsPosition: number; //最初のデータが何件目にあたるか（最初＝1）
@@ -22,7 +25,7 @@ type TProducts = {
     description: string; //商品説明
     url: string; //商品URL
     inStock: boolean; //true：在庫ありのみ false：在庫なしのみ
-    taxExcludePrice: number; //価格（税抜）
+    price: number; //価格
     image: {
       small: string;
       medium: string;
@@ -33,12 +36,9 @@ type TProducts = {
   }[];
 };
 
-async function fetchProduct(search: string) {
-  await new Promise((resolve) => setTimeout(resolve, 3000));
+async function fetchProduct(search: string, searchParams: string) {
   const res = await fetch(
-    `https://shopping.yahooapis.jp/ShoppingWebService/V3/itemSearch?appid=${
-      process.env.NEXT_PUBLIC_YAHOO_API_URL
-    }&query=${search}&start=${"1"}`,
+    `https://shopping.yahooapis.jp/ShoppingWebService/V3/itemSearch?appid=${process.env.NEXT_PUBLIC_YAHOO_API_URL}&query=${search}&start=${searchParams}`,
     {
       method: "GET",
       cache: "no-store",
@@ -49,37 +49,28 @@ async function fetchProduct(search: string) {
   return products;
 }
 
-export default async function Product({ params }: PageProps) {
-  const resProducts = await fetchProduct(params.product);
+export default async function Product({ params, searchParams }: PageProps) {
+  const resProducts = await fetchProduct(params.product, searchParams.page);
   if (!resProducts) return notFound();
 
   return (
     <section className="product">
       <div className="product__box">
         <h2>検索結果</h2>
-        <h3>検索名:{resProducts.request.query}</h3>
+        <h3>検索名:{resProducts.request?.query}</h3>
         <h3>総検索ヒット件数:{resProducts.totalResultsAvailable}</h3>
         <h3>返却された商品件数:{resProducts.totalResultsReturned}</h3>
         <h3>
           最初のデータが何件目にあたるか（最初＝1）:
           {resProducts.firstResultsPosition}
         </h3>
-        {resProducts.hits.map((hit) => (
-          <div key={hit.index}>
-            <h4>商品名:{hit.name}</h4>
-            <span>商品説明:{hit.description}</span>
-            <span>商品URL:{hit.url}</span>
-            <span>在庫:{hit.inStock}</span>
-            <span>価格（税抜）:{hit.taxExcludePrice}</span>
-            <span>レビュー平均:{hit.review.rate}</span>
-            <Image
-              src={hit.image.medium}
-              width={80}
-              height={80}
-              alt="プロフィール画像"
-            />
+        <Link href="/product-search">検索画面へ戻る</Link>
+        <div className="product__resBox">
+          <ResultYahoo resProducts={resProducts} query={params.product} />
+          <div className="resBox__rakutenMainBox">
+            <h3>楽天市場検索結果</h3>
           </div>
-        ))}
+        </div>
       </div>
     </section>
   );
