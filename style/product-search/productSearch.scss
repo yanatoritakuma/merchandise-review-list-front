@@ -1,0 +1,108 @@
+// page/product-search
+.productSearch {
+  width: 100%;
+  height: 100vh;
+  background-color: #ffd900;
+}
+
+.productSearch__box {
+  margin: 0 auto;
+  max-width: 1440px;
+
+  @media (max-width: 768px) {
+    padding: 20px;
+  }
+
+  h2 {
+    text-align: center;
+  }
+}
+
+// page/[product]
+.product {
+  width: 100%;
+  height: 100%;
+  background-color: #ffd900;
+}
+
+.product__box {
+  margin: 0 auto;
+  padding: 120px 20px 20px 20px;
+  max-width: 1440px;
+}
+
+.product__resBox {
+  // background-color: skyblue;
+  display: flex;
+  justify-content: space-between;
+}
+
+// components/Result
+
+.resultYahooBox {
+  width: 46%;
+  // background-color: #f03;
+
+  h3 {
+    color: #f03;
+  }
+
+  .resultYahooBox__topText {
+    display: block;
+  }
+
+  .resultYahooBox__currentPage {
+    margin: 12px 0;
+    display: block;
+    font-size: 18px;
+  }
+}
+
+.resultYahooBox__yahooBox {
+  margin: 20px 0;
+  padding: 20px;
+  display: block;
+  border: 3px solid #f03;
+  border-radius: 10px;
+  background-color: #fff;
+  color: #333;
+  text-decoration: none;
+  transition: transform 0.3s;
+
+  &:hover {
+    opacity: 0.9;
+    transform: translateY(-5px);
+  }
+
+  h4 {
+    margin-top: 0;
+    font-size: 20px;
+  }
+
+  span {
+    margin: 6px 0;
+    display: block;
+  }
+
+  img {
+    width: 100%;
+    object-fit: contain;
+  }
+}
+
+.resultYahooBox__yahooTextBox {
+  margin: 20px 0;
+  h5 {
+    margin-bottom: 10px;
+    font-size: 18px;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.resBox__rakutenMainBox {
+  width: 46%;
+  background-color: green;
+}
