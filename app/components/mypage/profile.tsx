@@ -59,16 +59,18 @@ export default async function Profile() {
               alt="プロフィール画像"
             />
             <h4>{loginUser.name}</h4>
+            <h4>{headersList}</h4>
           </div>
           <span className="profile__useDate">
             {formatDate(loginUser.created_at)}から利用しています
           </span>
-          {token}
+          <h4>{token}</h4>
         </>
       ) : (
         <>
           <h4>ログインしていません。</h4>
-          {token}
+          <h4>{token}</h4>
+          <h4>{headersList}</h4>
         </>
       )}
     </section>
