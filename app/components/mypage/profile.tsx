@@ -21,7 +21,6 @@ async function fetchLoginUser() {
     headers: {
       ...headers,
       Cookie: `${token}`,
-      AccessControlAllowOrigin: "*",
     },
     cache: "no-store",
     // cache: "force-cache",
@@ -35,6 +34,8 @@ async function fetchLoginUser() {
 
 export default async function Profile() {
   const loginUser = await fetchLoginUser();
+  const headersList = headers();
+  const token = headersList.get("cookie");
 
   const formatDate = (inputDate: string) => {
     const date = new Date(inputDate);
@@ -62,9 +63,13 @@ export default async function Profile() {
           <span className="profile__useDate">
             {formatDate(loginUser.created_at)}から利用しています
           </span>
+          {token}
         </>
       ) : (
-        <h4>ログインしていません。</h4>
+        <>
+          <h4>ログインしていません。</h4>
+          {token}
+        </>
       )}
     </section>
   );
