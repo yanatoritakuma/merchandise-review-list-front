@@ -21,6 +21,7 @@ async function fetchLoginUser() {
     headers: {
       ...headers,
       Cookie: `${token}`,
+      AccessControlAllowOrigin: "*",
     },
     cache: "no-store",
     // cache: "force-cache",
