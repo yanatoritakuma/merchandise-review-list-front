@@ -1,6 +1,7 @@
-import { headers } from "next/headers";
+import { headers, cookies } from "next/headers";
 import Image from "next/image";
 import "@/style/mypage/mypage.scss";
+
 // import { fetchLoginUser } from "@/app/api/fetchLoginUser";
 
 type TLoginUser = {
@@ -16,6 +17,10 @@ async function fetchLoginUser() {
   // await new Promise((resolve) => setTimeout(resolve, 3000));
   const headersList = headers();
   const token = headersList.get("cookie");
+  const cookieStore = cookies();
+  const Csrf = cookieStore.get("_csrf");
+  const Token = cookieStore.get("token");
+
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
     method: "GET",
     headers: {
@@ -24,6 +29,7 @@ async function fetchLoginUser() {
     },
     cache: "no-store",
     // cache: "force-cache",
+    // next: { revalidate: 10 },
     credentials: "include",
   });
 
@@ -35,7 +41,10 @@ async function fetchLoginUser() {
 export default async function Profile() {
   const loginUser = await fetchLoginUser();
   const headersList = headers();
-  const token = headersList.get("cookie");
+  const tokenHeadersList = headersList.get("cookie");
+
+  const cookieStore = cookies();
+  const Token = cookieStore.get("token");
 
   const formatDate = (inputDate: string) => {
     const date = new Date(inputDate);
@@ -59,18 +68,20 @@ export default async function Profile() {
               alt="プロフィール画像"
             />
             <h4>{loginUser.name}</h4>
-            <h4>{headersList}</h4>
+            <h4>headersList:{headersList}</h4>
           </div>
           <span className="profile__useDate">
             {formatDate(loginUser.created_at)}から利用しています
           </span>
-          <h4>{token}</h4>
+          <h4>TokenHeadersList:{tokenHeadersList}</h4>
+          <h4>Token:{Token?.value}</h4>
         </>
       ) : (
         <>
           <h4>ログインしていません。</h4>
-          <h4>{token}</h4>
-          <h4>{headersList}</h4>
+          <h4>TokenHeadersList:{tokenHeadersList}</h4>
+          <h4>header:{headersList}</h4>
+          <h4>Token:{Token?.value}</h4>
         </>
       )}
     </section>
