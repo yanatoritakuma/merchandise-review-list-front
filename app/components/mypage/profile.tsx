@@ -1,6 +1,7 @@
 import { headers, cookies } from "next/headers";
 import Image from "next/image";
 import "@/style/mypage/mypage.scss";
+import { getAllCookies } from "@/utils/getAllCookies";
 
 // import { fetchLoginUser } from "@/app/api/fetchLoginUser";
 
@@ -21,17 +22,17 @@ async function fetchLoginUser() {
   const Csrf = cookieStore.get("_csrf");
   const Token = cookieStore.get("token");
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
-    method: "GET",
+  const cookie = getAllCookies();
+  const options: RequestInit = {
     headers: {
-      ...headers,
-      Cookie: `${token}`,
+      cookie,
     },
+    // method: "GET",
     cache: "no-store",
-    // cache: "force-cache",
-    // next: { revalidate: 10 },
     credentials: "include",
-  });
+  };
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user`, options);
 
   const user: TLoginUser = await res.json();
 
