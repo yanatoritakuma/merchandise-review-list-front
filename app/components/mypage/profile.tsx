@@ -2,6 +2,7 @@ import { headers, cookies } from "next/headers";
 import Image from "next/image";
 import "@/style/mypage/mypage.scss";
 import { getAllCookies } from "@/utils/getAllCookies";
+import ProfileSc from "@/app/components/mypage/profileSc";
 
 // import { fetchLoginUser } from "@/app/api/fetchLoginUser";
 
@@ -27,7 +28,7 @@ async function fetchLoginUser() {
     headers: {
       cookie,
     },
-    // method: "GET",
+    method: "GET",
     cache: "no-store",
     credentials: "include",
   };
@@ -85,6 +86,7 @@ export default async function Profile() {
           <h4>Token:{Token?.value}</h4>
         </>
       )}
+      <ProfileSc />
     </section>
   );
 }
