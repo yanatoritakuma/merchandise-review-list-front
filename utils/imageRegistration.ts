@@ -3,7 +3,7 @@
 import { useContext } from "react";
 import firebase, { storage } from "@/firebase/initFirebase";
 import { TLoginUser } from "@/app/api/fetchLoginUser";
-import { BackdropContext } from "@/app/provider/backdropProvider";
+import { BackdropContext } from "@/provider/backdropProvider";
 
 // 画像をfirebaseのstorageに保存
 export const ImageRegistration = () => {

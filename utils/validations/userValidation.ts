@@ -1,6 +1,6 @@
 "use client";
 import { useContext } from "react";
-import { MessageContext } from "@/app/provider/messageProvider";
+import { MessageContext } from "@/provider/messageProvider";
 import validator from "validator";
 
 type TReqUpDate = {

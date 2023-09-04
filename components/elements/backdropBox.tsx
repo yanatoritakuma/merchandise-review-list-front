@@ -1,6 +1,6 @@
 "use client";
 
-import { BackdropContext } from "@/app/provider/backdropProvider";
+import { BackdropContext } from "@/provider/backdropProvider";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { memo, useContext } from "react";

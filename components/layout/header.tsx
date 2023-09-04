@@ -1,23 +1,18 @@
 "use client";
 
 import Link from "next/link";
+import { css } from "@emotion/react";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { createHeaders } from "@/utils/getCsrf";
 import Image from "next/image";
-import "@/style/layout/header.scss";
 import LogoIcon from "@/images/logo.png";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import Drawer from "@mui/material/Drawer";
-import { TLoginUser } from "@/app/api/fetchLoginUser";
-import { MessageContext } from "@/app/provider/messageProvider";
+import { MessageContext } from "@/provider/messageProvider";
 
-type Props = {
-  loginUser: TLoginUser;
-};
-
-export default function Header({ loginUser }: Props) {
+export default function Header() {
   const { message, setMessage } = useContext(MessageContext);
   const router = useRouter();
 
@@ -60,7 +55,7 @@ export default function Header({ loginUser }: Props) {
   };
 
   return (
-    <header className="header">
+    <header css={header}>
       <div className="header__logoLinkMainBox">
         <div className="header__logoLinkBox">
           <div className="header__logoBox">
@@ -76,7 +71,7 @@ export default function Header({ loginUser }: Props) {
             <Link prefetch={false} href="/product-search">
               商品検索
             </Link>
-            {loginUser.id !== undefined && (
+            {/* {loginUser.id !== undefined && (
               <Link prefetch={false} href="/mypage">
                 マイページ
               </Link>
@@ -101,7 +96,7 @@ export default function Header({ loginUser }: Props) {
                   ログイン
                 </Link>
               </>
-            )}
+            )} */}
           </div>
           <div className="header__humBox">
             <MenuIcon onClick={() => setMenuFlag(true)} />
@@ -128,7 +123,7 @@ export default function Header({ loginUser }: Props) {
                   >
                     商品検索
                   </Link>
-                  {loginUser.id !== undefined && (
+                  {/* {loginUser.id !== undefined && (
                     <Link
                       prefetch={false}
                       href="/mypage"
@@ -169,7 +164,7 @@ export default function Header({ loginUser }: Props) {
                         ログイン
                       </Link>
                     </>
-                  )}
+                  )} */}
                 </div>
               </Drawer>
             )}
@@ -179,3 +174,102 @@ export default function Header({ loginUser }: Props) {
     </header>
   );
 }
+
+const header = css`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ffd900;
+  border-bottom: 4px solid #f6f61e;
+
+  .header__logoLinkMainBox {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1440px;
+  }
+
+  .header__logoLinkBox {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .header__logoBox {
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    width: fit-content;
+
+    h2 {
+      padding-left: 12px;
+      font-size: 14px;
+    }
+
+    .header__logo {
+      width: 32px;
+      height: 32px;
+      img {
+        width: 100%;
+        height: auto;
+        border-radius: 50%;
+        object-fit: contain;
+      }
+    }
+  }
+
+  .header__linkBox {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
+
+    a,
+    span {
+      margin: 0 12px;
+      display: block;
+      color: #333;
+      text-decoration: none;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  }
+
+  .header__humBox {
+    display: none;
+    @media screen and (max-width: 768px) {
+      padding-right: 24px;
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+
+      svg {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .header__humMenuBox {
+    padding: 20px;
+    background-color: #fff;
+    width: 80vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    right: 0;
+
+    a,
+    span {
+      margin: 12px 0 0 auto;
+      display: block;
+      color: #333;
+      text-decoration: none;
+      width: 50%;
+      border-bottom: 1px solid #333;
+      font-size: 14px;
+    }
+  }
+`;

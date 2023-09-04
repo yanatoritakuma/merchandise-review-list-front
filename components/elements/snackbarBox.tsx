@@ -3,7 +3,7 @@ import { forwardRef, memo, useContext, useEffect, useState } from "react";
 import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
-import { MessageContext } from "@/app/provider/messageProvider";
+import { MessageContext } from "@/provider/messageProvider";
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
