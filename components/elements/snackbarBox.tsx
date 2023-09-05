@@ -1,4 +1,3 @@
-"use client";
 import { forwardRef, memo, useContext, useEffect, useState } from "react";
 import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";

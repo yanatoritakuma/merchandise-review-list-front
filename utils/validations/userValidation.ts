@@ -1,4 +1,3 @@
-"use client";
 import { useContext } from "react";
 import { MessageContext } from "@/provider/messageProvider";
 import validator from "validator";

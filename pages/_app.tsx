@@ -2,14 +2,14 @@ import "@/style/globals.css";
 import type { AppProps } from "next/app";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import axios from "axios";
 import Header from "@/components/layout/header";
-// import { Header } from "@/components/layout/Header";
-// import { MessageProvider } from "@/provider/MessageProvider";
-// import { SnackbarBox } from "@/components/elements/SnackbarBox";
-// import { BackdropBox } from "@/components/elements/BackdropBox";
-// import { BackdropProvider } from "@/provider/BackdropProvider";
+import { MessageProvider } from "@/provider/messageProvider";
+import { BackdropProvider } from "@/provider/backdropProvider";
+import { SnackbarBox } from "@/components/elements/snackbarBox";
+import { BackdropBox } from "@/components/elements/backdropBox";
+
 // import { PostProvider } from "@/provider/PostProvider";
 // import { ApiTimeoutBox } from "@/components/common/ApiTimeOutBox";
 
@@ -38,18 +38,18 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* <MessageProvider>
-        <BackdropProvider> */}
-      {/* <PostProvider> */}
-      <Header />
-      <Component {...pageProps} />
-      <ReactQueryDevtools />
-      {/* <SnackbarBox /> */}
-      {/* <BackdropBox /> */}
-      {/* <ApiTimeoutBox /> */}
-      {/* </PostProvider> */}
-      {/* </BackdropProvider>
-      </MessageProvider> */}
+      <MessageProvider>
+        <BackdropProvider>
+          {/* <PostProvider> */}
+          <Header />
+          <Component {...pageProps} />
+          <ReactQueryDevtools />
+          <SnackbarBox />
+          <BackdropBox />
+          {/* <ApiTimeoutBox /> */}
+          {/* </PostProvider> */}
+        </BackdropProvider>
+      </MessageProvider>
     </QueryClientProvider>
   );
 }

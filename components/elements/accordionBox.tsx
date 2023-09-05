@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { css } from "@emotion/react";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -28,7 +29,7 @@ export const AccordionBox = memo((props: Props) => {
         </AccordionSummary>
         <AccordionDetails>
           <p>{text}</p>
-          <div className="accordionBox">
+          <div css={accordionBox}>
             {links?.map((link, index) => (
               <Link prefetch={false} key={index} href={link.url}>
                 {link.name}
@@ -42,3 +43,13 @@ export const AccordionBox = memo((props: Props) => {
 });
 
 AccordionBox.displayName = "AccordionBox";
+
+const accordionBox = css`
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  a {
+    margin: 10px;
+  }
+`;

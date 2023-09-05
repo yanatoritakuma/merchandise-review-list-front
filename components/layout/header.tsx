@@ -1,61 +1,24 @@
-"use client";
-
 import Link from "next/link";
 import { css } from "@emotion/react";
-import { useRouter } from "next/navigation";
-import { useContext, useEffect, useState } from "react";
-import { createHeaders } from "@/utils/getCsrf";
+import { useState } from "react";
 import Image from "next/image";
 import LogoIcon from "@/images/logo.png";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import Drawer from "@mui/material/Drawer";
-import { MessageContext } from "@/provider/messageProvider";
+import { useQueryUser } from "@/hooks/user/useQueryUser";
+import { useMutateAuth } from "@/hooks/auth/useMutateAuth";
 
 export default function Header() {
-  const { message, setMessage } = useContext(MessageContext);
-  const router = useRouter();
-
-  useEffect(() => {
-    const setDefaultHeaders = async () => {
-      await createHeaders();
-    };
-    setDefaultHeaders();
-  }, []);
+  const { data: user, error } = useQueryUser();
+  console.log(error?.response.status);
+  const { logoutMutation } = useMutateAuth();
 
   const [menuFlag, setMenuFlag] = useState(false);
 
-  const onClikcLogOut = async () => {
-    const headers = await createHeaders();
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/logout`, {
-        method: "POST",
-        headers: headers,
-        cache: "no-store",
-        credentials: "include",
-      });
-      if (res.ok) {
-        router.push("/");
-        router.refresh();
-        setMessage({
-          ...message,
-          text: "ログアウトしました。",
-          type: "success",
-        });
-      } else {
-        setMessage({
-          ...message,
-          text: "ログアウトに失敗しました。",
-          type: "error",
-        });
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   return (
     <header css={header}>
+      {error?.response.status !== "401" ? <p>oooo</p> : <p>aaaa</p>}
       <div className="header__logoLinkMainBox">
         <div className="header__logoLinkBox">
           <div className="header__logoBox">
@@ -71,24 +34,24 @@ export default function Header() {
             <Link prefetch={false} href="/product-search">
               商品検索
             </Link>
-            {/* {loginUser.id !== undefined && (
+            {user?.id !== undefined && (
               <Link prefetch={false} href="/mypage">
                 マイページ
               </Link>
             )}
-            {loginUser.id !== undefined && (
+            {user?.id !== undefined && (
               <Link prefetch={false} href="/">
                 レビュー投稿
               </Link>
             )}
-            {loginUser.id !== undefined && (
+            {user?.id !== undefined && (
               <Link prefetch={false} href="/">
                 タイムライン
               </Link>
             )}
-            {loginUser.id !== undefined ? (
+            {user?.id !== undefined ? (
               <>
-                <span onClick={() => onClikcLogOut()}>ログアウト</span>
+                <span onClick={() => logoutMutation.mutate()}>ログアウト</span>
               </>
             ) : (
               <>
@@ -96,7 +59,7 @@ export default function Header() {
                   ログイン
                 </Link>
               </>
-            )} */}
+            )}
           </div>
           <div className="header__humBox">
             <MenuIcon onClick={() => setMenuFlag(true)} />
@@ -123,7 +86,7 @@ export default function Header() {
                   >
                     商品検索
                   </Link>
-                  {/* {loginUser.id !== undefined && (
+                  {user?.id !== undefined && (
                     <Link
                       prefetch={false}
                       href="/mypage"
@@ -132,7 +95,7 @@ export default function Header() {
                       マイページ
                     </Link>
                   )}
-                  {loginUser.id !== undefined && (
+                  {user?.id !== undefined && (
                     <Link
                       prefetch={false}
                       href="/"
@@ -141,7 +104,7 @@ export default function Header() {
                       レビュー投稿
                     </Link>
                   )}
-                  {loginUser.id !== undefined && (
+                  {user?.id !== undefined && (
                     <Link
                       prefetch={false}
                       href="/"
@@ -150,9 +113,11 @@ export default function Header() {
                       タイムライン
                     </Link>
                   )}
-                  {loginUser.id !== undefined ? (
+                  {user?.id !== undefined ? (
                     <>
-                      <span onClick={() => onClikcLogOut()}>ログアウト</span>
+                      <span onClick={() => logoutMutation.mutate()}>
+                        ログアウト
+                      </span>
                     </>
                   ) : (
                     <>
@@ -164,7 +129,7 @@ export default function Header() {
                         ログイン
                       </Link>
                     </>
-                  )} */}
+                  )}
                 </div>
               </Drawer>
             )}
