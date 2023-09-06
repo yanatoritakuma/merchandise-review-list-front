@@ -2,10 +2,10 @@ import Image from "next/image";
 import { css } from "@emotion/react";
 import { useQueryUser } from "@/hooks/user/useQueryUser";
 import { ProfileSkeleton } from "@/components/mypage/profileSkeleton";
+import NoImage from "@/images/noimage-user.png";
 
 export const Profile = () => {
   const { data, isLoading } = useQueryUser();
-  console.log(isLoading);
 
   const formatDate = (inputDate: string) => {
     const date = new Date(inputDate);
@@ -22,12 +22,21 @@ export const Profile = () => {
       {data?.id !== undefined ? (
         <>
           <div className="profile__imgBox">
-            <Image
-              src={data?.image}
-              width={80}
-              height={80}
-              alt="プロフィール画像"
-            />
+            {data.image !== "" ? (
+              <Image
+                src={data?.image}
+                width={80}
+                height={80}
+                alt="プロフィール画像"
+              />
+            ) : (
+              <Image
+                src={NoImage}
+                width={80}
+                height={80}
+                alt="プロフィール画像"
+              />
+            )}
             <h4>{data?.name}</h4>
           </div>
           <span className="profile__useDate">

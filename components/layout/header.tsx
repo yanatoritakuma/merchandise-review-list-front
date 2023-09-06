@@ -32,31 +32,39 @@ export const Header = () => {
             <Link prefetch={false} href="/product-search">
               商品検索
             </Link>
-            {data?.id !== undefined && (
-              <Link prefetch={false} href="/mypage">
-                マイページ
-              </Link>
-            )}
-            {data?.id !== undefined && (
-              <Link prefetch={false} href="/">
-                レビュー投稿
-              </Link>
-            )}
-            {data?.id !== undefined && (
-              <Link prefetch={false} href="/">
-                タイムライン
-              </Link>
-            )}
-            {data?.id !== undefined ? (
+            {!isLoading ? (
               <>
-                <span onClick={() => logoutMutation.mutate()}>ログアウト</span>
+                {data?.id !== undefined && (
+                  <Link prefetch={false} href="/mypage">
+                    マイページ
+                  </Link>
+                )}
+                {data?.id !== undefined && (
+                  <Link prefetch={false} href="/">
+                    レビュー投稿
+                  </Link>
+                )}
+                {data?.id !== undefined && (
+                  <Link prefetch={false} href="/">
+                    タイムライン
+                  </Link>
+                )}
+                {data?.id !== undefined ? (
+                  <>
+                    <span onClick={() => logoutMutation.mutate()}>
+                      ログアウト
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <Link prefetch={false} href="/auth">
+                      ログイン
+                    </Link>
+                  </>
+                )}
               </>
             ) : (
-              <>
-                <Link prefetch={false} href="/auth">
-                  ログイン
-                </Link>
-              </>
+              <span>ユーザー情報取得中</span>
             )}
           </div>
           <div css={humBox}>
