@@ -65,6 +65,7 @@ export const Header = () => {
             {menuFlag && (
               <Drawer
                 anchor="right"
+                css={humMenuBox}
                 open={menuFlag}
                 onClose={() => setMenuFlag(false)}
               >
@@ -214,7 +215,9 @@ const humBox = css`
       cursor: pointer;
     }
   }
+`;
 
+const humMenuBox = css`
   .header__humMenuBox {
     padding: 20px;
     background-color: #fff;
@@ -226,13 +229,13 @@ const humBox = css`
 
     a,
     span {
-      margin: 12px 0 0 auto;
+      margin: 24px 0 0 auto;
       display: block;
       color: #333;
       text-decoration: none;
       width: 50%;
       border-bottom: 1px solid #333;
-      font-size: 14px;
+      font-size: 18px;
     }
   }
 `;
