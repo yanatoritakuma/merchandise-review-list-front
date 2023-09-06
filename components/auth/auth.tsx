@@ -29,7 +29,7 @@ export const Auth = () => {
         password: authState.password,
       });
 
-      await router.push("/auth/profileImgSetting");
+      await router.push("/auth/profile-img-setting");
     } catch (err) {
       console.error(err);
     }

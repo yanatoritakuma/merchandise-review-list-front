@@ -9,8 +9,8 @@ import { ImageRegistration } from "@/utils/imageRegistration";
 import { useMutateUser } from "@/hooks/user/useMutateUser";
 import { UserValidation } from "@/utils/validations/userValidation";
 
-const ProfilePicture = () => {
-  const { data: user } = useQueryUser();
+const ProfileImgSetting = () => {
+  const { data, isLoading } = useQueryUser();
   const { onClickRegistration } = ImageRegistration();
   const { updateUserMutation } = useMutateUser();
   const [previewUrl, setPreviewUrl] = useState("");
@@ -20,11 +20,11 @@ const ProfilePicture = () => {
 
   const registrationImage = async (file: string | null) => {
     try {
-      if (user) {
+      if (data) {
         await updateUserMutation.mutateAsync({
-          name: user.name,
-          image: file ? file : user.image,
-          email: user.email,
+          name: data.name,
+          image: file ? file : data.image,
+          email: data.email,
         });
         await router.push("/");
       }
@@ -54,51 +54,62 @@ const ProfilePicture = () => {
 
   return (
     <main css={profilePictureBox}>
-      {user !== undefined && user.image === "" ? (
-        <div css={profilePictureInBox}>
-          <h2>アカウントを作成しました！</h2>
-          <p>
-            はじめまして、
-            {user?.name}さん
-          </p>
-          <p>プロフィール画像の設定をしませんか？</p>
-          {previewUrl !== "" && (
-            <div css={previewBox}>
-              <Image src={previewUrl} fill alt="プレビュー" />
+      {!isLoading ? (
+        <>
+          {data !== undefined && data.image === "" ? (
+            <div css={profilePictureInBox}>
+              <h2>アカウントを作成しました！</h2>
+              <p>
+                はじめまして、
+                {data?.name}さん
+              </p>
+              <p>プロフィール画像の設定をしませんか？</p>
+              {previewUrl !== "" && (
+                <div css={previewBox}>
+                  <Image src={previewUrl} fill alt="プレビュー" />
+                </div>
+              )}
+              <div className="profilePictureInBox__uploadIcon">
+                <ButtonBox onChange={onChangeImageHandler} upload />
+              </div>
+              <ButtonBox
+                onClick={() => {
+                  if (accountRegisterValidation(photoUrl)) {
+                    onClickRegistration(
+                      photoUrl,
+                      setPhotoUrl,
+                      setPreviewUrl,
+                      registrationImage
+                    );
+                  }
+                }}
+                disabled={photoUrl === null}
+              >
+                プロフィール画像設定
+              </ButtonBox>
+              <ButtonBox onClick={() => router.push("/")}>
+                今は設定しない
+              </ButtonBox>
             </div>
+          ) : (
+            <h3>
+              ログインしていないか
+              <br />
+              既にアカウントにプロフィール画像は設定済みです。
+            </h3>
           )}
-          <div className="profilePictureInBox__uploadIcon">
-            <ButtonBox onChange={onChangeImageHandler} upload />
-          </div>
-          <ButtonBox
-            onClick={() => {
-              if (accountRegisterValidation(photoUrl)) {
-                onClickRegistration(
-                  photoUrl,
-                  setPhotoUrl,
-                  setPreviewUrl,
-                  registrationImage
-                );
-              }
-            }}
-            disabled={photoUrl === null}
-          >
-            プロフィール画像設定
-          </ButtonBox>
-          <ButtonBox onClick={() => router.push("/")}>今は設定しない</ButtonBox>
-        </div>
+        </>
       ) : (
-        <h3>
-          ログインしていないか
-          <br />
-          既にアカウントにプロフィール画像は設定済みです。
-        </h3>
+        <>
+          <h2>アカウント確認中</h2>
+          <p>しばらくお待ちください。</p>
+        </>
       )}
     </main>
   );
 };
 
-export default ProfilePicture;
+export default ProfileImgSetting;
 
 const profilePictureBox = css`
   margin: 100px auto;
