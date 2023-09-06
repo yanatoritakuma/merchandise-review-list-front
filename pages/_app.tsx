@@ -1,10 +1,10 @@
 import "@/style/globals.css";
+import axios from "axios";
 import type { AppProps } from "next/app";
+import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { Suspense, useEffect } from "react";
-import axios from "axios";
-import Header from "@/components/layout/header";
+import { Header } from "@/components/layout/header";
 import { MessageProvider } from "@/provider/messageProvider";
 import { BackdropProvider } from "@/provider/backdropProvider";
 import { SnackbarBox } from "@/components/elements/snackbarBox";
@@ -18,7 +18,7 @@ const queryClient = new QueryClient({
     queries: {
       retry: false,
       refetchOnWindowFocus: false,
-      suspense: true,
+      // suspense: true,
     },
   },
 });

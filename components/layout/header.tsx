@@ -9,16 +9,14 @@ import Drawer from "@mui/material/Drawer";
 import { useQueryUser } from "@/hooks/user/useQueryUser";
 import { useMutateAuth } from "@/hooks/auth/useMutateAuth";
 
-export default function Header() {
-  const { data: user, error } = useQueryUser();
-  console.log(error?.response.status);
+export const Header = () => {
+  const { data, isLoading } = useQueryUser();
   const { logoutMutation } = useMutateAuth();
 
   const [menuFlag, setMenuFlag] = useState(false);
 
   return (
     <header css={header}>
-      {error?.response.status !== "401" ? <p>oooo</p> : <p>aaaa</p>}
       <div className="header__logoLinkMainBox">
         <div className="header__logoLinkBox">
           <div className="header__logoBox">
@@ -34,22 +32,22 @@ export default function Header() {
             <Link prefetch={false} href="/product-search">
               商品検索
             </Link>
-            {user?.id !== undefined && (
+            {data?.id !== undefined && (
               <Link prefetch={false} href="/mypage">
                 マイページ
               </Link>
             )}
-            {user?.id !== undefined && (
+            {data?.id !== undefined && (
               <Link prefetch={false} href="/">
                 レビュー投稿
               </Link>
             )}
-            {user?.id !== undefined && (
+            {data?.id !== undefined && (
               <Link prefetch={false} href="/">
                 タイムライン
               </Link>
             )}
-            {user?.id !== undefined ? (
+            {data?.id !== undefined ? (
               <>
                 <span onClick={() => logoutMutation.mutate()}>ログアウト</span>
               </>
@@ -61,7 +59,7 @@ export default function Header() {
               </>
             )}
           </div>
-          <div className="header__humBox">
+          <div css={humBox}>
             <MenuIcon onClick={() => setMenuFlag(true)} />
 
             {menuFlag && (
@@ -86,7 +84,7 @@ export default function Header() {
                   >
                     商品検索
                   </Link>
-                  {user?.id !== undefined && (
+                  {data?.id !== undefined && (
                     <Link
                       prefetch={false}
                       href="/mypage"
@@ -95,7 +93,7 @@ export default function Header() {
                       マイページ
                     </Link>
                   )}
-                  {user?.id !== undefined && (
+                  {data?.id !== undefined && (
                     <Link
                       prefetch={false}
                       href="/"
@@ -104,7 +102,7 @@ export default function Header() {
                       レビュー投稿
                     </Link>
                   )}
-                  {user?.id !== undefined && (
+                  {data?.id !== undefined && (
                     <Link
                       prefetch={false}
                       href="/"
@@ -113,7 +111,7 @@ export default function Header() {
                       タイムライン
                     </Link>
                   )}
-                  {user?.id !== undefined ? (
+                  {data?.id !== undefined ? (
                     <>
                       <span onClick={() => logoutMutation.mutate()}>
                         ログアウト
@@ -138,7 +136,7 @@ export default function Header() {
       </div>
     </header>
   );
-}
+};
 
 const header = css`
   position: fixed;
@@ -202,18 +200,18 @@ const header = css`
       cursor: pointer;
     }
   }
+`;
 
-  .header__humBox {
-    display: none;
-    @media screen and (max-width: 768px) {
-      padding-right: 24px;
-      width: 100%;
-      display: flex;
-      justify-content: flex-end;
+const humBox = css`
+  display: none;
+  @media screen and (max-width: 768px) {
+    padding-right: 24px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
 
-      svg {
-        cursor: pointer;
-      }
+    svg {
+      cursor: pointer;
     }
   }
 

@@ -2,7 +2,7 @@ import { css } from "@emotion/react";
 import Image from "next/image";
 import TopIcon from "@/images/top2.avif";
 
-export default function Home() {
+const Home = () => {
   return (
     <main css={homePage}>
       <div className="homePage__box">
@@ -118,7 +118,7 @@ export default function Home() {
       </div>
     </main>
   );
-}
+};
 
 const homePage = css`
   width: 100%;
@@ -182,3 +182,5 @@ const homePage = css`
     }
   }
 `;
+
+export default Home;
