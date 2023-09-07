@@ -8,7 +8,7 @@ export type TLoginUser = {
   image: string;
   name: string;
 };
-
+// todo:本番環境だとCookie情報を渡せていない
 export async function fetchLoginUser() {
   // await new Promise((resolve) => setTimeout(resolve, 3000));
   const headersList = headers();
