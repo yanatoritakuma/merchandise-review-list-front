@@ -5,7 +5,7 @@ import { TError } from "@/types/error";
 
 export const useQueryUser = () => {
   const getUser = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    // await new Promise((resolve) => setTimeout(resolve, 3000));
     const { data } = await axios.get<TUser>(
       `${process.env.NEXT_PUBLIC_API_URL}/user`
     );
@@ -15,7 +15,7 @@ export const useQueryUser = () => {
     queryKey: ["user"],
     queryFn: getUser,
     // suspense: false,
-    onError: (err: any) => {
+    onError: (err: TError) => {
       if (err.response.status === 401 || err.response.status === 403) {
         console.error("未ログイン");
       }
