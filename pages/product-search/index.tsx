@@ -9,12 +9,12 @@ const Index = () => {
   const router = useRouter();
   const [search, setSearch] = useState("");
 
-  //   const onClickSearch = () => {
-  //     router.push({
-  //       pathname: "/product-search/result",
-  //       query: { search: search, page: 1 },
-  //     });
-  //   };
+  const onClickSearch = () => {
+    router.push({
+      pathname: "/product-search/result",
+      query: { search: search, page: 1 },
+    });
+  };
 
   return (
     <main css={productSearch}>
@@ -26,9 +26,9 @@ const Index = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <ButtonBox>検索</ButtonBox>
+          <ButtonBox onClick={() => onClickSearch()}>検索</ButtonBox>
         </div>
-        <ResultYahoo search={"コーヒー"} page={1} />
+        {/* <ResultYahoo search={"コーヒー"} page={1} /> */}
       </div>
     </main>
   );
