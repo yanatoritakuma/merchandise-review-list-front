@@ -12,6 +12,7 @@ const Index = () => {
   const [currentYahooPage, setCurrentYahooPage] = useState(1);
 
   const onClickSearch = () => {
+    setCurrentYahooPage(1);
     setSearch({
       ...search,
       search: search.input,
@@ -22,7 +23,7 @@ const Index = () => {
     <main css={productSearch}>
       <div className="productSearch__box">
         <h2>商品検索</h2>
-        <div>
+        <div className="productSearch__inputBox">
           <TextBox
             label="商品検索"
             value={search.input}
@@ -65,7 +66,18 @@ const productSearch = css`
     }
 
     h2 {
+      font-size: 28px;
       text-align: center;
+    }
+  }
+
+  .productSearch__inputBox {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+
+    button {
+      margin-left: 32px;
     }
   }
 `;

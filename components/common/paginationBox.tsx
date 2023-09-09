@@ -10,34 +10,35 @@ type Props = {
   targetScroll?: string;
 };
 
-export const PaginationBox = memo((props: Props) => {
-  const { count, currentPage, setCurrentPage, targetScroll } = props;
+export const PaginationBox = memo(
+  ({ count, currentPage, setCurrentPage, targetScroll }: Props) => {
+    useEffect(() => {
+      if (!targetScroll) {
+        scroll.scrollToTop();
+      } else {
+        scroller.scrollTo(targetScroll, {
+          smooth: true,
+          duration: 500,
+          offset: -150,
+        });
+      }
 
-  useEffect(() => {
-    if (!targetScroll) {
-      scroll.scrollToTop();
-    } else {
-      scroller.scrollTo(targetScroll, {
-        smooth: true,
-        duration: 500,
-        offset: -150,
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentPage]);
 
-  return (
-    <Stack spacing={2} style={{ margin: "0 auto", width: "fit-content" }}>
-      <Pagination
-        count={count}
-        page={currentPage}
-        onChange={(event: React.ChangeEvent<unknown>, value: number) =>
-          setCurrentPage(value)
-        }
-        color="primary"
-      />
-    </Stack>
-  );
-});
+    return (
+      <Stack spacing={2} style={{ margin: "0 auto", width: "fit-content" }}>
+        <Pagination
+          count={count}
+          page={currentPage}
+          onChange={(event: React.ChangeEvent<unknown>, value: number) =>
+            setCurrentPage(value)
+          }
+          color="primary"
+        />
+      </Stack>
+    );
+  }
+);
 
 PaginationBox.displayName = "PaginationBox";

@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { PaginationBox } from "@/components/common/paginationBox";
 import { useQueryYahoo } from "@/hooks/yahoo/useQueryYahoo";
+import { ResultYahooSkeleton } from "@/components/product-search/resultYahooSkeleton";
 
 type Props = {
   search: string;
@@ -11,7 +12,6 @@ type Props = {
   setCurrentYahooPage: React.Dispatch<SetStateAction<number>>;
 };
 
-// eslint-disable-next-line react/display-name
 export const ResultYahoo = memo(
   ({ search, currentYahooPage, setCurrentYahooPage }: Props) => {
     //   todo: yahooAPIで初期検索（1ページ目）と2ページ目以降で総件数が変わって返ってくる
@@ -28,11 +28,8 @@ export const ResultYahoo = memo(
       refetch();
     }, [currentYahooPage, search, refetch]);
 
-    if (isLoading) {
-      return <div>検索中</div>;
-    }
-    if (isFetching) {
-      return <div>ページネーション</div>;
+    if (isLoading || isFetching) {
+      return <ResultYahooSkeleton />;
     }
 
     return (
@@ -41,11 +38,12 @@ export const ResultYahoo = memo(
         <span className="rresultYahooBox__topText">
           検索結果は300件までを上限にしています。
         </span>
-        <span className="resultYahooBox__currentPage">
-          {currentYahooPage}ページ目
-        </span>
+
         {data?.hits.length !== 0 ? (
           <div>
+            <span className="resultYahooBox__currentPage">
+              {currentYahooPage}ページ目
+            </span>
             {data?.hits?.map((hit) => (
               <Link
                 key={hit.index}
@@ -83,6 +81,8 @@ export const ResultYahoo = memo(
     );
   }
 );
+
+ResultYahoo.displayName = "ResultYahoo";
 
 const resultYahooBox = css`
   width: 46%;
@@ -146,10 +146,5 @@ const resultYahooBox = css`
     p {
       margin: 0;
     }
-  }
-
-  .resBox__rakutenMainBox {
-    width: 46%;
-    background-color: green;
   }
 `;
