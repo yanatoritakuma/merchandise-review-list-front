@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { SetStateAction, memo, useEffect, useState } from "react";
 import { css } from "@emotion/react";
 import Link from "next/link";
 import Image from "next/image";
@@ -7,61 +7,85 @@ import { useQueryYahoo } from "@/hooks/yahoo/useQueryYahoo";
 
 type Props = {
   search: string;
-  page: number;
+  currentYahooPage: number;
+  setCurrentYahooPage: React.Dispatch<SetStateAction<number>>;
 };
 
-export const ResultYahoo = ({ search, page }: Props) => {
-  const [currentYahooPage, setCurrentYahooPage] = useState(1);
-  console.log(currentYahooPage);
-  //   todo: yahooAPIで初期検索（1ページ目）と2ページ目以降で総件数が変わって返ってくる
-  //   const totalYahooPage = Math.ceil(resProducts.totalResultsAvailable / 20);
-  const { data } = useQueryYahoo(search, page);
-  console.log(data);
+// eslint-disable-next-line react/display-name
+export const ResultYahoo = memo(
+  ({ search, currentYahooPage, setCurrentYahooPage }: Props) => {
+    //   todo: yahooAPIで初期検索（1ページ目）と2ページ目以降で総件数が変わって返ってくる
+    //   const totalYahooPage = Math.ceil(resProducts.totalResultsAvailable / 20);
+    const { data, refetch, isLoading, isFetching } = useQueryYahoo(
+      search,
+      currentYahooPage
+    );
+    console.log(data);
+    console.log("isFetching", isFetching);
+    console.log("isLoading", isLoading);
 
-  return (
-    <section css={resultYahooBox}>
-      <h3>Yahooショッピング検索結果</h3>
-      <span className="rresultYahooBox__topText">
-        検索結果は30件までを上限にしています。
-      </span>
-      <span className="resultYahooBox__currentPage">
-        {currentYahooPage}ページ目
-      </span>
-      {data?.hits?.map((hit) => (
-        <Link
-          key={hit.index}
-          className="resultYahooBox__yahooBox"
-          prefetch={false}
-          href={hit.url}
-        >
-          <h4>商品名:{hit.name}</h4>
-          <div className="resultYahooBox__yahooTextBox">
-            <h5>商品説明</h5>
-            <p dangerouslySetInnerHTML={{ __html: hit.description }} />
+    useEffect(() => {
+      refetch();
+    }, [currentYahooPage, search, refetch]);
+
+    if (isLoading) {
+      return <div>検索中</div>;
+    }
+    if (isFetching) {
+      return <div>ページネーション</div>;
+    }
+
+    return (
+      <section css={resultYahooBox}>
+        <h3>Yahooショッピング検索結果</h3>
+        <span className="rresultYahooBox__topText">
+          検索結果は300件までを上限にしています。
+        </span>
+        <span className="resultYahooBox__currentPage">
+          {currentYahooPage}ページ目
+        </span>
+        {data?.hits.length !== 0 ? (
+          <div>
+            {data?.hits?.map((hit) => (
+              <Link
+                key={hit.index}
+                className="resultYahooBox__yahooBox"
+                prefetch={false}
+                href={hit.url}
+                target="_blank"
+              >
+                <h4>商品名:{hit.name}</h4>
+                <div className="resultYahooBox__yahooTextBox">
+                  <h5>商品説明</h5>
+                  <p dangerouslySetInnerHTML={{ __html: hit.description }} />
+                </div>
+                <span>在庫: {hit.inStock ? "あり" : "なし"}</span>
+                <span>価格: {hit.price}</span>
+                <span>レビュー平均: {hit.review.rate}</span>
+                <Image
+                  src={hit.image.medium}
+                  width={320}
+                  height={320}
+                  alt="プロフィール画像"
+                />
+              </Link>
+            ))}
+            <PaginationBox
+              count={30}
+              currentPage={currentYahooPage}
+              setCurrentPage={setCurrentYahooPage}
+            />
           </div>
-          <span>在庫: {hit.inStock ? "あり" : "なし"}</span>
-          <span>価格: {hit.price}</span>
-          <span>レビュー平均: {hit.review.rate}</span>
-          <Image
-            src={hit.image.medium}
-            width={320}
-            height={320}
-            alt="プロフィール画像"
-          />
-        </Link>
-      ))}
-      <PaginationBox
-        count={30}
-        currentPage={currentYahooPage}
-        setCurrentPage={setCurrentYahooPage}
-      />
-    </section>
-  );
-};
+        ) : (
+          <div>検索結果がありません。</div>
+        )}
+      </section>
+    );
+  }
+);
 
 const resultYahooBox = css`
   width: 46%;
-  // background-color: #f03;
 
   h3 {
     color: #f03;
@@ -104,7 +128,10 @@ const resultYahooBox = css`
     }
 
     img {
-      width: 100%;
+      margin: 20px auto;
+      display: block;
+      width: 60%;
+      height: auto;
       object-fit: contain;
     }
   }

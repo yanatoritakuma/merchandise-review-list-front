@@ -3,16 +3,18 @@ import { TextBox } from "@/components/elements/textBox";
 import { ButtonBox } from "@/components/elements/buttonBox";
 import { useState } from "react";
 import { ResultYahoo } from "@/components/product-search/resultYahoo";
-import { useRouter } from "next/router";
 
 const Index = () => {
-  const router = useRouter();
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState({
+    input: "",
+    search: "",
+  });
+  const [currentYahooPage, setCurrentYahooPage] = useState(1);
 
   const onClickSearch = () => {
-    router.push({
-      pathname: "/product-search/result",
-      query: { search: search, page: 1 },
+    setSearch({
+      ...search,
+      search: search.input,
     });
   };
 
@@ -23,12 +25,23 @@ const Index = () => {
         <div>
           <TextBox
             label="商品検索"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            value={search.input}
+            onChange={(e) =>
+              setSearch({
+                ...search,
+                input: e.target.value,
+              })
+            }
           />
           <ButtonBox onClick={() => onClickSearch()}>検索</ButtonBox>
         </div>
-        {/* <ResultYahoo search={"コーヒー"} page={1} /> */}
+        {search.search !== "" && (
+          <ResultYahoo
+            search={search.search}
+            currentYahooPage={currentYahooPage}
+            setCurrentYahooPage={setCurrentYahooPage}
+          />
+        )}
       </div>
     </main>
   );
@@ -38,7 +51,8 @@ export default Index;
 
 const productSearch = css`
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  min-height: 100vh;
   background-color: #ffd900;
 
   .productSearch__box {
