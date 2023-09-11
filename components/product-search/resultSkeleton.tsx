@@ -3,10 +3,10 @@ import Stack from "@mui/material/Stack";
 import { css } from "@emotion/react";
 import { Typography } from "@mui/material";
 
-export const ResultYahooSkeleton = () => {
+export const ResultSkeleton = () => {
   return (
-    <Stack spacing={1}>
-      <div css={resultYahooSkeleton}>
+    <Stack spacing={1} style={{ width: "46%" }}>
+      <div css={resultSkeleton}>
         <h4>{<Skeleton sx={{ fontSize: "2rem" }} />}</h4>
         <h5>{<Skeleton sx={{ fontSize: "1.2rem" }} />}</h5>
         <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
@@ -19,11 +19,11 @@ export const ResultYahooSkeleton = () => {
   );
 };
 
-const resultYahooSkeleton = css`
+const resultSkeleton = css`
   padding: 20px;
   background-color: #fff;
   border-radius: 10px;
-  width: 46%;
+  width: 100%;
 
   h4 {
     width: 40%;

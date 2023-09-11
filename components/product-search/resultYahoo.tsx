@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { PaginationBox } from "@/components/common/paginationBox";
 import { useQueryYahoo } from "@/hooks/yahoo/useQueryYahoo";
-import { ResultYahooSkeleton } from "@/components/product-search/resultYahooSkeleton";
+import { ResultSkeleton } from "@/components/product-search/resultSkeleton";
 
 type Props = {
   search: string;
@@ -20,16 +20,13 @@ export const ResultYahoo = memo(
       search,
       currentYahooPage
     );
-    console.log(data);
-    console.log("isFetching", isFetching);
-    console.log("isLoading", isLoading);
 
     useEffect(() => {
       refetch();
     }, [currentYahooPage, search, refetch]);
 
     if (isLoading || isFetching) {
-      return <ResultYahooSkeleton />;
+      return <ResultSkeleton />;
     }
 
     return (

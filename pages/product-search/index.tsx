@@ -3,6 +3,7 @@ import { TextBox } from "@/components/elements/textBox";
 import { ButtonBox } from "@/components/elements/buttonBox";
 import { useState } from "react";
 import { ResultYahoo } from "@/components/product-search/resultYahoo";
+import { ResultRakuten } from "@/components/product-search/resultRakuten";
 
 const Index = () => {
   const [search, setSearch] = useState({
@@ -10,9 +11,11 @@ const Index = () => {
     search: "",
   });
   const [currentYahooPage, setCurrentYahooPage] = useState(1);
+  const [currentRakutenPage, setCurrentRakutenPage] = useState(1);
 
   const onClickSearch = () => {
     setCurrentYahooPage(1);
+    setCurrentRakutenPage(1);
     setSearch({
       ...search,
       search: search.input,
@@ -36,13 +39,22 @@ const Index = () => {
           />
           <ButtonBox onClick={() => onClickSearch()}>検索</ButtonBox>
         </div>
-        {search.search !== "" && (
-          <ResultYahoo
-            search={search.search}
-            currentYahooPage={currentYahooPage}
-            setCurrentYahooPage={setCurrentYahooPage}
-          />
-        )}
+        <div css={resultBox}>
+          {search.search !== "" && (
+            <ResultYahoo
+              search={search.search}
+              currentYahooPage={currentYahooPage}
+              setCurrentYahooPage={setCurrentYahooPage}
+            />
+          )}
+          {search.search !== "" && (
+            <ResultRakuten
+              search={search.search}
+              currentRakutenPage={currentRakutenPage}
+              setCurrentRakutenPage={setCurrentRakutenPage}
+            />
+          )}
+        </div>
       </div>
     </main>
   );
@@ -80,4 +92,9 @@ const productSearch = css`
       margin-left: 32px;
     }
   }
+`;
+
+const resultBox = css`
+  display: flex;
+  justify-content: space-between;
 `;
