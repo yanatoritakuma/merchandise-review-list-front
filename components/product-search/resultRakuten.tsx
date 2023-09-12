@@ -19,13 +19,42 @@ export const ResultRakuten = memo(
       currentRakutenPage
     );
 
+    const initialFlagCount = 20;
+
+    const initialMoreTextFlags = Array.from(
+      { length: initialFlagCount },
+      () => false
+    );
+
+    const [moreTextFlag, setMoreTextFlag] = useState(initialMoreTextFlags);
+
     const totalPage =
       data?.count !== undefined ? Math.ceil(data.count / 20) : 0;
 
     const totalCountPage = totalPage > 100 ? 100 : totalPage;
 
+    const truncateString = (inputString: string, maxLength: number) => {
+      if (inputString?.length <= maxLength) {
+        return inputString;
+      } else {
+        const truncated = inputString?.slice(0, maxLength - 3);
+        return truncated + "...";
+      }
+    };
+
+    const moreTextDescription = (
+      description: string,
+      moreTextFlag: boolean
+    ) => {
+      if (description?.length > 100) {
+        return moreTextFlag ? "元に戻す" : "もっとみる";
+      }
+      return "";
+    };
+
     useEffect(() => {
       refetch();
+      setMoreTextFlag(initialMoreTextFlags);
     }, [currentRakutenPage, search, refetch]);
 
     if (isLoading || isFetching) {
@@ -43,32 +72,52 @@ export const ResultRakuten = memo(
               {currentRakutenPage}ページ目
             </span>
             {data?.Items?.map((item, index) => (
-              <Link
-                key={index}
-                className="resultRakutenBox__rakutenBox"
-                prefetch={false}
-                href={item.Item.itemUrl}
-                target="_blank"
-              >
-                <h4>商品名:{item.Item.itemName}</h4>
+              <div key={index} className="resultRakutenBox__rakutenBox">
+                <h4>商品名:{item.Item.itemCode}</h4>
                 <div className="resultRakutenBox__rakutenTextBox">
                   <h5>商品説明</h5>
-                  <p
-                    dangerouslySetInnerHTML={{ __html: item.Item.itemCaption }}
-                  />
+                  {!moreTextFlag[index] ? (
+                    <p
+                      dangerouslySetInnerHTML={{
+                        __html: truncateString(item.Item.itemCaption, 100),
+                      }}
+                    />
+                  ) : (
+                    <p
+                      dangerouslySetInnerHTML={{
+                        __html: item.Item.itemCaption,
+                      }}
+                    />
+                  )}
+                  <span
+                    className="resultRakutenBox__moreText"
+                    onClick={() => {
+                      const newArray = [...moreTextFlag];
+                      newArray[index] = !moreTextFlag[index];
+                      setMoreTextFlag(newArray);
+                    }}
+                  >
+                    {moreTextDescription(
+                      item.Item.itemCaption,
+                      moreTextFlag[index]
+                    )}
+                  </span>
                 </div>
                 <span>
                   在庫: {item.Item.availability !== 0 ? "あり" : "なし"}
                 </span>
                 <span>価格: {item.Item.itemPrice}</span>
                 <span>レビュー平均: {item.Item.reviewAverage}</span>
+                <Link prefetch={false} href={item.Item.itemUrl} target="_blank">
+                  商品のサイトへ
+                </Link>
                 <Image
                   src={item.Item.mediumImageUrls[0].imageUrl}
                   width={320}
                   height={320}
                   alt="プロフィール画像"
                 />
-              </Link>
+              </div>
             ))}
             <PaginationBox
               count={totalCountPage}
@@ -107,17 +156,13 @@ const resultRakutenBox = css`
     margin: 20px 0;
     padding: 20px;
     display: block;
+    width: 100%;
+    height: 680px;
     border: 3px solid #bf0000;
     border-radius: 10px;
     background-color: #fff;
     color: #333;
-    text-decoration: none;
-    transition: transform 0.3s;
-
-    &:hover {
-      opacity: 0.9;
-      transform: translateY(-5px);
-    }
+    overflow-y: scroll;
 
     h4 {
       margin-top: 0;
@@ -127,6 +172,10 @@ const resultRakutenBox = css`
     span {
       margin: 6px 0;
       display: block;
+    }
+
+    a {
+      color: #1976d2;
     }
 
     img {
@@ -148,5 +197,11 @@ const resultRakutenBox = css`
     p {
       margin: 0;
     }
+  }
+
+  .resultRakutenBox__moreText {
+    margin: 12px 0;
+    text-align: center;
+    cursor: pointer;
   }
 `;

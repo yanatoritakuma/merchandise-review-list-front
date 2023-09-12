@@ -21,19 +21,48 @@ export const ResultYahoo = memo(
       currentYahooPage
     );
 
+    const initialFlagCount = 20;
+
+    const initialMoreTextFlags = Array.from(
+      { length: initialFlagCount },
+      () => false
+    );
+
+    const [moreTextFlag, setMoreTextFlag] = useState(initialMoreTextFlags);
+
     useEffect(() => {
       refetch();
+      setMoreTextFlag(initialMoreTextFlags);
     }, [currentYahooPage, search, refetch]);
 
     if (isLoading || isFetching) {
       return <ResultSkeleton />;
     }
 
+    const truncateString = (inputString: string, maxLength: number) => {
+      if (inputString?.length <= maxLength) {
+        return inputString;
+      } else {
+        const truncated = inputString?.slice(0, maxLength - 3);
+        return truncated + "...";
+      }
+    };
+
+    const moreTextDescription = (
+      description: string,
+      moreTextFlag: boolean
+    ) => {
+      if (description?.length > 100) {
+        return moreTextFlag ? "元に戻す" : "もっとみる";
+      }
+      return "";
+    };
+
     return (
       <section css={resultYahooBox}>
         <h3>Yahooショッピング検索結果</h3>
         <span className="rresultYahooBox__topText">
-          検索結果は300件までを上限にしています。
+          検索結果は30ページまでを上限にしています。
         </span>
 
         {data?.hits.length !== 0 ? (
@@ -41,29 +70,49 @@ export const ResultYahoo = memo(
             <span className="resultYahooBox__currentPage">
               {currentYahooPage}ページ目
             </span>
-            {data?.hits?.map((hit) => (
-              <Link
-                key={hit.index}
-                className="resultYahooBox__yahooBox"
-                prefetch={false}
-                href={hit.url}
-                target="_blank"
-              >
-                <h4>商品名:{hit.name}</h4>
+            {data?.hits?.map((hit, index) => (
+              <div key={hit.index} className="resultYahooBox__yahooBox">
+                <h4>{hit.name}</h4>
                 <div className="resultYahooBox__yahooTextBox">
                   <h5>商品説明</h5>
-                  <p dangerouslySetInnerHTML={{ __html: hit.description }} />
+                  {!moreTextFlag[index] ? (
+                    <p
+                      dangerouslySetInnerHTML={{
+                        __html: truncateString(hit.description, 100),
+                      }}
+                    />
+                  ) : (
+                    <p
+                      dangerouslySetInnerHTML={{
+                        __html: hit.description,
+                      }}
+                    />
+                  )}
+
+                  <span
+                    className="resultYahooBox__moreText"
+                    onClick={() => {
+                      const newArray = [...moreTextFlag];
+                      newArray[index] = !moreTextFlag[index];
+                      setMoreTextFlag(newArray);
+                    }}
+                  >
+                    {moreTextDescription(hit.description, moreTextFlag[index])}
+                  </span>
                 </div>
                 <span>在庫: {hit.inStock ? "あり" : "なし"}</span>
-                <span>価格: {hit.price}</span>
+                <span>価格: {hit.price.toLocaleString()}円</span>
                 <span>レビュー平均: {hit.review.rate}</span>
+                <Link prefetch={false} href={hit.url} target="_blank">
+                  商品のサイトへ
+                </Link>
                 <Image
                   src={hit.image.medium}
                   width={320}
                   height={320}
                   alt="プロフィール画像"
                 />
-              </Link>
+              </div>
             ))}
             <PaginationBox
               count={30}
@@ -102,17 +151,13 @@ const resultYahooBox = css`
     margin: 20px 0;
     padding: 20px;
     display: block;
+    width: 100%;
+    height: 680px;
     border: 3px solid #f03;
     border-radius: 10px;
     background-color: #fff;
     color: #333;
-    text-decoration: none;
-    transition: transform 0.3s;
-
-    &:hover {
-      opacity: 0.9;
-      transform: translateY(-5px);
-    }
+    overflow-y: scroll;
 
     h4 {
       margin-top: 0;
@@ -122,6 +167,10 @@ const resultYahooBox = css`
     span {
       margin: 6px 0;
       display: block;
+    }
+
+    a {
+      color: #1976d2;
     }
 
     img {
@@ -143,5 +192,11 @@ const resultYahooBox = css`
     p {
       margin: 0;
     }
+  }
+
+  .resultYahooBox__moreText {
+    margin: 12px 0;
+    text-align: center;
+    cursor: pointer;
   }
 `;

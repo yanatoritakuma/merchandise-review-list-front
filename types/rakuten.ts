@@ -9,6 +9,7 @@ type TItems = {
     itemName: string; // 商品名
     itemPrice: number; // 値段
     itemCaption: string; // キャッチコピー
+    itemCode: string; // アイテムコード
     itemUrl: string; // 商品URL
     reviewAverage: number; //レビュー平均
     availability: number; //在庫　0：在庫なし 1：在庫あり
