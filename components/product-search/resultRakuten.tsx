@@ -138,6 +138,12 @@ ResultRakuten.displayName = "ResultRakuten";
 const resultRakutenBox = css`
   width: 46%;
 
+  @media (max-width: 768px) {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 600px;
+  }
+
   h3 {
     color: #bf0000;
   }
@@ -163,6 +169,10 @@ const resultRakutenBox = css`
     background-color: #fff;
     color: #333;
     overflow-y: scroll;
+
+    @media (max-width: 425px) {
+      height: 400px;
+    }
 
     h4 {
       margin-top: 0;
