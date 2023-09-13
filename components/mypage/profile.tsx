@@ -3,6 +3,7 @@ import { css } from "@emotion/react";
 import { useQueryUser } from "@/hooks/user/useQueryUser";
 import { ProfileSkeleton } from "@/components/mypage/profileSkeleton";
 import NoImage from "@/images/noimage-user.png";
+import { UserEditMenu } from "@/components/mypage/userEditMenu";
 
 export const Profile = () => {
   const { data, isLoading } = useQueryUser();
@@ -38,6 +39,9 @@ export const Profile = () => {
               />
             )}
             <h4>{data?.name}</h4>
+            <div className="profile__editIcon">
+              <UserEditMenu />
+            </div>
           </div>
           <span className="profile__useDate">
             {formatDate(data?.created_at)}から利用しています
@@ -58,9 +62,14 @@ const profile = css`
   .profile__imgBox {
     display: flex;
     align-items: center;
+    position: relative;
 
     h4 {
       margin-left: 18px;
+
+      @media (max-width: 425px) {
+        max-width: 120px;
+      }
     }
 
     img {
@@ -74,5 +83,10 @@ const profile = css`
     display: block;
     color: #aaa;
     font-size: 14px;
+  }
+
+  .profile__editIcon {
+    position: absolute;
+    right: -14px;
   }
 `;

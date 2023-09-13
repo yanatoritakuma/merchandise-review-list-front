@@ -73,7 +73,7 @@ export const ResultRakuten = memo(
             </span>
             {data?.Items?.map((item, index) => (
               <div key={index} className="resultRakutenBox__rakutenBox">
-                <h4>商品名:{item.Item.itemCode}</h4>
+                <h4>{item.Item.itemName}</h4>
                 <div className="resultRakutenBox__rakutenTextBox">
                   <h5>商品説明</h5>
                   {!moreTextFlag[index] ? (
