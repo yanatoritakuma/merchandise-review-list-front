@@ -1,9 +1,7 @@
-"use client";
-
 import { useContext } from "react";
 import firebase, { storage } from "@/firebase/initFirebase";
-import { TLoginUser } from "@/app/api/fetchLoginUser";
-import { BackdropContext } from "@/app/provider/backdropProvider";
+import { BackdropContext } from "@/provider/backdropProvider";
+import { TUser } from "@/types/user";
 
 // 画像をfirebaseのstorageに保存
 export const ImageRegistration = () => {
@@ -13,7 +11,7 @@ export const ImageRegistration = () => {
     setPhotoUrl: React.Dispatch<React.SetStateAction<File | null>>,
     setPreviewUrl: React.Dispatch<React.SetStateAction<string>>,
     dbRegistration?: (file: string | null) => void,
-    user?: TLoginUser
+    user?: TUser
   ) => {
     setBackdropFlag(true);
     if (photoUrl) {

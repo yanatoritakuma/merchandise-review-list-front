@@ -2,7 +2,11 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["item-shopping.c.yimg.jp", "firebasestorage.googleapis.com"],
+    domains: [
+      "item-shopping.c.yimg.jp",
+      "thumbnail.image.rakuten.co.jp",
+      "firebasestorage.googleapis.com",
+    ],
   },
 };
 
