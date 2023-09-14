@@ -5,6 +5,11 @@ import Image from "next/image";
 import { PaginationBox } from "@/components/common/paginationBox";
 import { useQueryYahoo } from "@/hooks/yahoo/useQueryYahoo";
 import { ResultSkeleton } from "@/components/product-search/resultSkeleton";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import { useMutateProduct } from "@/hooks/product/useMutateProduct";
+import { TReqProduct } from "@/types/product";
+import { TYahooHit } from "@/types/yahoo";
 
 type Props = {
   search: string;
@@ -20,6 +25,7 @@ export const ResultYahoo = memo(
       search,
       currentYahooPage
     );
+    const { productMutation } = useMutateProduct();
 
     const initialFlagCount = 20;
 
@@ -59,6 +65,23 @@ export const ResultYahoo = memo(
       return "";
     };
 
+    const onClickCart = async (product: TYahooHit) => {
+      try {
+        await productMutation.mutateAsync({
+          name: product.name,
+          description: product.description,
+          stock: product.inStock,
+          price: product.price,
+          review: product.review.rate,
+          url: product.url,
+          image: product.image.medium,
+          code: product.code,
+        });
+      } catch (err) {
+        console.error("err:", err);
+      }
+    };
+
     return (
       <section css={resultYahooBox}>
         <h3>Yahooショッピング検索結果</h3>
@@ -73,6 +96,10 @@ export const ResultYahoo = memo(
             </span>
             {data?.hits?.map((hit, index) => (
               <div key={hit.index} className="resultYahooBox__yahooBox">
+                <span onClick={() => onClickCart(hit)}>
+                  <ShoppingCartIcon className="resultYahooBox__cartIcon" />
+                </span>
+                <ShoppingCartOutlinedIcon className="resultYahooBox__cartIcon" />
                 <h4>{hit.name}</h4>
                 <div className="resultYahooBox__yahooTextBox">
                   <h5>商品説明</h5>
@@ -191,6 +218,14 @@ const resultYahooBox = css`
       height: auto;
       object-fit: contain;
     }
+  }
+
+  .resultYahooBox__cartIcon {
+    margin: 0 0 18px auto;
+    display: block;
+    width: fit-content;
+    font-size: 32px;
+    cursor: pointer;
   }
 
   .resultYahooBox__yahooTextBox {
