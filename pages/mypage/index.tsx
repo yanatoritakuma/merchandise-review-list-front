@@ -17,7 +17,7 @@ export default Index;
 const mypage = css`
   width: 100%;
   height: 100vh;
-  //   background-color: #ffd900;
+
   .mypage__box {
     margin: 60px auto;
     padding: 40px;
@@ -28,6 +28,10 @@ const mypage = css`
 
     @media (max-width: 768px) {
       padding: 20px;
+    }
+
+    @media (max-width: 425px) {
+      padding: 12px;
     }
 
     h2 {

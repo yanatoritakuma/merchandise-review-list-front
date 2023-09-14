@@ -1,9 +1,10 @@
 import { css } from "@emotion/react";
 import { TextBox } from "@/components/elements/textBox";
 import { ButtonBox } from "@/components/elements/buttonBox";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import { ResultYahoo } from "@/components/product-search/resultYahoo";
 import { ResultRakuten } from "@/components/product-search/resultRakuten";
+import { TabsBox } from "@/components/elements/tabsBox";
 
 const Index = () => {
   const [search, setSearch] = useState({
@@ -12,6 +13,8 @@ const Index = () => {
   });
   const [currentYahooPage, setCurrentYahooPage] = useState(1);
   const [currentRakutenPage, setCurrentRakutenPage] = useState(1);
+
+  const [selectTab, setSelectTab] = useState(0);
 
   const onClickSearch = () => {
     setCurrentYahooPage(1);
@@ -40,20 +43,46 @@ const Index = () => {
           <ButtonBox onClick={() => onClickSearch()}>検索</ButtonBox>
         </div>
         <div css={resultBox}>
-          {search.search !== "" && (
-            <ResultYahoo
-              search={search.search}
-              currentYahooPage={currentYahooPage}
-              setCurrentYahooPage={setCurrentYahooPage}
+          <div css={tabBox}>
+            <TabsBox
+              labels={["Yahoo", "楽天"]}
+              selectTab={selectTab}
+              setSelectTab={setSelectTab}
             />
-          )}
-          {search.search !== "" && (
-            <ResultRakuten
-              search={search.search}
-              currentRakutenPage={currentRakutenPage}
-              setCurrentRakutenPage={setCurrentRakutenPage}
-            />
-          )}
+          </div>
+          <div className="resultBox__pc">
+            {search.search !== "" && (
+              <ResultYahoo
+                search={search.search}
+                currentYahooPage={currentYahooPage}
+                setCurrentYahooPage={setCurrentYahooPage}
+              />
+            )}
+            {search.search !== "" && (
+              <ResultRakuten
+                search={search.search}
+                currentRakutenPage={currentRakutenPage}
+                setCurrentRakutenPage={setCurrentRakutenPage}
+              />
+            )}
+          </div>
+          <div className="resultBox__sp">
+            {selectTab === 0
+              ? search.search !== "" && (
+                  <ResultYahoo
+                    search={search.search}
+                    currentYahooPage={currentYahooPage}
+                    setCurrentYahooPage={setCurrentYahooPage}
+                  />
+                )
+              : search.search !== "" && (
+                  <ResultRakuten
+                    search={search.search}
+                    currentRakutenPage={currentRakutenPage}
+                    setCurrentRakutenPage={setCurrentRakutenPage}
+                  />
+                )}
+          </div>
         </div>
       </div>
     </main>
@@ -95,6 +124,36 @@ const productSearch = css`
 `;
 
 const resultBox = css`
-  display: flex;
-  justify-content: space-between;
+  .resultBox__pc {
+    display: flex;
+    justify-content: space-between;
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  .resultBox__sp {
+    display: none;
+
+    @media (max-width: 768px) {
+      display: block;
+    }
+  }
+`;
+
+const tabBox = css`
+  margin: 32px auto;
+  width: 250px;
+  display: none;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+
+  div {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
 `;

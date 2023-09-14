@@ -55,6 +55,7 @@ export const ResultRakuten = memo(
     useEffect(() => {
       refetch();
       setMoreTextFlag(initialMoreTextFlags);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentRakutenPage, search, refetch]);
 
     if (isLoading || isFetching) {
@@ -73,7 +74,7 @@ export const ResultRakuten = memo(
             </span>
             {data?.Items?.map((item, index) => (
               <div key={index} className="resultRakutenBox__rakutenBox">
-                <h4>商品名:{item.Item.itemCode}</h4>
+                <h4>{item.Item.itemName}</h4>
                 <div className="resultRakutenBox__rakutenTextBox">
                   <h5>商品説明</h5>
                   {!moreTextFlag[index] ? (
@@ -138,6 +139,12 @@ ResultRakuten.displayName = "ResultRakuten";
 const resultRakutenBox = css`
   width: 46%;
 
+  @media (max-width: 768px) {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 600px;
+  }
+
   h3 {
     color: #bf0000;
   }
@@ -163,6 +170,10 @@ const resultRakutenBox = css`
     background-color: #fff;
     color: #333;
     overflow-y: scroll;
+
+    @media (max-width: 425px) {
+      height: 400px;
+    }
 
     h4 {
       margin-top: 0;
