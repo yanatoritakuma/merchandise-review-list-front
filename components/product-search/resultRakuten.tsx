@@ -55,6 +55,7 @@ export const ResultRakuten = memo(
     useEffect(() => {
       refetch();
       setMoreTextFlag(initialMoreTextFlags);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentRakutenPage, search, refetch]);
 
     if (isLoading || isFetching) {

@@ -33,6 +33,7 @@ export const ResultYahoo = memo(
     useEffect(() => {
       refetch();
       setMoreTextFlag(initialMoreTextFlags);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentYahooPage, search, refetch]);
 
     if (isLoading || isFetching) {
