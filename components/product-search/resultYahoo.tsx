@@ -6,9 +6,7 @@ import { PaginationBox } from "@/components/common/paginationBox";
 import { useQueryYahoo } from "@/hooks/yahoo/useQueryYahoo";
 import { ResultSkeleton } from "@/components/product-search/resultSkeleton";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { useMutateProduct } from "@/hooks/product/useMutateProduct";
-import { TReqProduct } from "@/types/product";
 import { TYahooHit } from "@/types/yahoo";
 
 type Props = {
@@ -96,10 +94,6 @@ export const ResultYahoo = memo(
             </span>
             {data?.hits?.map((hit, index) => (
               <div key={hit.index} className="resultYahooBox__yahooBox">
-                <span onClick={() => onClickCart(hit)}>
-                  <ShoppingCartIcon className="resultYahooBox__cartIcon" />
-                </span>
-                <ShoppingCartOutlinedIcon className="resultYahooBox__cartIcon" />
                 <h4>{hit.name}</h4>
                 <div className="resultYahooBox__yahooTextBox">
                   <h5>商品説明</h5>
@@ -134,11 +128,18 @@ export const ResultYahoo = memo(
                 <Link prefetch={false} href={hit.url} target="_blank">
                   商品のサイトへ
                 </Link>
+                <span
+                  className="resultYahooBox__cart"
+                  onClick={() => onClickCart(hit)}
+                >
+                  カートにいれる
+                  <ShoppingCartIcon className="resultYahooBox__cartIcon" />
+                </span>
                 <Image
                   src={hit.image.medium}
                   width={320}
                   height={320}
-                  alt="プロフィール画像"
+                  alt="商品画像"
                 />
               </div>
             ))}
@@ -207,6 +208,21 @@ const resultYahooBox = css`
       display: block;
     }
 
+    .resultYahooBox__cart {
+      margin: 12px 0;
+      padding: 4px 12px;
+      display: flex;
+      align-items: center;
+      border: 2px solid #333;
+      border-radius: 10px;
+      width: fit-content;
+      cursor: pointer;
+    }
+
+    .resultYahooBox__cartIcon {
+      margin-left: 12px;
+    }
+
     a {
       color: #1976d2;
     }
@@ -218,14 +234,6 @@ const resultYahooBox = css`
       height: auto;
       object-fit: contain;
     }
-  }
-
-  .resultYahooBox__cartIcon {
-    margin: 0 0 18px auto;
-    display: block;
-    width: fit-content;
-    font-size: 32px;
-    cursor: pointer;
   }
 
   .resultYahooBox__yahooTextBox {

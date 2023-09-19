@@ -5,6 +5,9 @@ import Image from "next/image";
 import { PaginationBox } from "@/components/common/paginationBox";
 import { ResultSkeleton } from "@/components/product-search/resultSkeleton";
 import { useQueryRakuten } from "@/hooks/rakuten/useQueryRakuten";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { useMutateProduct } from "@/hooks/product/useMutateProduct";
+import { TItems } from "@/types/rakuten";
 
 type Props = {
   search: string;
@@ -18,6 +21,7 @@ export const ResultRakuten = memo(
       search,
       currentRakutenPage
     );
+    const { productMutation } = useMutateProduct();
 
     const initialFlagCount = 20;
 
@@ -50,6 +54,23 @@ export const ResultRakuten = memo(
         return moreTextFlag ? "元に戻す" : "もっとみる";
       }
       return "";
+    };
+
+    const onClickCart = async (items: TItems) => {
+      try {
+        await productMutation.mutateAsync({
+          name: items.Item.itemName,
+          description: items.Item.itemCaption,
+          stock: items.Item.availability === 0 ? false : true,
+          price: items.Item.itemPrice,
+          review: items.Item.reviewAverage,
+          url: items.Item.itemUrl,
+          image: items.Item.mediumImageUrls[0].imageUrl,
+          code: items.Item.itemCode,
+        });
+      } catch (err) {
+        console.error("err:", err);
+      }
     };
 
     useEffect(() => {
@@ -112,6 +133,13 @@ export const ResultRakuten = memo(
                 <Link prefetch={false} href={item.Item.itemUrl} target="_blank">
                   商品のサイトへ
                 </Link>
+                <span
+                  className="esultRakutenBox__cart"
+                  onClick={() => onClickCart(item)}
+                >
+                  カートにいれる
+                  <ShoppingCartIcon className="esultRakutenBox__cartIcon" />
+                </span>
                 <Image
                   src={item.Item.mediumImageUrls[0].imageUrl}
                   width={320}
@@ -183,6 +211,21 @@ const resultRakutenBox = css`
     span {
       margin: 6px 0;
       display: block;
+    }
+
+    .esultRakutenBox__cart {
+      margin: 12px 0;
+      padding: 4px 12px;
+      display: flex;
+      align-items: center;
+      border: 2px solid #333;
+      border-radius: 10px;
+      width: fit-content;
+      cursor: pointer;
+    }
+
+    .esultRakutenBox__cartIcon {
+      margin-left: 12px;
     }
 
     a {

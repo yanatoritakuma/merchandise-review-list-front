@@ -1,12 +1,18 @@
+import { useState } from "react";
 import Image from "next/image";
 import { css } from "@emotion/react";
 import { useQueryUser } from "@/hooks/user/useQueryUser";
 import { ProfileSkeleton } from "@/components/mypage/profileSkeleton";
 import NoImage from "@/images/noimage-user.png";
 import { UserEditMenu } from "@/components/mypage/userEditMenu";
+import { useQueryUserProduct } from "@/hooks/product/useQueryUserProduct";
+import { TabsBox } from "@/components/elements/tabsBox";
+import { Cart } from "@/components/mypage/cart";
 
 export const Profile = () => {
-  const { data, isLoading } = useQueryUser();
+  const { data: user, isLoading: userIsLoading } = useQueryUser();
+
+  const [selectTab, setSelectTab] = useState(0);
 
   const formatDate = (inputDate: string) => {
     const date = new Date(inputDate);
@@ -18,14 +24,28 @@ export const Profile = () => {
     return `${year}年${month}月${day}日`;
   };
 
-  return !isLoading ? (
+  const selectOpneProduct = (tab: number) => {
+    switch (tab) {
+      case 0:
+        return <Cart />;
+
+      case 1:
+        return "投稿";
+      case 2:
+        return "いいね";
+      default:
+        return "カート";
+    }
+  };
+
+  return !userIsLoading ? (
     <section css={profile}>
-      {data?.id !== undefined ? (
+      {user?.id !== undefined ? (
         <>
           <div className="profile__imgBox">
-            {data.image !== "" ? (
+            {user.image !== "" ? (
               <Image
-                src={data?.image}
+                src={user?.image}
                 width={80}
                 height={80}
                 alt="プロフィール画像"
@@ -38,14 +58,24 @@ export const Profile = () => {
                 alt="プロフィール画像"
               />
             )}
-            <h4>{data?.name}</h4>
+            <h4>{user?.name}</h4>
             <div className="profile__editIcon">
               <UserEditMenu />
             </div>
           </div>
           <span className="profile__useDate">
-            {formatDate(data?.created_at)}から利用しています
+            {formatDate(user?.created_at)}から利用しています
           </span>
+          <div>
+            <div css={tabBox}>
+              <TabsBox
+                labels={["カート", "投稿", "いいね"]}
+                selectTab={selectTab}
+                setSelectTab={setSelectTab}
+              />
+            </div>
+            <div>{selectOpneProduct(selectTab)}</div>
+          </div>
         </>
       ) : (
         <>
@@ -89,4 +119,9 @@ const profile = css`
     position: absolute;
     right: -14px;
   }
+`;
+
+const tabBox = css`
+  margin: 32px auto;
+  display: block;
 `;

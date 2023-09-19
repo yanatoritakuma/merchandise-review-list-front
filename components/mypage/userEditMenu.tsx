@@ -5,12 +5,9 @@ import MenuItem from "@mui/material/MenuItem";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { ModalUserEdit } from "@/components/mypage/modalUserEdit";
-import { ModalProfileChange } from "@/components/mypage/modalProfileChange";
-import { ModalUserPostDelete } from "@/components/mypage/modalUserPostDelete";
-// import { ModalUserPostDeleteBox } from "@/components/features/post/ModalUserPostDeleteBox";
-// import { ModalUserEditBox } from "@/components/features/user/ModalUserEditBox";
-// import { ModalProfileChangeBox } from "@/components/features/user/ModalProfileChangeBox";
+import { ModalUserEdit } from "@/components/mypage//modal/modalUserEdit";
+import { ModalProfileChange } from "@/components/mypage//modal/modalProfileChange";
+import { ModalUserPostDelete } from "@/components/mypage//modal/modalUserPostDelete";
 
 export const UserEditMenu = memo(() => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

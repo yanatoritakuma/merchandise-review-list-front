@@ -4,7 +4,7 @@ export type TRakutenProducts = {
   page: number;
 };
 
-type TItems = {
+export type TItems = {
   Item: {
     itemName: string; // 商品名
     itemPrice: number; // 値段
