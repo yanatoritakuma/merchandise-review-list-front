@@ -11,15 +11,17 @@ export type TReqProduct = {
 
 export type TResProduct = {
   totalPageCount: number;
-  products: {
-    id: number;
-    name: string;
-    description: string;
-    stock: boolean;
-    price: number;
-    review: number;
-    url: string;
-    image: string;
-    createdAt: string;
-  }[];
+  products: TProduct[];
+};
+
+export type TProduct = {
+  id: number;
+  name: string;
+  description: string;
+  stock: boolean;
+  price: number;
+  review: number;
+  url: string;
+  image: string;
+  createdAt: string;
 };
