@@ -34,5 +34,26 @@ export const useMutateProduct = () => {
     }
   );
 
-  return { productMutation };
+  const deleteProductMutation = useMutation(
+    async (id: number) =>
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/product/${id}`),
+    {
+      onSuccess: () => {
+        setBackdropFlag(false);
+        setMessage({
+          text: "カートから削除しました。",
+          type: "success",
+        });
+      },
+      onError: () => {
+        setBackdropFlag(false);
+        setMessage({
+          text: "カートの削除に失敗しました。",
+          type: "error",
+        });
+      },
+    }
+  );
+
+  return { productMutation, deleteProductMutation };
 };

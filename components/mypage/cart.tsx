@@ -1,20 +1,16 @@
 import { useEffect, useState } from "react";
 import { css } from "@emotion/react";
-import { TResProduct } from "@/types/product";
 import Link from "next/link";
 import Image from "next/image";
 import { ButtonBox } from "@/components/elements/buttonBox";
 import { PaginationBox } from "@/components/common/paginationBox";
 import { useQueryUserProduct } from "@/hooks/product/useQueryUserProduct";
+import { useMutateProduct } from "@/hooks/product/useMutateProduct";
 
 export const Cart = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const {
-    data: products,
-    isLoading: productIsLoading,
-    refetch,
-  } = useQueryUserProduct(currentPage, 10);
-  console.log(products);
+  const { data: products, refetch } = useQueryUserProduct(currentPage, 10);
+  const { deleteProductMutation } = useMutateProduct();
 
   const initialFlagCount = 20;
 
@@ -42,6 +38,10 @@ export const Cart = () => {
       return moreTextFlag ? "元に戻す" : "もっとみる";
     }
     return "";
+  };
+
+  const onClickDelete = async (id: number) => {
+    await deleteProductMutation.mutateAsync(id).then(() => refetch());
   };
 
   // ページネーションで都道府県別投稿のAPI再取得
@@ -93,7 +93,14 @@ export const Cart = () => {
           <Link prefetch={false} href={pr.url} target="_blank">
             商品のサイトへ
           </Link>
-          <ButtonBox>カートから削除</ButtonBox>
+
+          <ButtonBox
+            onClick={() => onClickDelete(pr.id)}
+            disabled={deleteProductMutation.isLoading}
+          >
+            {!deleteProductMutation.isLoading ? "カートから削除" : "削除実行中"}
+          </ButtonBox>
+
           <Image src={pr.image} width={320} height={320} alt="商品画像" />
         </div>
       ))}
