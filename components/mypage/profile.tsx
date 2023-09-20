@@ -5,12 +5,11 @@ import { useQueryUser } from "@/hooks/user/useQueryUser";
 import { ProfileSkeleton } from "@/components/mypage/profileSkeleton";
 import NoImage from "@/images/noimage-user.png";
 import { UserEditMenu } from "@/components/mypage/userEditMenu";
-import { useQueryUserProduct } from "@/hooks/product/useQueryUserProduct";
 import { TabsBox } from "@/components/elements/tabsBox";
 import { Cart } from "@/components/mypage/cart";
 
 export const Profile = () => {
-  const { data: user, isLoading: userIsLoading } = useQueryUser();
+  const { data: user, isLoading } = useQueryUser();
 
   const [selectTab, setSelectTab] = useState(0);
 
@@ -38,7 +37,11 @@ export const Profile = () => {
     }
   };
 
-  return !userIsLoading ? (
+  if (isLoading) {
+    return <ProfileSkeleton />;
+  }
+
+  return (
     <section css={profile}>
       {user?.id !== undefined ? (
         <>
@@ -83,8 +86,6 @@ export const Profile = () => {
         </>
       )}
     </section>
-  ) : (
-    <ProfileSkeleton />
   );
 };
 

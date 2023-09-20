@@ -151,6 +151,7 @@ const header = css`
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 999999;
   width: 100%;
   background-color: #ffd900;
   border-bottom: 4px solid #f6f61e;

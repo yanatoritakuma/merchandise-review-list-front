@@ -5,6 +5,7 @@ import { TResProduct } from "@/types/product";
 
 export const useQueryUserProduct = (page: number, pageSize: number) => {
   const getUserProduct = async () => {
+    // await new Promise((resolve) => setTimeout(resolve, 3000));
     const { data } = await axios.get<TResProduct>(
       `${process.env.NEXT_PUBLIC_API_URL}/product/userProducts?page=${page}&pageSize=${pageSize}`
     );

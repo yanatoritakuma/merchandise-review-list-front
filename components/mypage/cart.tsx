@@ -2,10 +2,15 @@ import { useEffect, useState } from "react";
 import { PaginationBox } from "@/components/common/paginationBox";
 import { useQueryUserProduct } from "@/hooks/product/useQueryUserProduct";
 import { ItemCart } from "./itemCart";
+import { ItemCartSkeleton } from "@/components/mypage/itemCartSkeleton";
 
 export const Cart = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const { data: products, refetch } = useQueryUserProduct(currentPage, 10);
+  const {
+    data: products,
+    isLoading,
+    refetch,
+  } = useQueryUserProduct(currentPage, 10);
 
   const initialFlagCount = 20;
 
@@ -27,6 +32,10 @@ export const Cart = () => {
     const total = totalPage / 10;
     return Math.ceil(total);
   };
+
+  if (isLoading) {
+    return <ItemCartSkeleton />;
+  }
 
   return (
     <div>
