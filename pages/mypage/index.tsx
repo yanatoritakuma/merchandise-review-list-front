@@ -16,7 +16,6 @@ export default Index;
 
 const mypage = css`
   width: 100%;
-  height: 100vh;
 
   .mypage__box {
     margin: 60px auto;
