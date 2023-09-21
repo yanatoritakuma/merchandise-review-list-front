@@ -40,7 +40,7 @@ export const Header = () => {
                   </Link>
                 )}
                 {data?.id !== undefined && (
-                  <Link prefetch={false} href="/">
+                  <Link prefetch={false} href="/review-post">
                     レビュー投稿
                   </Link>
                 )}
@@ -105,7 +105,7 @@ export const Header = () => {
                   {data?.id !== undefined && (
                     <Link
                       prefetch={false}
-                      href="/"
+                      href="/review-post"
                       onClick={() => setMenuFlag(false)}
                     >
                       レビュー投稿
@@ -151,7 +151,7 @@ const header = css`
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 999999;
+  z-index: 10;
   width: 100%;
   background-color: #ffd900;
   border-bottom: 4px solid #f6f61e;

@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import { TextBox } from "@/components/elements/textBox";
 import { ButtonBox } from "@/components/elements/buttonBox";
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import { ResultYahoo } from "@/components/product-search/resultYahoo";
 import { ResultRakuten } from "@/components/product-search/resultRakuten";
 import { TabsBox } from "@/components/elements/tabsBox";
