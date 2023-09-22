@@ -46,7 +46,7 @@ export const Header = () => {
                 )}
                 {data?.id !== undefined && (
                   <Link prefetch={false} href="/">
-                    タイムライン
+                    投稿一覧
                   </Link>
                 )}
                 {data?.id !== undefined ? (
@@ -117,7 +117,7 @@ export const Header = () => {
                       href="/"
                       onClick={() => setMenuFlag(false)}
                     >
-                      タイムライン
+                      投稿一覧
                     </Link>
                   )}
                   {data?.id !== undefined ? (
