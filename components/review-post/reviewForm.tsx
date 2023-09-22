@@ -6,17 +6,17 @@ import { ButtonBox } from "../elements/buttonBox";
 import { ImageRegistration } from "@/utils/imageRegistration";
 import { useChangeImage } from "@/hooks/useChangeImage";
 import { ReviewPostValidation } from "@/utils/validations/reviewPostValidation";
-import { useQueryUser } from "@/hooks/user/useQueryUser";
 import { useMutateReviewPost } from "@/hooks/review-post/useMutateReviewPost";
 import { RatingBox } from "@/components/elements/ratingBox";
+import { TUser } from "@/types/user";
 
 type Props = {
   type: "new" | "edit";
   setOpen?: (value: React.SetStateAction<boolean>) => void;
+  user: TUser | undefined;
 };
 
-export const ReviewForm = memo(({ type, setOpen }: Props) => {
-  const { data: user } = useQueryUser();
+export const ReviewForm = memo(({ type, setOpen, user }: Props) => {
   const { reviewPostsMutation } = useMutateReviewPost();
   const { onClickRegistration } = ImageRegistration();
   const { onChangeImageHandler, photoUrl, setPhotoUrl } = useChangeImage();

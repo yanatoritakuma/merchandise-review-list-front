@@ -1,12 +1,24 @@
 import { ReviewForm } from "@/components/review-post/reviewForm";
+import { useQueryUser } from "@/hooks/user/useQueryUser";
 import { css } from "@emotion/react";
+import Link from "next/link";
 
 const Index = () => {
+  const { data: user } = useQueryUser();
   return (
     <main css={reviewPostBox}>
       <div className="reviewPostBox__box">
-        <h2>レビュー投稿</h2>
-        <ReviewForm type="new" />
+        {user !== undefined ? (
+          <>
+            <h2>レビュー投稿</h2>
+            <ReviewForm type="new" user={user} />
+          </>
+        ) : (
+          <div className="reviewPostBox__notlogin">
+            <p>レビュー投稿は、ログインしていないとできません。</p>
+            <Link href="/auth">ログイン画面へ</Link>
+          </div>
+        )}
       </div>
     </main>
   );
@@ -32,6 +44,22 @@ const reviewPostBox = css`
     h2 {
       font-size: 28px;
       text-align: center;
+    }
+  }
+
+  .reviewPostBox__notlogin {
+    p {
+      font-size: 20px;
+      text-align: center;
+    }
+
+    a {
+      margin: 20px auto;
+      display: block;
+      width: fit-content;
+      font-size: 18px;
+      text-decoration: none;
+      color: #333;
     }
   }
 `;
