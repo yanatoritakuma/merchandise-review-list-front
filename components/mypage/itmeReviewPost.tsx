@@ -5,6 +5,7 @@ import { TReviewPosts } from "@/types/reviewPost";
 import NoPostImage from "@/images/noimage.png";
 import NoUserImage from "@/images/noimage-user.png";
 import { RatingBox } from "@/components/elements/ratingBox";
+import { ReviewPostEdit } from "@/components/mypage/reviewPostEdit";
 
 type Props = {
   reviewPost: TReviewPosts;
@@ -29,8 +30,10 @@ export const ItmeReviewPost = memo(({ reviewPost }: Props) => {
             alt="プロフィール画像"
           />
         )}
-
         <h5>{reviewPost.reviewPostUserResponse.name}</h5>
+        <div className="itemCartBox__editBox">
+          <ReviewPostEdit />
+        </div>
       </div>
       <h4>{reviewPost.title}</h4>
       <div className="itemCartBox__textBox">
@@ -95,6 +98,12 @@ const itmeReviewPostBox = css`
     img {
       border-radius: 50%;
     }
+  }
+
+  .itemCartBox__editBox {
+    display: block;
+    width: 100%;
+    text-align: end;
   }
 
   .itemCartBox__postImg {

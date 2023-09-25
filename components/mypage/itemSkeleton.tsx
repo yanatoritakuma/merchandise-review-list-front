@@ -2,10 +2,10 @@ import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import { css } from "@emotion/react";
 
-export const ItemCartSkeleton = () => {
+export const ItemSkeleton = () => {
   return (
     <Stack spacing={1} css={itemCartSkeletonBox}>
-      <div className="itemCartSkeletonBox__box">
+      <div className="ItemSkeleton">
         <h4>{<Skeleton sx={{ fontSize: "2rem" }} />}</h4>
         <h5>{<Skeleton sx={{ fontSize: "1.5rem" }} />}</h5>
         <p>
@@ -30,7 +30,7 @@ export const ItemCartSkeleton = () => {
 };
 
 const itemCartSkeletonBox = css`
-  .itemCartSkeletonBox__box {
+  .ItemSkeleton {
     margin: 20px 0;
     padding: 20px;
     display: block;
