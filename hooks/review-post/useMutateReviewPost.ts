@@ -10,7 +10,7 @@ export const useMutateReviewPost = () => {
   const { setBackdropFlag } = useContext(BackdropContext);
   const { setMessage } = useContext(MessageContext);
 
-  const reviewPostsMutation = useMutation(
+  const reviewPostMutation = useMutation(
     async (reqReviewPosts: TReqReviewPostMutation) =>
       await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/reviewPosts`,
@@ -34,5 +34,29 @@ export const useMutateReviewPost = () => {
     }
   );
 
-  return { reviewPostsMutation };
+  const updateReviewPostMutation = useMutation(
+    async (reqReviewPosts: TReqReviewPostMutation) =>
+      await axios.put(
+        `${process.env.NEXT_PUBLIC_API_URL}/reviewPosts/${reqReviewPosts.id}`,
+        reqReviewPosts
+      ),
+    {
+      onSuccess: () => {
+        setBackdropFlag(false);
+        setMessage({
+          text: "編集完了",
+          type: "success",
+        });
+      },
+      onError: () => {
+        setBackdropFlag(false);
+        setMessage({
+          text: "編集失敗しました。",
+          type: "error",
+        });
+      },
+    }
+  );
+
+  return { reviewPostMutation, updateReviewPostMutation };
 };

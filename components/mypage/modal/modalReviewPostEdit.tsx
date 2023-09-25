@@ -15,6 +15,7 @@ export const ModalReviewPostEdit = memo(({ open, setOpen }: Props) => {
     <div>
       <Modal open={open} onClose={() => setOpen(false)}>
         <div css={modalReviewPostEditBox}>
+          <h3>編集</h3>
           <ReviewForm type="edit" setOpen={setOpen} user={user} />
         </div>
       </Modal>

@@ -1,22 +1,35 @@
-import { memo, useState } from "react";
+import { memo, useContext, useEffect, useState } from "react";
 import { useQueryUserReviewPost } from "@/hooks/review-post/useQueryUserReviewPost";
 import { ItmeReviewPost } from "@/components/mypage/itmeReviewPost";
 import { PaginationBox } from "@/components/common/paginationBox";
 import { ItemSkeleton } from "@/components/mypage/itemSkeleton";
+import { ReviewPostContext } from "@/provider/reviewPostProvider";
 
 export const ReviewPost = memo(() => {
+  const { reviewPostProcess, setReviewPostProcess } =
+    useContext(ReviewPostContext);
   const [currentPage, setCurrentPage] = useState(1);
-  const { data: userReviewPosts, isLoading } = useQueryUserReviewPost(
-    currentPage,
-    10
-  );
+  const {
+    data: userReviewPosts,
+    isLoading,
+    refetch,
+    isFetching,
+  } = useQueryUserReviewPost(currentPage, 10);
 
   const countPages = (totalPage: number) => {
     const total = totalPage / 10;
     return Math.ceil(total);
   };
 
-  if (isLoading) {
+  useEffect(() => {
+    if (reviewPostProcess) {
+      refetch();
+      setReviewPostProcess(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reviewPostProcess]);
+
+  if (isLoading || isFetching) {
     return <ItemSkeleton />;
   }
 

@@ -1,4 +1,5 @@
 export type TReqReviewPost = {
+  id?: number;
   title: string;
   text: string;
 };

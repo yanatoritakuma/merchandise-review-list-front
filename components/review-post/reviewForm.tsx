@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useContext, useEffect, useState } from "react";
 import { css } from "@emotion/react";
 import Image from "next/image";
 import { TextBox } from "../elements/textBox";
@@ -9,6 +9,9 @@ import { ReviewPostValidation } from "@/utils/validations/reviewPostValidation";
 import { useMutateReviewPost } from "@/hooks/review-post/useMutateReviewPost";
 import { RatingBox } from "@/components/elements/ratingBox";
 import { TUser } from "@/types/user";
+import { ReviewPostContext } from "@/provider/reviewPostProvider";
+import { DeleteImgStorage } from "@/utils/deleteImgStorage";
+import { useQueryUserReviewPost } from "@/hooks/review-post/useQueryUserReviewPost";
 
 type Props = {
   type: "new" | "edit";
@@ -17,9 +20,13 @@ type Props = {
 };
 
 export const ReviewForm = memo(({ type, setOpen, user }: Props) => {
-  const { reviewPostsMutation } = useMutateReviewPost();
+  const { reviewPostGlobal, setReviewPostProcess } =
+    useContext(ReviewPostContext);
+  const { reviewPostMutation, updateReviewPostMutation } =
+    useMutateReviewPost();
   const { onClickRegistration } = ImageRegistration();
   const { onChangeImageHandler, photoUrl, setPhotoUrl } = useChangeImage();
+  const { deleteImg } = DeleteImgStorage();
   const [postState, setPostState] = useState({
     title: "",
     text: "",
@@ -48,9 +55,21 @@ export const ReviewForm = memo(({ type, setOpen, user }: Props) => {
     };
   }, [photoUrl]);
 
+  useEffect(() => {
+    if (type === "edit") {
+      setPostState({
+        title: reviewPostGlobal.title,
+        text: reviewPostGlobal.text,
+      });
+      setPreviewUrl(reviewPostGlobal.image);
+      setReviewState(reviewPostGlobal.review);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const onClickRegister = async (file: string | null) => {
     try {
-      await reviewPostsMutation.mutateAsync({
+      await reviewPostMutation.mutateAsync({
         title: postState.title,
         text: postState.text,
         image: file,
@@ -67,20 +86,22 @@ export const ReviewForm = memo(({ type, setOpen, user }: Props) => {
   };
 
   const onClickUpdate = async (file: string | null) => {
-    // try {
-    //   await updatePostMutation.mutateAsync({
-    //     id: postGlobal.id,
-    //     title: postState.title,
-    //     text: postState.text,
-    //     image: file !== null ? file : postGlobal.image,
-    //   });
-    //   setPostProcess(true);
-    //   if (file !== null) {
-    //     deleteImg(postGlobal.image, "postImages", postGlobal.userId);
-    //   }
-    // } catch (err) {
-    //   console.error("err:", err);
-    // }
+    try {
+      await updateReviewPostMutation.mutateAsync({
+        id: reviewPostGlobal.id,
+        title: postState.title,
+        text: postState.text,
+        image: file !== null ? file : reviewPostGlobal.image,
+        review: reviewState,
+      });
+
+      if (file !== null && user !== undefined) {
+        deleteImg(reviewPostGlobal.image, "postImages", user.id);
+      }
+      setReviewPostProcess(true);
+    } catch (err) {
+      console.error("err:", err);
+    }
   };
 
   return (

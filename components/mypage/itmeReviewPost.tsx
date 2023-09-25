@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useContext, useEffect } from "react";
 import { css } from "@emotion/react";
 import Image from "next/image";
 import { TReviewPosts } from "@/types/reviewPost";
@@ -6,12 +6,25 @@ import NoPostImage from "@/images/noimage.png";
 import NoUserImage from "@/images/noimage-user.png";
 import { RatingBox } from "@/components/elements/ratingBox";
 import { ReviewPostEdit } from "@/components/mypage/reviewPostEdit";
+import { ReviewPostContext } from "@/provider/reviewPostProvider";
 
 type Props = {
   reviewPost: TReviewPosts;
 };
 
 export const ItmeReviewPost = memo(({ reviewPost }: Props) => {
+  const { setReviewPostGlobal } = useContext(ReviewPostContext);
+
+  const onClickEdit = (selectPost: TReviewPosts) => {
+    setReviewPostGlobal({
+      id: selectPost.id,
+      title: selectPost.title,
+      text: selectPost.text,
+      image: selectPost.image,
+      review: selectPost.review,
+    });
+  };
+
   return (
     <div key={reviewPost.id} css={itmeReviewPostBox}>
       <div className="itemCartBox__userBox">
@@ -31,7 +44,10 @@ export const ItmeReviewPost = memo(({ reviewPost }: Props) => {
           />
         )}
         <h5>{reviewPost.reviewPostUserResponse.name}</h5>
-        <div className="itemCartBox__editBox">
+        <div
+          className="itemCartBox__editBox"
+          onClick={() => onClickEdit(reviewPost)}
+        >
           <ReviewPostEdit />
         </div>
       </div>
