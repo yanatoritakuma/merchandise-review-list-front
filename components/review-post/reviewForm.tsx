@@ -11,7 +11,6 @@ import { RatingBox } from "@/components/elements/ratingBox";
 import { TUser } from "@/types/user";
 import { ReviewPostContext } from "@/provider/reviewPostProvider";
 import { DeleteImgStorage } from "@/utils/deleteImgStorage";
-import { useQueryUserReviewPost } from "@/hooks/review-post/useQueryUserReviewPost";
 
 type Props = {
   type: "new" | "edit";

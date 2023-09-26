@@ -9,6 +9,7 @@ export const Cart = () => {
   const {
     data: products,
     isLoading,
+    isFetching,
     refetch,
   } = useQueryUserProduct(currentPage, 10);
 
@@ -33,7 +34,7 @@ export const Cart = () => {
     return Math.ceil(total);
   };
 
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return <ItemSkeleton />;
   }
 

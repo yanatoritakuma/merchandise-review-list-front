@@ -6,8 +6,6 @@ import { ItemSkeleton } from "@/components/mypage/itemSkeleton";
 import { ReviewPostContext } from "@/provider/reviewPostProvider";
 
 export const ReviewPost = memo(() => {
-  const { reviewPostProcess, setReviewPostProcess } =
-    useContext(ReviewPostContext);
   const [currentPage, setCurrentPage] = useState(1);
   const {
     data: userReviewPosts,
@@ -15,6 +13,8 @@ export const ReviewPost = memo(() => {
     refetch,
     isFetching,
   } = useQueryUserReviewPost(currentPage, 10);
+  const { reviewPostProcess, setReviewPostProcess } =
+    useContext(ReviewPostContext);
 
   const countPages = (totalPage: number) => {
     const total = totalPage / 10;
@@ -22,10 +22,13 @@ export const ReviewPost = memo(() => {
   };
 
   useEffect(() => {
-    if (reviewPostProcess) {
-      refetch();
-      setReviewPostProcess(false);
-    }
+    refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
+
+  useEffect(() => {
+    refetch();
+    setReviewPostProcess(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reviewPostProcess]);
 
