@@ -58,5 +58,32 @@ export const useMutateReviewPost = () => {
     }
   );
 
-  return { reviewPostMutation, updateReviewPostMutation };
+  const deleteReviewPostMutation = useMutation(
+    async (id: number) =>
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/reviewPosts/${id}`
+      ),
+    {
+      onSuccess: () => {
+        setBackdropFlag(false);
+        setMessage({
+          text: "削除完了",
+          type: "success",
+        });
+      },
+      onError: () => {
+        setBackdropFlag(false);
+        setMessage({
+          text: "削除失敗しました。",
+          type: "error",
+        });
+      },
+    }
+  );
+
+  return {
+    reviewPostMutation,
+    updateReviewPostMutation,
+    deleteReviewPostMutation,
+  };
 };
