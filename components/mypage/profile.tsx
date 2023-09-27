@@ -7,6 +7,7 @@ import NoImage from "@/images/noimage-user.png";
 import { UserEditMenu } from "@/components/mypage/userEditMenu";
 import { TabsBox } from "@/components/elements/tabsBox";
 import { Cart } from "@/components/mypage/cart";
+import { ReviewPost } from "@/components/mypage/reviewPost";
 
 export const Profile = () => {
   const { data: user, isLoading } = useQueryUser();
@@ -29,7 +30,7 @@ export const Profile = () => {
         return <Cart />;
 
       case 1:
-        return "投稿";
+        return <ReviewPost />;
       case 2:
         return "いいね";
       default:

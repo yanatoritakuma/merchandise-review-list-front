@@ -7,6 +7,8 @@ import { useQueryUser } from "@/hooks/user/useQueryUser";
 import { DeleteImgStorage } from "@/utils/deleteImgStorage";
 import { ButtonBox } from "@/components/elements/buttonBox";
 import { CheckBox } from "@/components/elements/checkbox";
+import { useMutateReviewPost } from "@/hooks/review-post/useMutateReviewPost";
+import { ReviewPostContext } from "@/provider/reviewPostProvider";
 
 type Props = {
   open: boolean;
@@ -16,8 +18,9 @@ type Props = {
 
 export const ModalUserPostDelete = memo((props: Props) => {
   const { open, setOpen, type } = props;
-  // const { postGlobal, setPostProcess } = useContext(PostContext);
-  // const { deletePostMutation } = useMutatePost();
+  const { reviewPostGlobal, setReviewPostProcess } =
+    useContext(ReviewPostContext);
+  const { deleteReviewPostMutation } = useMutateReviewPost();
   const { deleteUserMutation } = useMutateUser();
   const { data: user } = useQueryUser();
   const { deleteImg, deleteAllUserPostsImg } = DeleteImgStorage();
@@ -25,22 +28,24 @@ export const ModalUserPostDelete = memo((props: Props) => {
 
   const onClickDelete = async () => {
     setOpen(false);
-    if (type === "user") {
-      user?.id &&
-        (await deleteUserMutation
-          .mutateAsync(user.id)
-          .then(() => deleteAllUserPostsImg(user.id))
-          .then(() => deleteImg(user.image, "userImages", user.id)));
-    } else {
-      // todo: 投稿削除
-      // await deletePostMutation
-      //   .mutateAsync(postGlobal.id)
-      //   .then(() => setPostProcess(true))
-      //   .then(
-      //     () =>
-      //       postGlobal.image !== "" &&
-      //       deleteImg(postGlobal.image, "postImages", postGlobal.userId)
-      //   );
+
+    try {
+      if (type === "user" && user?.id) {
+        await deleteUserMutation.mutateAsync(user.id);
+        deleteAllUserPostsImg(user.id);
+        if (user.image) {
+          deleteImg(user.image, "userImages", user.id);
+        }
+      } else if (reviewPostGlobal.id) {
+        await deleteReviewPostMutation.mutateAsync(reviewPostGlobal.id);
+        setReviewPostProcess(true);
+        if (reviewPostGlobal.image !== "" && user) {
+          deleteImg(reviewPostGlobal.image, "postImages", user.id);
+        }
+      }
+    } catch (error) {
+      // エラーハンドリング
+      console.error("削除中にエラーが発生しました:", error);
     }
   };
 

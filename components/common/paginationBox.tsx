@@ -1,4 +1,4 @@
-import { memo, useEffect } from "react";
+import { memo, useEffect, useState } from "react";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { animateScroll as scroll, scroller } from "react-scroll";
@@ -12,17 +12,20 @@ type Props = {
 
 export const PaginationBox = memo(
   ({ count, currentPage, setCurrentPage, targetScroll }: Props) => {
-    useEffect(() => {
-      if (!targetScroll) {
-        scroll.scrollToTop();
-      } else {
-        scroller.scrollTo(targetScroll, {
-          smooth: true,
-          duration: 500,
-          offset: -150,
-        });
-      }
+    const [beforeCurrentPage, _] = useState(currentPage);
 
+    useEffect(() => {
+      if (currentPage !== beforeCurrentPage) {
+        if (!targetScroll) {
+          scroll.scrollToTop();
+        } else {
+          scroller.scrollTo(targetScroll, {
+            smooth: true,
+            duration: 500,
+            offset: -150,
+          });
+        }
+      }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPage]);
 

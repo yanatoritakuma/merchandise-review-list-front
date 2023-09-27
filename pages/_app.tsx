@@ -9,8 +9,8 @@ import { MessageProvider } from "@/provider/messageProvider";
 import { BackdropProvider } from "@/provider/backdropProvider";
 import { SnackbarBox } from "@/components/elements/snackbarBox";
 import { BackdropBox } from "@/components/elements/backdropBox";
+import { ReviewPostProvider } from "@/provider/reviewPostProvider";
 
-// import { PostProvider } from "@/provider/PostProvider";
 // import { ApiTimeoutBox } from "@/components/common/ApiTimeOutBox";
 
 const queryClient = new QueryClient({
@@ -40,14 +40,14 @@ export default function App({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <MessageProvider>
         <BackdropProvider>
-          {/* <PostProvider> */}
-          <Header />
-          <Component {...pageProps} />
-          <ReactQueryDevtools />
-          <SnackbarBox />
-          <BackdropBox />
-          {/* <ApiTimeoutBox /> */}
-          {/* </PostProvider> */}
+          <ReviewPostProvider>
+            <Header />
+            <Component {...pageProps} />
+            <ReactQueryDevtools />
+            <SnackbarBox />
+            <BackdropBox />
+            {/* <ApiTimeoutBox /> */}
+          </ReviewPostProvider>
         </BackdropProvider>
       </MessageProvider>
     </QueryClientProvider>

@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import { PaginationBox } from "@/components/common/paginationBox";
 import { useQueryUserProduct } from "@/hooks/product/useQueryUserProduct";
 import { ItemCart } from "./itemCart";
-import { ItemCartSkeleton } from "@/components/mypage/itemCartSkeleton";
+import { ItemSkeleton } from "@/components/mypage/itemSkeleton";
 
 export const Cart = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const {
     data: products,
     isLoading,
+    isFetching,
     refetch,
   } = useQueryUserProduct(currentPage, 10);
 
@@ -33,8 +34,8 @@ export const Cart = () => {
     return Math.ceil(total);
   };
 
-  if (isLoading) {
-    return <ItemCartSkeleton />;
+  if (isLoading || isFetching) {
+    return <ItemSkeleton />;
   }
 
   return (

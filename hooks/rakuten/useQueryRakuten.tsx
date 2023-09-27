@@ -17,7 +17,7 @@ export const useQueryRakuten = (search: string, page: number) => {
     queryKey: ["rakuten"],
     queryFn: getRakuten,
     // suspense: true,
-    onError: (err: any) => {
+    onError: (err) => {
       console.error("err", err);
     },
   });
