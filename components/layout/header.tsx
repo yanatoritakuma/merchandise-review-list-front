@@ -32,6 +32,9 @@ export const Header = () => {
             <Link prefetch={false} href="/product-search">
               商品検索
             </Link>
+            <Link prefetch={false} href="/review-post-lists">
+              投稿一覧
+            </Link>
             {!isLoading ? (
               <>
                 {data?.id !== undefined && (
@@ -42,11 +45,6 @@ export const Header = () => {
                 {data?.id !== undefined && (
                   <Link prefetch={false} href="/review-post">
                     レビュー投稿
-                  </Link>
-                )}
-                {data?.id !== undefined && (
-                  <Link prefetch={false} href="/review-post-lists">
-                    投稿一覧
                   </Link>
                 )}
                 {data?.id !== undefined ? (
@@ -93,6 +91,13 @@ export const Header = () => {
                   >
                     商品検索
                   </Link>
+                  <Link
+                    prefetch={false}
+                    href="/review-post-lists"
+                    onClick={() => setMenuFlag(false)}
+                  >
+                    投稿一覧
+                  </Link>
                   {data?.id !== undefined && (
                     <Link
                       prefetch={false}
@@ -109,15 +114,6 @@ export const Header = () => {
                       onClick={() => setMenuFlag(false)}
                     >
                       レビュー投稿
-                    </Link>
-                  )}
-                  {data?.id !== undefined && (
-                    <Link
-                      prefetch={false}
-                      href="/review-post-lists"
-                      onClick={() => setMenuFlag(false)}
-                    >
-                      投稿一覧
                     </Link>
                   )}
                   {data?.id !== undefined ? (

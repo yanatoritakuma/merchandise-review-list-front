@@ -1,8 +1,8 @@
 import { memo, useContext, useEffect, useState } from "react";
 import { useQueryUserReviewPost } from "@/hooks/review-post/useQueryUserReviewPost";
-import { ItmeReviewPost } from "@/components/mypage/itmeReviewPost";
+import { ItmeReviewPost } from "@/components/common/itmeReviewPost";
 import { PaginationBox } from "@/components/common/paginationBox";
-import { ItemSkeleton } from "@/components/mypage/itemSkeleton";
+import { ItemSkeleton } from "@/components/common/itemSkeleton";
 import { ReviewPostContext } from "@/provider/reviewPostProvider";
 
 export const ReviewPost = memo(() => {

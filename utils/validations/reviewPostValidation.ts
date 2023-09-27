@@ -46,6 +46,18 @@ export const ReviewPostValidation = () => {
         text: "画像名に日本語を入れないでください。",
         type: "error",
       });
+    } else if (validator.isEmpty(reviewPost.category)) {
+      return setMessage({
+        ...message,
+        text: "カテゴリーは必須です。",
+        type: "error",
+      });
+    } else if (!validator.isLength(reviewPost.category, { max: 30 })) {
+      return setMessage({
+        ...message,
+        text: "カテゴリーは30文字以下で入力してください。",
+        type: "error",
+      });
     } else {
       return true;
     }

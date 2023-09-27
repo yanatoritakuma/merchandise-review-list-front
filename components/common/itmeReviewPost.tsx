@@ -7,12 +7,14 @@ import NoUserImage from "@/images/noimage-user.png";
 import { RatingBox } from "@/components/elements/ratingBox";
 import { ReviewPostEdit } from "@/components/mypage/reviewPostEdit";
 import { ReviewPostContext } from "@/provider/reviewPostProvider";
+import { useQueryUser } from "@/hooks/user/useQueryUser";
 
 type Props = {
   reviewPost: TReviewPosts;
 };
 
 export const ItmeReviewPost = memo(({ reviewPost }: Props) => {
+  const { data: user } = useQueryUser();
   const { setReviewPostGlobal } = useContext(ReviewPostContext);
 
   const onClickEdit = (selectPost: TReviewPosts) => {
@@ -45,12 +47,14 @@ export const ItmeReviewPost = memo(({ reviewPost }: Props) => {
           />
         )}
         <h5>{reviewPost.reviewPostUserResponse.name}</h5>
-        <div
-          className="itemCartBox__editBox"
-          onClick={() => onClickEdit(reviewPost)}
-        >
-          <ReviewPostEdit />
-        </div>
+        {user?.id === reviewPost.reviewPostUserResponse.id && (
+          <div
+            className="itemCartBox__editBox"
+            onClick={() => onClickEdit(reviewPost)}
+          >
+            <ReviewPostEdit />
+          </div>
+        )}
       </div>
       <h4>{reviewPost.title}</h4>
       <div className="itemCartBox__textBox">
