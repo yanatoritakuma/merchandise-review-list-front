@@ -29,6 +29,7 @@ export const ReviewForm = memo(({ type, setOpen, user }: Props) => {
   const [postState, setPostState] = useState({
     title: "",
     text: "",
+    category: "",
   });
   const [reviewState, setReviewState] = useState(0.5);
 
@@ -59,6 +60,7 @@ export const ReviewForm = memo(({ type, setOpen, user }: Props) => {
       setPostState({
         title: reviewPostGlobal.title,
         text: reviewPostGlobal.text,
+        category: reviewPostGlobal.category,
       });
       setPreviewUrl(reviewPostGlobal.image);
       setReviewState(reviewPostGlobal.review);
@@ -71,12 +73,14 @@ export const ReviewForm = memo(({ type, setOpen, user }: Props) => {
       await reviewPostMutation.mutateAsync({
         title: postState.title,
         text: postState.text,
+        category: postState.category,
         image: file,
         review: reviewState,
       });
       setPostState({
         title: "",
         text: "",
+        category: "",
       });
       setReviewState(0.5);
     } catch (err) {
@@ -90,6 +94,7 @@ export const ReviewForm = memo(({ type, setOpen, user }: Props) => {
         id: reviewPostGlobal.id,
         title: postState.title,
         text: postState.text,
+        category: postState.category,
         image: file !== null ? file : reviewPostGlobal.image,
         review: reviewState,
       });
@@ -131,6 +136,20 @@ export const ReviewForm = memo(({ type, setOpen, user }: Props) => {
           fullWidth
           multiline
           rows={3}
+        />
+      </div>
+
+      <div css={textBox}>
+        <TextBox
+          label="カテゴリー"
+          value={postState.category}
+          onChange={(e) =>
+            setPostState({
+              ...postState,
+              category: e.target.value,
+            })
+          }
+          fullWidth
         />
       </div>
 

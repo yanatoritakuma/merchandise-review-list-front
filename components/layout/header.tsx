@@ -45,7 +45,7 @@ export const Header = () => {
                   </Link>
                 )}
                 {data?.id !== undefined && (
-                  <Link prefetch={false} href="/">
+                  <Link prefetch={false} href="/review-post-lists">
                     投稿一覧
                   </Link>
                 )}
@@ -114,7 +114,7 @@ export const Header = () => {
                   {data?.id !== undefined && (
                     <Link
                       prefetch={false}
-                      href="/"
+                      href="/review-post-lists"
                       onClick={() => setMenuFlag(false)}
                     >
                       投稿一覧

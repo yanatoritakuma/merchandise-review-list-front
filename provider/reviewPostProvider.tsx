@@ -5,6 +5,7 @@ type TReviewPostGlobal = {
     id: number;
     title: string;
     text: string;
+    category: string;
     image: string;
     review: number;
   };
@@ -13,6 +14,7 @@ type TReviewPostGlobal = {
       id: number;
       title: string;
       text: string;
+      category: string;
       image: string;
       review: number;
     }>
@@ -26,6 +28,7 @@ export const ReviewPostContext = createContext<TReviewPostGlobal>({
     id: 0,
     title: "",
     text: "",
+    category: "",
     image: "",
     review: 0,
   },
@@ -44,6 +47,7 @@ export const ReviewPostProvider = (props: Props) => {
     id: 0,
     title: "",
     text: "",
+    category: "",
     image: "",
     review: 0,
   });

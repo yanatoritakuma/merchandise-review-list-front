@@ -20,6 +20,7 @@ export const ItmeReviewPost = memo(({ reviewPost }: Props) => {
       id: selectPost.id,
       title: selectPost.title,
       text: selectPost.text,
+      category: selectPost.category,
       image: selectPost.image,
       review: selectPost.review,
     });
@@ -55,6 +56,10 @@ export const ItmeReviewPost = memo(({ reviewPost }: Props) => {
       <div className="itemCartBox__textBox">
         <h5>レビュー内容</h5>
         <p>{reviewPost.text}</p>
+      </div>
+      <div className="itemCartBox__textBox">
+        <h5>カテゴリー</h5>
+        <p>{reviewPost.category}</p>
       </div>
       <span className="itemCartBox__reviewBox">
         レビュー:
