@@ -17,7 +17,7 @@ export const useQueryYahoo = (search: string, page: number) => {
     queryKey: ["yahoo"],
     queryFn: getYahoo,
     // suspense: true,
-    onError: (err: any) => {
+    onError: (err) => {
       console.error("err", err);
     },
   });

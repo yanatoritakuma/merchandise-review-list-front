@@ -1,21 +1,36 @@
-import { memo, useContext, useEffect } from "react";
+import { memo, useContext } from "react";
 import { css } from "@emotion/react";
 import Image from "next/image";
-import { TReviewPosts } from "@/types/reviewPost";
+import { TResReviewPost, TReviewPosts } from "@/types/reviewPost";
 import NoPostImage from "@/images/noimage.png";
 import NoUserImage from "@/images/noimage-user.png";
 import { RatingBox } from "@/components/elements/ratingBox";
 import { ReviewPostEdit } from "@/components/mypage/reviewPostEdit";
 import { ReviewPostContext } from "@/provider/reviewPostProvider";
-import { useQueryUser } from "@/hooks/user/useQueryUser";
+import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import { useMutateLike } from "@/hooks/like/useMutateLike";
+import { MessageContext } from "@/provider/messageProvider";
+import { TUser } from "@/types/user";
+import {
+  QueryObserverResult,
+  RefetchOptions,
+  RefetchQueryFilters,
+} from "@tanstack/react-query";
+import { TError } from "@/types/error";
 
 type Props = {
   reviewPost: TReviewPosts;
+  user?: TUser;
+  refetch: <TPageData>(
+    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
+  ) => Promise<QueryObserverResult<TResReviewPost, TError>>;
 };
 
-export const ItmeReviewPost = memo(({ reviewPost }: Props) => {
-  const { data: user } = useQueryUser();
+export const ItmeReviewPost = memo(({ reviewPost, user, refetch }: Props) => {
   const { setReviewPostGlobal } = useContext(ReviewPostContext);
+  const { message, setMessage } = useContext(MessageContext);
+  const { likeMutation, likeDeleteMutation } = useMutateLike();
 
   const onClickEdit = (selectPost: TReviewPosts) => {
     setReviewPostGlobal({
@@ -26,6 +41,35 @@ export const ItmeReviewPost = memo(({ reviewPost }: Props) => {
       image: selectPost.image,
       review: selectPost.review,
     });
+  };
+
+  const onClickLike = async (postId: number) => {
+    if (!user) {
+      setMessage({
+        ...message,
+        text: "いいねをするにはログインが必要です",
+        type: "error",
+      });
+      return;
+    }
+    try {
+      const req = {
+        post_id: postId,
+      };
+      await likeMutation.mutateAsync(req);
+      refetch();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const onClickDeleteLike = async (likeId: number) => {
+    try {
+      await likeDeleteMutation.mutateAsync(likeId);
+      refetch();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -71,6 +115,23 @@ export const ItmeReviewPost = memo(({ reviewPost }: Props) => {
           <RatingBox reviewState={reviewPost.review} readOnly />
         </span>
       </span>
+      <div className="itemCartBox__likeBox">
+        {reviewPost.like_id !== 0 ? (
+          <span className="itemCartBox__like">
+            <FavoriteOutlinedIcon
+              onClick={() => onClickDeleteLike(reviewPost.like_id)}
+            />
+          </span>
+        ) : (
+          <span
+            className="itemCartBox__like"
+            onClick={() => onClickLike(reviewPost.id)}
+          >
+            <FavoriteBorderOutlinedIcon />
+          </span>
+        )}
+        <span>{reviewPost.like_count}</span>
+      </div>
       <div className="itemCartBox__postImg">
         {reviewPost.image !== "" ? (
           <Image
@@ -161,5 +222,16 @@ const itmeReviewPostBox = css`
     .itemCartBox__review {
       margin-left: 12px;
     }
+  }
+
+  .itemCartBox__likeBox {
+    display: flex;
+    align-items: center;
+  }
+
+  .itemCartBox__like {
+    margin-right: 6px;
+    color: #e9546b;
+    cursor: pointer;
   }
 `;

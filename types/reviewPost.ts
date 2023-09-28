@@ -30,5 +30,7 @@ export type TReviewPosts = {
     image: string;
   };
   user_id: number;
+  like_count: number;
+  like_id: number;
   created_at: string;
 };

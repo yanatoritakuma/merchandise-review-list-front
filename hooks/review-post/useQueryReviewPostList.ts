@@ -6,12 +6,13 @@ import { TResReviewPost } from "@/types/reviewPost";
 export const useQueryReviewPostList = (
   category: string,
   page: number,
-  pageSize: number
+  pageSize: number,
+  userId: number | undefined
 ) => {
   const getReviewPostList = async () => {
     // await new Promise((resolve) => setTimeout(resolve, 3000));
     const { data } = await axios.get<TResReviewPost>(
-      `${process.env.NEXT_PUBLIC_API_URL}/reviewPosts/lists/${category}?page=${page}&pageSize=${pageSize}`
+      `${process.env.NEXT_PUBLIC_API_URL}/reviewPosts/lists/${category}?page=${page}&pageSize=${pageSize}&userId=${userId}`
     );
     return data;
   };
@@ -23,5 +24,6 @@ export const useQueryReviewPostList = (
         console.error("レビュー投稿の取得に失敗しました。");
       }
     },
+    staleTime: 1000,
   });
 };

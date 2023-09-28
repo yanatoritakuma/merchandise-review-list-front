@@ -7,16 +7,19 @@ import { TextBox } from "@/components/elements/textBox";
 import { ButtonBox } from "@/components/elements/buttonBox";
 import { ReviewPostContext } from "@/provider/reviewPostProvider";
 import { ItemSkeleton } from "@/components/common/itemSkeleton";
+import { useQueryUser } from "@/hooks/user/useQueryUser";
 
 const Index = () => {
   const { reviewPostProcess, setReviewPostProcess } =
     useContext(ReviewPostContext);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchCategory, setSearchCategory] = useState("");
+  const { data: user } = useQueryUser();
   const { data, refetch, isLoading, isFetching } = useQueryReviewPostList(
     searchCategory === "" ? "all" : searchCategory,
     currentPage,
-    10
+    10,
+    user?.id
   );
 
   const countPages = (totalPage: number) => {
@@ -30,13 +33,29 @@ const Index = () => {
   }, [currentPage]);
 
   useEffect(() => {
+    const timeout = setTimeout(() => {
+      refetch();
+    }, 100);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [user?.id]);
+
+  useEffect(() => {
     refetch();
     setReviewPostProcess(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reviewPostProcess]);
 
   if (isLoading || isFetching) {
-    return <ItemSkeleton />;
+    return (
+      <main css={reviewPostListsBox}>
+        <div className="reviewPostListsBox__box">
+          <h2>レビュー投稿一覧</h2>
+          <ItemSkeleton />
+        </div>
+      </main>
+    );
   }
 
   return (
@@ -51,16 +70,27 @@ const Index = () => {
           />
           <ButtonBox onClick={() => refetch()}>絞り込む</ButtonBox>
         </div>
-        <div>
-          {data?.reviewPosts.map((reviewPost) => (
-            <ItmeReviewPost key={reviewPost.id} reviewPost={reviewPost} />
-          ))}
-          <PaginationBox
-            count={countPages(data !== undefined ? data.totalPageCount : 0)}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-          />
-        </div>
+        {data?.reviewPosts.length !== 0 ? (
+          <div>
+            {data?.reviewPosts.map((reviewPost) => (
+              <ItmeReviewPost
+                key={reviewPost.id}
+                reviewPost={reviewPost}
+                user={user}
+                refetch={refetch}
+              />
+            ))}
+            <PaginationBox
+              count={countPages(data !== undefined ? data.totalPageCount : 0)}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
+          </div>
+        ) : (
+          <h3 className="reviewPostListsBox__resText">
+            検索結果がありません。
+          </h3>
+        )}
       </div>
     </main>
   );
@@ -87,6 +117,10 @@ const reviewPostListsBox = css`
       font-size: 28px;
       text-align: center;
     }
+  }
+
+  .reviewPostListsBox__resText {
+    text-align: center;
   }
 
   .reviewPostListsBox__searchBox {
