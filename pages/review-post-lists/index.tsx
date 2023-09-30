@@ -33,12 +33,10 @@ const Index = () => {
   }, [currentPage]);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
+    setTimeout(() => {
       refetch();
     }, 100);
-    return () => {
-      clearTimeout(timeout);
-    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
 
   useEffect(() => {
