@@ -8,6 +8,7 @@ import { UserEditMenu } from "@/components/mypage/userEditMenu";
 import { TabsBox } from "@/components/elements/tabsBox";
 import { Cart } from "@/components/mypage/cart";
 import { ReviewPost } from "@/components/mypage/reviewPost";
+import { LikePost } from "@/components/mypage/likePost";
 
 export const Profile = () => {
   const { data: user, isLoading } = useQueryUser();
@@ -32,7 +33,7 @@ export const Profile = () => {
       case 1:
         return <ReviewPost />;
       case 2:
-        return "いいね";
+        return <LikePost />;
       default:
         return "カート";
     }

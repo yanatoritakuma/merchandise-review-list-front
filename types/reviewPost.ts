@@ -2,6 +2,7 @@ export type TReqReviewPost = {
   id?: number;
   title: string;
   text: string;
+  category: string;
 };
 
 type TReqReviewImage = {
@@ -20,6 +21,7 @@ export type TReviewPosts = {
   id: number;
   title: string;
   text: string;
+  category: string;
   image: string;
   review: number;
   reviewPostUserResponse: {
@@ -28,5 +30,7 @@ export type TReviewPosts = {
     image: string;
   };
   user_id: number;
+  like_count: number;
+  like_id: number;
   created_at: string;
 };

@@ -1,19 +1,17 @@
 import { memo, useContext, useEffect, useState } from "react";
-import { useQueryUserReviewPost } from "@/hooks/review-post/useQueryUserReviewPost";
+import { useQueryUserLike } from "@/hooks/review-post/useQueryUserLike";
+import { useQueryUser } from "@/hooks/user/useQueryUser";
+import { ReviewPostContext } from "@/provider/reviewPostProvider";
+import { ItemSkeleton } from "@/components/common/itemSkeleton";
 import { ItmeReviewPost } from "@/components/common/itmeReviewPost";
 import { PaginationBox } from "@/components/common/paginationBox";
-import { ItemSkeleton } from "@/components/common/itemSkeleton";
-import { ReviewPostContext } from "@/provider/reviewPostProvider";
-import { useQueryUser } from "@/hooks/user/useQueryUser";
 
-export const ReviewPost = memo(() => {
+export const LikePost = memo(() => {
   const [currentPage, setCurrentPage] = useState(1);
-  const {
-    data: userReviewPosts,
-    isLoading,
-    refetch,
-    isFetching,
-  } = useQueryUserReviewPost(currentPage, 10);
+  const { data, isLoading, refetch, isFetching } = useQueryUserLike(
+    currentPage,
+    10
+  );
   const { data: user } = useQueryUser();
   const { reviewPostProcess, setReviewPostProcess } =
     useContext(ReviewPostContext);
@@ -40,7 +38,7 @@ export const ReviewPost = memo(() => {
 
   return (
     <section>
-      {userReviewPosts?.reviewPosts.map((reviewPost) => (
+      {data?.reviewPosts.map((reviewPost) => (
         <ItmeReviewPost
           key={reviewPost.id}
           reviewPost={reviewPost}
@@ -49,9 +47,7 @@ export const ReviewPost = memo(() => {
         />
       ))}
       <PaginationBox
-        count={countPages(
-          userReviewPosts !== undefined ? userReviewPosts.totalPageCount : 0
-        )}
+        count={countPages(data !== undefined ? data.totalPageCount : 0)}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
       />
@@ -59,4 +55,4 @@ export const ReviewPost = memo(() => {
   );
 });
 
-ReviewPost.displayName = "ReviewPost";
+LikePost.displayName = "LikePost";

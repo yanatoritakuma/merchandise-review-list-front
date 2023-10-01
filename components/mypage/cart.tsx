@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { PaginationBox } from "@/components/common/paginationBox";
 import { useQueryUserProduct } from "@/hooks/product/useQueryUserProduct";
 import { ItemCart } from "./itemCart";
-import { ItemSkeleton } from "@/components/mypage/itemSkeleton";
+import { ItemSkeleton } from "@/components/common/itemSkeleton";
 
 export const Cart = () => {
   const [currentPage, setCurrentPage] = useState(1);
