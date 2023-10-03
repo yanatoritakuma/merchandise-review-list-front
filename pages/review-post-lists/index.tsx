@@ -8,10 +8,12 @@ import { ButtonBox } from "@/components/elements/buttonBox";
 import { ReviewPostContext } from "@/provider/reviewPostProvider";
 import { ItemSkeleton } from "@/components/common/itemSkeleton";
 import { useQueryUser } from "@/hooks/user/useQueryUser";
+import { BackdropContext } from "@/provider/backdropProvider";
 
 const Index = () => {
   const { reviewPostProcess, setReviewPostProcess } =
     useContext(ReviewPostContext);
+  const { setBackdropFlag } = useContext(BackdropContext);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchCategory, setSearchCategory] = useState("");
   const { data: user } = useQueryUser();
@@ -26,6 +28,14 @@ const Index = () => {
     const total = totalPage / 10;
     return Math.ceil(total);
   };
+
+  useEffect(() => {
+    if (isLoading) {
+      setBackdropFlag(true);
+    } else {
+      setBackdropFlag(false);
+    }
+  }, [isLoading]);
 
   useEffect(() => {
     refetch();

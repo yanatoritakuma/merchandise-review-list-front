@@ -10,7 +10,7 @@ export const useQueryReviewPostList = (
   userId: number | undefined
 ) => {
   const getReviewPostList = async () => {
-    // await new Promise((resolve) => setTimeout(resolve, 3000));
+    // await new Promise((resolve) => setTimeout(resolve, 30000000));
     const { data } = await axios.get<TResReviewPost>(
       `${process.env.NEXT_PUBLIC_API_URL}/reviewPosts/lists/${category}?page=${page}&pageSize=${pageSize}&userId=${userId}`
     );
