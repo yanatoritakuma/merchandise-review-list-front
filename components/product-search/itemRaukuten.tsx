@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useContext, useState } from "react";
 import { css } from "@emotion/react";
 import { useMutateProduct } from "@/hooks/product/useMutateProduct";
 import { TItems } from "@/types/rakuten";
@@ -6,6 +6,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { CircularProgress } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { useQueryUser } from "@/hooks/user/useQueryUser";
+import { MessageContext } from "@/provider/messageProvider";
 
 type TItem = {
   item: TItems;
@@ -13,7 +15,9 @@ type TItem = {
 };
 
 export const ItemRaukuten = memo(({ item, index }: TItem) => {
+  const { data } = useQueryUser();
   const { productMutation } = useMutateProduct();
+  const { setMessage } = useContext(MessageContext);
   const initialFlagCount = 20;
 
   const initialMoreTextFlags = Array.from(
@@ -40,19 +44,26 @@ export const ItemRaukuten = memo(({ item, index }: TItem) => {
   };
 
   const onClickCart = async (items: TItems) => {
-    try {
-      await productMutation.mutateAsync({
-        name: items.Item.itemName,
-        description: items.Item.itemCaption,
-        stock: items.Item.availability === 0 ? false : true,
-        price: items.Item.itemPrice,
-        review: items.Item.reviewAverage,
-        url: items.Item.itemUrl,
-        image: items.Item.mediumImageUrls[0].imageUrl,
-        code: items.Item.itemCode,
+    if (!data) {
+      setMessage({
+        text: "ログインしていないとカートに商品をいれられません。",
+        type: "error",
       });
-    } catch (err) {
-      console.error("err:", err);
+    } else {
+      try {
+        await productMutation.mutateAsync({
+          name: items.Item.itemName,
+          description: items.Item.itemCaption,
+          stock: items.Item.availability === 0 ? false : true,
+          price: items.Item.itemPrice,
+          review: items.Item.reviewAverage,
+          url: items.Item.itemUrl,
+          image: items.Item.mediumImageUrls[0].imageUrl,
+          code: items.Item.itemCode,
+        });
+      } catch (err) {
+        console.error("err:", err);
+      }
     }
   };
 
