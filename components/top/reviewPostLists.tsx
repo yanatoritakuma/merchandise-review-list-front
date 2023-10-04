@@ -2,33 +2,30 @@ import { memo } from "react";
 import { css } from "@emotion/react";
 import Image from "next/image";
 import Link from "next/link";
-import ProductSearchImg from "@/images/logo.jpg";
+import ShoppingImg from "@/images/shopping.jpg";
 
-export const ProductSearch = memo(() => {
+export const ReviewPostLists = memo(() => {
   return (
-    <section css={productSearchBox}>
-      <Image src={ProductSearchImg} alt="商品検索画像" />
-      <div className="productSearchBox__textBox">
-        <h2>
-          <span className="productSearchBox__yahoo">Yahooショッピング</span>と
-          <span className="productSearchBox__rakuten">楽天市場</span>の商品検索
-        </h2>
+    <section css={reviewPostLists}>
+      <div className="reviewPostLists__textBox">
+        <h2>投稿一覧</h2>
         <p>
-          Yahooショッピングと楽天市場の商品を同時に検索ができます。
+          ユーザーが購入した商品を閲覧することができます。
           <br />
-          1度の検索で、商品や料金の比較ができます。
+          実際に購入したユーザーのレビュー内容が分かります。
           <br />
-          アカウントを作成することで、カートにいれてマイページから確認することができます。
+          カテゴリー別で検索をして閲覧が可能です。
         </p>
-        <Link href="/product-search">商品検索へ</Link>
+        <Link href="/review-post-lists">投稿一覧へ</Link>
       </div>
+      <Image src={ShoppingImg} alt="投稿一覧画像" />
     </section>
   );
 });
 
-ProductSearch.displayName = "ProductSearch";
+ReviewPostLists.displayName = "ReviewPostLists";
 
-const productSearchBox = css`
+const reviewPostLists = css`
   margin: 120px auto;
   display: flex;
   justify-content: center;
@@ -60,8 +57,8 @@ const productSearchBox = css`
     }
   }
 
-  .productSearchBox__textBox {
-    margin-left: 40px;
+  .reviewPostLists__textBox {
+    margin-right: 40px;
 
     @media screen and (max-width: 768px) {
       margin: 0;
@@ -101,13 +98,5 @@ const productSearchBox = css`
         font-size: 16px;
       }
     }
-  }
-
-  .productSearchBox__yahoo {
-    color: #f03;
-  }
-
-  .productSearchBox__rakuten {
-    color: #bf0000;
   }
 `;

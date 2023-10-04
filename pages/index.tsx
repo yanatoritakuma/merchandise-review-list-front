@@ -2,6 +2,7 @@ import { css } from "@emotion/react";
 import Image from "next/image";
 import TopIcon from "@/images/top2.avif";
 import { ProductSearch } from "@/components/top/productSearch";
+import { ReviewPostLists } from "@/components/top/reviewPostLists";
 
 const Home = () => {
   return (
@@ -18,105 +19,7 @@ const Home = () => {
           <Image src={TopIcon} alt="カート" />
         </div>
         <ProductSearch />
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
+        <ReviewPostLists />
       </div>
     </main>
   );
