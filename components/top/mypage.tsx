@@ -2,30 +2,37 @@ import { memo } from "react";
 import { css } from "@emotion/react";
 import Image from "next/image";
 import Link from "next/link";
-import ShoppingImg from "@/images/shopping.jpg";
+import Noimage from "@/images/noimage-user.png";
+import { TUser } from "@/types/user";
 
-export const ReviewPostLists = memo(() => {
+type Props = {
+  user: TUser | undefined;
+};
+
+export const Mypage = memo(({ user }: Props) => {
   return (
-    <section css={reviewPostListsBox}>
-      <div className="reviewPostListsBox__textBox">
-        <h2>投稿一覧</h2>
+    <section css={mypageBox}>
+      {user ? (
+        <Image src={user?.image} width={260} height={260} alt="ユーザー画像" />
+      ) : (
+        <Image src={Noimage} alt="ユーザー画像" />
+      )}
+      <div className="mypageBox__textBox">
+        <h2>マイページ</h2>
         <p>
-          ユーザーが購入した商品を閲覧することができます。
+          今までにカート、いいね、投稿した商品を確認できます。
           <br />
-          実際に購入したユーザーのレビュー内容が分かります。
-          <br />
-          カテゴリー別で検索をして閲覧が可能です。
+          アカウントの編集ができます。
         </p>
-        <Link href="/review-post-lists">投稿一覧へ</Link>
+        <Link href="/mypage">マイページへ</Link>
       </div>
-      <Image src={ShoppingImg} alt="投稿一覧画像" />
     </section>
   );
 });
 
-ReviewPostLists.displayName = "ReviewPostLists";
+Mypage.displayName = "Mypage";
 
-const reviewPostListsBox = css`
+const mypageBox = css`
   margin: 120px auto;
   display: flex;
   justify-content: center;
@@ -40,6 +47,7 @@ const reviewPostListsBox = css`
     border-radius: 50%;
     width: 300px;
     height: 300px;
+    object-fit: cover;
 
     @media screen and (max-width: 1024px) {
       width: 260px;
@@ -57,8 +65,8 @@ const reviewPostListsBox = css`
     }
   }
 
-  .reviewPostListsBox__textBox {
-    margin-right: 40px;
+  .mypageBox__textBox {
+    margin-left: 40px;
 
     @media screen and (max-width: 768px) {
       margin: 0;

@@ -3,8 +3,11 @@ import Image from "next/image";
 import TopIcon from "@/images/top2.avif";
 import { ProductSearch } from "@/components/top/productSearch";
 import { ReviewPostLists } from "@/components/top/reviewPostLists";
+import { Mypage } from "@/components/top/mypage";
+import { useQueryUser } from "@/hooks/user/useQueryUser";
 
 const Home = () => {
+  const { data } = useQueryUser();
   return (
     <main css={homePage}>
       <div className="homePage__box">
@@ -20,6 +23,7 @@ const Home = () => {
         </div>
         <ProductSearch />
         <ReviewPostLists />
+        {data && <Mypage user={data} />}
       </div>
     </main>
   );
