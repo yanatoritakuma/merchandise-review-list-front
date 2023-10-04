@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Head from "next/head";
 import { css } from "@emotion/react";
 import { useState } from "react";
 import Image from "next/image";
@@ -10,136 +11,138 @@ import { useQueryUser } from "@/hooks/user/useQueryUser";
 import { useMutateAuth } from "@/hooks/auth/useMutateAuth";
 
 export const Header = () => {
-  const { data, isLoading } = useQueryUser();
+  const { data } = useQueryUser();
   const { logoutMutation } = useMutateAuth();
 
   const [menuFlag, setMenuFlag] = useState(false);
 
   return (
-    <header css={header}>
-      <div className="header__logoLinkMainBox">
-        <div className="header__logoLinkBox">
-          <div className="header__logoBox">
-            <div className="header__logo">
-              <Image src={LogoIcon} alt="ロゴ" />
+    <>
+      <Head>
+        <title>MerchandiseReviewList</title>
+        <meta name="You can list the products you want to purchase" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.jpg" />
+      </Head>
+      <header css={header}>
+        <div className="header__logoLinkMainBox">
+          <div className="header__logoLinkBox">
+            <div className="header__logoBox">
+              <div className="header__logo">
+                <Image src={LogoIcon} alt="ロゴ" />
+              </div>
+              <h2>MRL</h2>
             </div>
-            <h2>MRL</h2>
-          </div>
-          <div className="header__linkBox">
-            <Link prefetch={false} href="/">
-              ホーム
-            </Link>
-            <Link prefetch={false} href="/product-search">
-              商品検索
-            </Link>
-            <Link prefetch={false} href="/review-post-lists">
-              投稿一覧
-            </Link>
-            {!isLoading ? (
-              <>
-                {data?.id !== undefined && (
-                  <Link prefetch={false} href="/mypage">
-                    マイページ
+            <div className="header__linkBox">
+              <Link prefetch={false} href="/">
+                ホーム
+              </Link>
+              <Link prefetch={false} href="/product-search">
+                商品検索
+              </Link>
+              <Link prefetch={false} href="/review-post-lists">
+                投稿一覧
+              </Link>
+              {data?.id !== undefined && (
+                <Link prefetch={false} href="/mypage">
+                  マイページ
+                </Link>
+              )}
+              {data?.id !== undefined && (
+                <Link prefetch={false} href="/review-post">
+                  レビュー投稿
+                </Link>
+              )}
+              {data?.id !== undefined ? (
+                <>
+                  <span onClick={() => logoutMutation.mutate()}>
+                    ログアウト
+                  </span>
+                </>
+              ) : (
+                <>
+                  <Link prefetch={false} href="/auth">
+                    ログイン
                   </Link>
-                )}
-                {data?.id !== undefined && (
-                  <Link prefetch={false} href="/review-post">
-                    レビュー投稿
-                  </Link>
-                )}
-                {data?.id !== undefined ? (
-                  <>
-                    <span onClick={() => logoutMutation.mutate()}>
-                      ログアウト
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <Link prefetch={false} href="/auth">
-                      ログイン
-                    </Link>
-                  </>
-                )}
-              </>
-            ) : (
-              <span>ユーザー情報取得中</span>
-            )}
-          </div>
-          <div css={humBox}>
-            <MenuIcon onClick={() => setMenuFlag(true)} />
+                </>
+              )}
+            </div>
+            <div css={humBox}>
+              <MenuIcon onClick={() => setMenuFlag(true)} />
 
-            {menuFlag && (
-              <Drawer
-                anchor="right"
-                css={humMenuBox}
-                open={menuFlag}
-                onClose={() => setMenuFlag(false)}
-              >
-                <div className="header__humMenuBox">
-                  <CloseIcon onClick={() => setMenuFlag(false)} />
-                  <Link
-                    prefetch={false}
-                    href="/"
-                    onClick={() => setMenuFlag(false)}
-                  >
-                    ホーム
-                  </Link>
-                  <Link
-                    prefetch={false}
-                    href="/product-search"
-                    onClick={() => setMenuFlag(false)}
-                  >
-                    商品検索
-                  </Link>
-                  <Link
-                    prefetch={false}
-                    href="/review-post-lists"
-                    onClick={() => setMenuFlag(false)}
-                  >
-                    投稿一覧
-                  </Link>
-                  {data?.id !== undefined && (
+              {menuFlag && (
+                <Drawer
+                  anchor="right"
+                  css={humMenuBox}
+                  open={menuFlag}
+                  onClose={() => setMenuFlag(false)}
+                >
+                  <div className="header__humMenuBox">
+                    <CloseIcon onClick={() => setMenuFlag(false)} />
                     <Link
                       prefetch={false}
-                      href="/mypage"
+                      href="/"
                       onClick={() => setMenuFlag(false)}
                     >
-                      マイページ
+                      ホーム
                     </Link>
-                  )}
-                  {data?.id !== undefined && (
                     <Link
                       prefetch={false}
-                      href="/review-post"
+                      href="/product-search"
                       onClick={() => setMenuFlag(false)}
                     >
-                      レビュー投稿
+                      商品検索
                     </Link>
-                  )}
-                  {data?.id !== undefined ? (
-                    <>
-                      <span onClick={() => logoutMutation.mutate()}>
-                        ログアウト
-                      </span>
-                    </>
-                  ) : (
-                    <>
+                    <Link
+                      prefetch={false}
+                      href="/review-post-lists"
+                      onClick={() => setMenuFlag(false)}
+                    >
+                      投稿一覧
+                    </Link>
+                    {data?.id !== undefined && (
                       <Link
                         prefetch={false}
-                        href="/auth"
+                        href="/mypage"
                         onClick={() => setMenuFlag(false)}
                       >
-                        ログイン
+                        マイページ
                       </Link>
-                    </>
-                  )}
-                </div>
-              </Drawer>
-            )}
+                    )}
+                    {data?.id !== undefined && (
+                      <Link
+                        prefetch={false}
+                        href="/review-post"
+                        onClick={() => setMenuFlag(false)}
+                      >
+                        レビュー投稿
+                      </Link>
+                    )}
+                    {data?.id !== undefined ? (
+                      <>
+                        <span onClick={() => logoutMutation.mutate()}>
+                          ログアウト
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <Link
+                          prefetch={false}
+                          href="/auth"
+                          onClick={() => setMenuFlag(false)}
+                        >
+                          ログイン
+                        </Link>
+                      </>
+                    )}
+                  </div>
+                </Drawer>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    </header>
+      </header>
+    </>
   );
 };
 

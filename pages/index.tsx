@@ -1,8 +1,14 @@
 import { css } from "@emotion/react";
 import Image from "next/image";
 import TopIcon from "@/images/top2.avif";
+import { ProductSearch } from "@/components/top/productSearch";
+import { ReviewPostLists } from "@/components/top/reviewPostLists";
+import { Mypage } from "@/components/top/mypage";
+import { ReviewPost } from "@/components/top/reviewPost";
+import { useQueryUser } from "@/hooks/user/useQueryUser";
 
 const Home = () => {
+  const { data } = useQueryUser();
   return (
     <main css={homePage}>
       <div className="homePage__box">
@@ -16,105 +22,10 @@ const Home = () => {
           </h1>
           <Image src={TopIcon} alt="カート" />
         </div>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
-        <br />
-        <p>aaaa</p>
+        <ProductSearch />
+        <ReviewPostLists />
+        {data && <Mypage user={data} />}
+        {data && <ReviewPost />}
       </div>
     </main>
   );

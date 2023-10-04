@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useContext, useState } from "react";
 import { css } from "@emotion/react";
 import { TYahooHit } from "@/types/yahoo";
 import Link from "next/link";
@@ -6,6 +6,8 @@ import Image from "next/image";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useMutateProduct } from "@/hooks/product/useMutateProduct";
 import { CircularProgress } from "@mui/material";
+import { useQueryUser } from "@/hooks/user/useQueryUser";
+import { MessageContext } from "@/provider/messageProvider";
 
 type TItem = {
   hit: TYahooHit;
@@ -13,7 +15,9 @@ type TItem = {
 };
 
 export const ItemYahoo = memo(({ hit, index }: TItem) => {
+  const { data } = useQueryUser();
   const { productMutation } = useMutateProduct();
+  const { setMessage } = useContext(MessageContext);
   const initialFlagCount = 20;
 
   const initialMoreTextFlags = Array.from(
@@ -40,19 +44,26 @@ export const ItemYahoo = memo(({ hit, index }: TItem) => {
   };
 
   const onClickCart = async (product: TYahooHit) => {
-    try {
-      await productMutation.mutateAsync({
-        name: product.name,
-        description: product.description,
-        stock: product.inStock,
-        price: product.price,
-        review: product.review.rate,
-        url: product.url,
-        image: product.image.medium,
-        code: product.code,
+    if (!data) {
+      setMessage({
+        text: "ログインしていないとカートに商品をいれられません。",
+        type: "error",
       });
-    } catch (err) {
-      console.error("err:", err);
+    } else {
+      try {
+        await productMutation.mutateAsync({
+          name: product.name,
+          description: product.description,
+          stock: product.inStock,
+          price: product.price,
+          review: product.review.rate,
+          url: product.url,
+          image: product.image.medium,
+          code: product.code,
+        });
+      } catch (err) {
+        console.error("err:", err);
+      }
     }
   };
 
