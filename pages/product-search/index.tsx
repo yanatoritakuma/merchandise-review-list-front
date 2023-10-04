@@ -43,13 +43,15 @@ const Index = () => {
           <ButtonBox onClick={() => onClickSearch()}>検索</ButtonBox>
         </div>
         <div css={resultBox}>
-          <div css={tabBox}>
-            <TabsBox
-              labels={["Yahoo", "楽天"]}
-              selectTab={selectTab}
-              setSelectTab={setSelectTab}
-            />
-          </div>
+          {search.search !== "" && (
+            <div css={tabBox}>
+              <TabsBox
+                labels={["Yahoo", "楽天"]}
+                selectTab={selectTab}
+                setSelectTab={setSelectTab}
+              />
+            </div>
+          )}
           <div className="resultBox__pc">
             {search.search !== "" && (
               <ResultYahoo

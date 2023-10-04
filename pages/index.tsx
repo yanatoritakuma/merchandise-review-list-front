@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import Image from "next/image";
 import TopIcon from "@/images/top2.avif";
+import { ProductSearch } from "@/components/top/productSearch";
 
 const Home = () => {
   return (
@@ -16,6 +17,7 @@ const Home = () => {
           </h1>
           <Image src={TopIcon} alt="カート" />
         </div>
+        <ProductSearch />
         <br />
         <p>aaaa</p>
         <br />
