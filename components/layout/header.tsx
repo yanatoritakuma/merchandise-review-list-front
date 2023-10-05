@@ -1,20 +1,15 @@
 import Link from "next/link";
 import Head from "next/head";
 import { css } from "@emotion/react";
-import { useState } from "react";
 import Image from "next/image";
 import LogoIcon from "@/images/logo.png";
-import MenuIcon from "@mui/icons-material/Menu";
-import CloseIcon from "@mui/icons-material/Close";
-import Drawer from "@mui/material/Drawer";
 import { useQueryUser } from "@/hooks/user/useQueryUser";
 import { useMutateAuth } from "@/hooks/auth/useMutateAuth";
+import { HambugerMenu } from "@/components/layout/hambugerMenu";
 
 export const Header = () => {
   const { data } = useQueryUser();
   const { logoutMutation } = useMutateAuth();
-
-  const [menuFlag, setMenuFlag] = useState(false);
 
   return (
     <>
@@ -68,76 +63,7 @@ export const Header = () => {
               )}
             </div>
             <div css={humBox}>
-              <MenuIcon onClick={() => setMenuFlag(true)} />
-
-              {menuFlag && (
-                <Drawer
-                  anchor="right"
-                  css={humMenuBox}
-                  open={menuFlag}
-                  onClose={() => setMenuFlag(false)}
-                >
-                  <div className="header__humMenuBox">
-                    <CloseIcon onClick={() => setMenuFlag(false)} />
-                    <Link
-                      prefetch={false}
-                      href="/"
-                      onClick={() => setMenuFlag(false)}
-                    >
-                      ホーム
-                    </Link>
-                    <Link
-                      prefetch={false}
-                      href="/product-search"
-                      onClick={() => setMenuFlag(false)}
-                    >
-                      商品検索
-                    </Link>
-                    <Link
-                      prefetch={false}
-                      href="/review-post-lists"
-                      onClick={() => setMenuFlag(false)}
-                    >
-                      投稿一覧
-                    </Link>
-                    {data?.id !== undefined && (
-                      <Link
-                        prefetch={false}
-                        href="/mypage"
-                        onClick={() => setMenuFlag(false)}
-                      >
-                        マイページ
-                      </Link>
-                    )}
-                    {data?.id !== undefined && (
-                      <Link
-                        prefetch={false}
-                        href="/review-post"
-                        onClick={() => setMenuFlag(false)}
-                      >
-                        レビュー投稿
-                      </Link>
-                    )}
-                    {data?.id !== undefined ? (
-                      <>
-                        <span onClick={() => logoutMutation.mutate()}>
-                          ログアウト
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        <Link
-                          prefetch={false}
-                          href="/auth"
-                          onClick={() => setMenuFlag(false)}
-                        >
-                          ログイン
-                        </Link>
-                      </>
-                    )}
-                  </div>
-                </Drawer>
-              )}
+              <HambugerMenu user={data} />
             </div>
           </div>
         </div>
@@ -221,29 +147,6 @@ const humBox = css`
 
     svg {
       cursor: pointer;
-    }
-  }
-`;
-
-const humMenuBox = css`
-  .header__humMenuBox {
-    padding: 20px;
-    background-color: #fff;
-    width: 80vw;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    right: 0;
-
-    a,
-    span {
-      margin: 24px 0 0 auto;
-      display: block;
-      color: #333;
-      text-decoration: none;
-      width: 50%;
-      border-bottom: 1px solid #333;
-      font-size: 18px;
     }
   }
 `;
