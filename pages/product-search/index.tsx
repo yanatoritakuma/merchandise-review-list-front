@@ -29,19 +29,28 @@ const Index = () => {
     <main css={productSearch}>
       <div className="productSearch__box">
         <h2>商品検索</h2>
-        <div className="productSearch__inputBox">
-          <TextBox
-            label="商品検索"
-            value={search.input}
-            onChange={(e) =>
-              setSearch({
-                ...search,
-                input: e.target.value,
-              })
-            }
-          />
-          <ButtonBox onClick={() => onClickSearch()}>検索</ButtonBox>
+        <div className="productSearch__inputMainBox">
+          <p>
+            Yahooショッピングと楽天市場の商品を同時に検索できます。
+            <br />
+            商品名で検索してください。
+          </p>
+          <div className="productSearch__inputBox">
+            <TextBox
+              label="商品検索"
+              value={search.input}
+              onChange={(e) =>
+                setSearch({
+                  ...search,
+                  input: e.target.value,
+                })
+              }
+              fullWidth
+            />
+            <ButtonBox onClick={() => onClickSearch()}>検索</ButtonBox>
+          </div>
         </div>
+
         <div css={resultBox}>
           {search.search !== "" && (
             <div css={tabBox}>
@@ -114,13 +123,45 @@ const productSearch = css`
     }
   }
 
-  .productSearch__inputBox {
+  .productSearch__inputMainBox {
     margin: 20px 0;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 20px;
+
+    @media screen and (max-width: 425px) {
+      padding: 18px;
+    }
+  }
+
+  .productSearch__inputBox {
+    margin: 20px auto;
     display: flex;
+    justify-content: center;
     align-items: center;
+    width: 100%;
+    max-width: 600px;
+
+    @media screen and (max-width: 425px) {
+      display: block;
+    }
+
+    input {
+      width: 300px;
+
+      @media screen and (max-width: 425px) {
+        width: 100%;
+      }
+    }
 
     button {
       margin-left: 32px;
+
+      @media screen and (max-width: 425px) {
+        margin: 20px auto;
+        display: block;
+        width: 80%;
+      }
     }
   }
 `;
