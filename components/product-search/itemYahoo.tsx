@@ -8,6 +8,7 @@ import { useMutateProduct } from "@/hooks/product/useMutateProduct";
 import { CircularProgress } from "@mui/material";
 import { useQueryUser } from "@/hooks/user/useQueryUser";
 import { MessageContext } from "@/provider/messageProvider";
+import { RatingBox } from "@/components/elements/ratingBox";
 
 type TItem = {
   hit: TYahooHit;
@@ -99,7 +100,13 @@ export const ItemYahoo = memo(({ hit, index }: TItem) => {
       </div>
       <span>在庫: {hit.inStock ? "あり" : "なし"}</span>
       <span>価格: {hit.price.toLocaleString()}円</span>
-      <span>レビュー平均: {hit.review.rate}</span>
+      <span className="itemYahooBox__ratingBox">
+        レビュー平均:
+        <span className="itemYahooBox__rating">
+          <RatingBox reviewState={hit.review.rate} readOnly />
+        </span>
+        {hit.review.rate}
+      </span>
       <Link prefetch={false} href={hit.url} target="_blank">
         商品のサイトへ
       </Link>
@@ -190,5 +197,19 @@ const itemYahooBox = css`
     margin: 12px 0;
     text-align: center;
     cursor: pointer;
+  }
+
+  .itemYahooBox__ratingBox {
+    display: flex;
+    align-items: center;
+
+    span {
+      margin: 0;
+      display: inline;
+    }
+  }
+
+  .rakutenItemBox__rating {
+    margin: 0 12px;
   }
 `;

@@ -8,6 +8,7 @@ import { CircularProgress } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useQueryUser } from "@/hooks/user/useQueryUser";
 import { MessageContext } from "@/provider/messageProvider";
+import { RatingBox } from "@/components/elements/ratingBox";
 
 type TItem = {
   item: TItems;
@@ -97,8 +98,14 @@ export const ItemRaukuten = memo(({ item, index }: TItem) => {
         </span>
       </div>
       <span>在庫: {item.Item.availability !== 0 ? "あり" : "なし"}</span>
-      <span>価格: {item.Item.itemPrice}</span>
-      <span>レビュー平均: {item.Item.reviewAverage}</span>
+      <span>価格: {item.Item.itemPrice.toLocaleString()}円</span>
+      <span className="rakutenItemBox__ratingBox">
+        レビュー平均:{" "}
+        <span className="rakutenItemBox__rating">
+          <RatingBox reviewState={item.Item.reviewAverage} readOnly />
+        </span>
+        {item.Item.reviewAverage}
+      </span>
       <Link prefetch={false} href={item.Item.itemUrl} target="_blank">
         商品のサイトへ
       </Link>
@@ -201,5 +208,19 @@ const rakutenItemBox = css`
     margin: 12px 0;
     text-align: center;
     cursor: pointer;
+  }
+
+  .rakutenItemBox__ratingBox {
+    display: flex;
+    align-items: center;
+
+    span {
+      margin: 0;
+      display: inline;
+    }
+  }
+
+  .rakutenItemBox__rating {
+    margin: 0 12px;
   }
 `;
