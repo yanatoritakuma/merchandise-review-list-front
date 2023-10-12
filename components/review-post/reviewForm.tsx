@@ -11,16 +11,19 @@ import { RatingBox } from "@/components/elements/ratingBox";
 import { TUser } from "@/types/user";
 import { ReviewPostContext } from "@/provider/reviewPostProvider";
 import { DeleteImgStorage } from "@/utils/deleteImgStorage";
+import { BackdropContext } from "@/provider/backdropProvider";
 
 type Props = {
   type: "new" | "edit";
   setOpen?: (value: React.SetStateAction<boolean>) => void;
   user: TUser | undefined;
+  review?: boolean;
 };
 
-export const ReviewForm = memo(({ type, setOpen, user }: Props) => {
+export const ReviewForm = memo(({ type, setOpen, user, review }: Props) => {
   const { reviewPostGlobal, setReviewPostProcess } =
     useContext(ReviewPostContext);
+  const { setBackdropFlag } = useContext(BackdropContext);
   const { reviewPostMutation, updateReviewPostMutation } =
     useMutateReviewPost();
   const { onClickRegistration } = ImageRegistration();
@@ -68,6 +71,18 @@ export const ReviewForm = memo(({ type, setOpen, user }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (review) {
+      setPostState({
+        title: reviewPostGlobal.title,
+        text: "",
+        category: "",
+      });
+      setPreviewUrl(reviewPostGlobal.image);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const onClickRegister = async (file: string | null) => {
     try {
       await reviewPostMutation.mutateAsync({
@@ -105,6 +120,23 @@ export const ReviewForm = memo(({ type, setOpen, user }: Props) => {
       setReviewPostProcess(true);
     } catch (err) {
       console.error("err:", err);
+    }
+  };
+
+  const onClickMultipleRegister = () => {
+    if (!review) {
+      onClickRegistration(
+        photoUrl,
+        setPhotoUrl,
+        setPreviewUrl,
+        type === "new" ? onClickRegister : onClickUpdate,
+        user
+      ),
+        type === "edit" && setOpen && setOpen(false);
+    } else {
+      setBackdropFlag(true);
+      onClickRegister(previewUrl);
+      setOpen && setOpen(false);
     }
   };
 
@@ -167,15 +199,7 @@ export const ReviewForm = memo(({ type, setOpen, user }: Props) => {
 
       <ButtonBox
         onClick={() =>
-          reviewPostValid(postState, photoUrl) &&
-          (onClickRegistration(
-            photoUrl,
-            setPhotoUrl,
-            setPreviewUrl,
-            type === "new" ? onClickRegister : onClickUpdate,
-            user
-          ),
-          type === "edit" && setOpen && setOpen(false))
+          reviewPostValid(postState, photoUrl) && onClickMultipleRegister()
         }
       >
         登録

@@ -12,7 +12,7 @@ export const DeleteImgStorage = () => {
       if (image !== null) {
         const imgUrlStart = image.indexOf(targetStorage + "%2F");
         const imgUrlEnd = image.indexOf("?alt");
-        const deletePostCoffeeUrl = image
+        const deletePostUrl = image
           .substring(imgUrlStart, imgUrlEnd)
           .replace(targetStorage + `%2F${userId}%2F`, "");
         const deleteUserUrl = image
@@ -21,17 +21,19 @@ export const DeleteImgStorage = () => {
 
         if (targetStorage === "postImages") {
           const desertRef = storage.ref(
-            `${targetStorage}/${userId}/${deletePostCoffeeUrl}`
+            `${targetStorage}/${userId}/${deletePostUrl}`
           );
 
-          desertRef
-            .delete()
-            .then(() => {
-              console.log("削除");
-            })
-            .catch((error) => {
-              console.log(error);
-            });
+          if (image.includes("firebasestorage.googleapis.com")) {
+            desertRef
+              .delete()
+              .then(() => {
+                console.log("削除");
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          }
         } else {
           const desertRef = storage.ref(`${targetStorage}/${deleteUserUrl}`);
           desertRef
