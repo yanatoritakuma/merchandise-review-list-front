@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useContext, useState } from "react";
 import { css } from "@emotion/react";
 import { TProduct, TResProduct } from "@/types/product";
 import Link from "next/link";
@@ -11,6 +11,8 @@ import {
   RefetchOptions,
   RefetchQueryFilters,
 } from "@tanstack/react-query";
+import { ModalReviewForm } from "@/components/review-post/modal/modalReviewForm";
+import { ReviewPostContext } from "@/provider/reviewPostProvider";
 
 type TItem = {
   pr: TProduct;
@@ -25,6 +27,9 @@ type TItem = {
 export const ItemCart = memo(
   ({ pr, index, refetch, moreTextFlag, setMoreTextFlag }: TItem) => {
     const { deleteProductMutation } = useMutateProduct();
+    const { reviewPostGlobal, setReviewPostGlobal } =
+      useContext(ReviewPostContext);
+    const [modalReviewFlag, setModalReviewFlag] = useState(false);
 
     //   todo:共通化したい
     const truncateString = (inputString: string, maxLength: number) => {
@@ -49,6 +54,15 @@ export const ItemCart = memo(
 
     const onClickDelete = async (id: number) => {
       await deleteProductMutation.mutateAsync(id).then(() => refetch());
+    };
+
+    const onClickModalReview = () => {
+      setModalReviewFlag(true);
+      setReviewPostGlobal({
+        ...reviewPostGlobal,
+        title: pr.name.slice(0, 50),
+        image: pr.image,
+      });
     };
 
     return (
@@ -94,8 +108,15 @@ export const ItemCart = memo(
         >
           {!deleteProductMutation.isLoading ? "カートから削除" : "削除実行中"}
         </ButtonBox>
+        <ButtonBox onClick={() => onClickModalReview()}>
+          商品のレビューをする
+        </ButtonBox>
 
         <Image src={pr.image} width={320} height={320} alt="商品画像" />
+        <ModalReviewForm
+          open={modalReviewFlag}
+          setOpen={() => setModalReviewFlag(false)}
+        />
       </div>
     );
   }
