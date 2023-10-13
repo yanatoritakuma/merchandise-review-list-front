@@ -7,14 +7,21 @@ import { ItemRaukuten } from "./itemRaukuten";
 
 type Props = {
   search: string;
+  price: {
+    min: string;
+    max: string;
+    searchmMinPrice: string;
+    searchmMaxPrice: string;
+  };
   currentRakutenPage: number;
   setCurrentRakutenPage: React.Dispatch<SetStateAction<number>>;
 };
 
 export const ResultRakuten = memo(
-  ({ search, currentRakutenPage, setCurrentRakutenPage }: Props) => {
+  ({ search, price, currentRakutenPage, setCurrentRakutenPage }: Props) => {
     const { data, refetch, isLoading, isFetching } = useQueryRakuten(
       search,
+      price,
       currentRakutenPage
     );
 
@@ -26,7 +33,13 @@ export const ResultRakuten = memo(
     useEffect(() => {
       refetch();
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentRakutenPage, search, refetch]);
+    }, [
+      currentRakutenPage,
+      search,
+      price.searchmMinPrice,
+      price.searchmMaxPrice,
+      refetch,
+    ]);
 
     if (isLoading || isFetching) {
       return <ResultSkeleton />;

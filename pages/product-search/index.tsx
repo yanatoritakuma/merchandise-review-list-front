@@ -1,15 +1,23 @@
+import { useState } from "react";
 import { css } from "@emotion/react";
 import { TextBox } from "@/components/elements/textBox";
 import { ButtonBox } from "@/components/elements/buttonBox";
-import { useState } from "react";
 import { ResultYahoo } from "@/components/product-search/resultYahoo";
 import { ResultRakuten } from "@/components/product-search/resultRakuten";
 import { TabsBox } from "@/components/elements/tabsBox";
+import { AccordionBox } from "@/components/elements/accordionBox";
+import { SearchOption } from "@/components/product-search/searchOption";
 
 const Index = () => {
   const [search, setSearch] = useState({
     input: "",
     search: "",
+  });
+  const [price, setPrice] = useState({
+    min: "",
+    max: "",
+    searchmMinPrice: "",
+    searchmMaxPrice: "",
   });
   const [currentYahooPage, setCurrentYahooPage] = useState(1);
   const [currentRakutenPage, setCurrentRakutenPage] = useState(1);
@@ -22,6 +30,11 @@ const Index = () => {
     setSearch({
       ...search,
       search: search.input,
+    });
+    setPrice({
+      ...price,
+      searchmMinPrice: price.min,
+      searchmMaxPrice: price.max,
     });
   };
 
@@ -49,6 +62,11 @@ const Index = () => {
             />
             <ButtonBox onClick={() => onClickSearch()}>検索</ButtonBox>
           </div>
+          <AccordionBox
+            title="オプション"
+            text="値段で絞り込みができます。"
+            components={<SearchOption price={price} setPrice={setPrice} />}
+          />
         </div>
 
         <div css={resultBox}>
@@ -65,6 +83,7 @@ const Index = () => {
             {search.search !== "" && (
               <ResultYahoo
                 search={search.search}
+                price={price}
                 currentYahooPage={currentYahooPage}
                 setCurrentYahooPage={setCurrentYahooPage}
               />
@@ -72,6 +91,7 @@ const Index = () => {
             {search.search !== "" && (
               <ResultRakuten
                 search={search.search}
+                price={price}
                 currentRakutenPage={currentRakutenPage}
                 setCurrentRakutenPage={setCurrentRakutenPage}
               />
@@ -82,6 +102,7 @@ const Index = () => {
               ? search.search !== "" && (
                   <ResultYahoo
                     search={search.search}
+                    price={price}
                     currentYahooPage={currentYahooPage}
                     setCurrentYahooPage={setCurrentYahooPage}
                   />
@@ -89,6 +110,7 @@ const Index = () => {
               : search.search !== "" && (
                   <ResultRakuten
                     search={search.search}
+                    price={price}
                     currentRakutenPage={currentRakutenPage}
                     setCurrentRakutenPage={setCurrentRakutenPage}
                   />
