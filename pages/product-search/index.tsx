@@ -7,6 +7,7 @@ import { ResultRakuten } from "@/components/product-search/resultRakuten";
 import { TabsBox } from "@/components/elements/tabsBox";
 import { AccordionBox } from "@/components/elements/accordionBox";
 import { SearchOption } from "@/components/product-search/searchOption";
+import { ProductSearchValidation } from "@/utils/validations/productSearchValidation";
 
 const Index = () => {
   const [search, setSearch] = useState({
@@ -21,8 +22,8 @@ const Index = () => {
   });
   const [currentYahooPage, setCurrentYahooPage] = useState(1);
   const [currentRakutenPage, setCurrentRakutenPage] = useState(1);
-
   const [selectTab, setSelectTab] = useState(0);
+  const { productSearchValidation } = ProductSearchValidation();
 
   const onClickSearch = () => {
     setCurrentYahooPage(1);
@@ -60,7 +61,11 @@ const Index = () => {
               }
               fullWidth
             />
-            <ButtonBox onClick={() => onClickSearch()}>検索</ButtonBox>
+            <ButtonBox
+              onClick={() => productSearchValidation(price) && onClickSearch()}
+            >
+              検索
+            </ButtonBox>
           </div>
           <AccordionBox
             title="オプション"

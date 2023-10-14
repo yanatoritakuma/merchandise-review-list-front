@@ -124,7 +124,7 @@ export const ItemRaukuten = memo(({ item, index }: TItem) => {
       )}
 
       <Image
-        src={item.Item.mediumImageUrls[0].imageUrl}
+        src={item.Item.mediumImageUrls[0]?.imageUrl}
         width={320}
         height={320}
         alt="プロフィール画像"

@@ -19,13 +19,14 @@ type Props = {
 
 export const ResultYahoo = memo(
   ({ search, price, currentYahooPage, setCurrentYahooPage }: Props) => {
-    //   todo: yahooAPIで初期検索（1ページ目）と2ページ目以降で総件数が変わって返ってくる
-    //   const totalYahooPage = Math.ceil(resProducts.totalResultsAvailable / 20);
     const { data, refetch, isLoading, isFetching } = useQueryYahoo(
       search,
       price,
       currentYahooPage
     );
+
+    //   todo: yahooAPIで初期検索（1ページ目）と2ページ目以降で総件数が変わって返ってくる
+    // const totalYahooPage = Math.ceil(data.totalResultsAvailable / 20);
 
     useEffect(() => {
       refetch();
