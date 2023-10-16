@@ -11,6 +11,10 @@ export const ProductSearchValidation = () => {
   const { message, setMessage } = useContext(MessageContext);
 
   const productSearchValidation = (conditions: TConditions) => {
+    if (conditions.min.trim() === "" || conditions.max.trim() === "") {
+      return true;
+    }
+
     if (!validator.isNumeric(String(conditions.min))) {
       return setMessage({
         ...message,
