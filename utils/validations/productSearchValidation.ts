@@ -11,7 +11,7 @@ export const ProductSearchValidation = () => {
   const { message, setMessage } = useContext(MessageContext);
 
   const productSearchValidation = (conditions: TConditions) => {
-    if (conditions.min.trim() === "" || conditions.max.trim() === "") {
+    if (conditions.min.trim() === "" && conditions.max.trim() === "") {
       return true;
     }
 
