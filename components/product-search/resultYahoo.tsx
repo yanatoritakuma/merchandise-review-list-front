@@ -3,30 +3,58 @@ import { css } from "@emotion/react";
 import { PaginationBox } from "@/components/common/paginationBox";
 import { useQueryYahoo } from "@/hooks/yahoo/useQueryYahoo";
 import { ResultSkeleton } from "@/components/product-search/resultSkeleton";
-import { useMutateProduct } from "@/hooks/product/useMutateProduct";
-import { TYahooHit } from "@/types/yahoo";
 import { ItemYahoo } from "./itemYahoo";
 
 type Props = {
   search: string;
+  price: {
+    min: string;
+    max: string;
+    searchmMinPrice: string;
+    searchmMaxPrice: string;
+  };
   currentYahooPage: number;
   setCurrentYahooPage: React.Dispatch<SetStateAction<number>>;
+  sort: string;
 };
 
 export const ResultYahoo = memo(
-  ({ search, currentYahooPage, setCurrentYahooPage }: Props) => {
-    //   todo: yahooAPIで初期検索（1ページ目）と2ページ目以降で総件数が変わって返ってくる
-    //   const totalYahooPage = Math.ceil(resProducts.totalResultsAvailable / 20);
+  ({ search, price, sort, currentYahooPage, setCurrentYahooPage }: Props) => {
+    const selectSorts = (sort: string) => {
+      switch (sort) {
+        case "standard":
+          return "-score";
+        case "plusPrice":
+          return "+price";
+        case "minusPrice":
+          return "-price";
+        case "reviewCount":
+          return "-review_count";
+        default:
+          return "-score";
+      }
+    };
     const { data, refetch, isLoading, isFetching } = useQueryYahoo(
       search,
+      price,
+      selectSorts(sort),
       currentYahooPage
     );
 
+    //   todo: yahooAPIで初期検索（1ページ目）と2ページ目以降で総件数が変わって返ってくる
+    // const totalYahooPage = Math.ceil(data.totalResultsAvailable / 20);
+
     useEffect(() => {
       refetch();
-
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentYahooPage, search, refetch]);
+    }, [
+      currentYahooPage,
+      search,
+      price.searchmMinPrice,
+      price.searchmMaxPrice,
+      sort,
+      refetch,
+    ]);
 
     if (isLoading || isFetching) {
       return <ResultSkeleton />;

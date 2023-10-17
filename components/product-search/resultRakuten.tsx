@@ -7,14 +7,43 @@ import { ItemRaukuten } from "./itemRaukuten";
 
 type Props = {
   search: string;
+  price: {
+    min: string;
+    max: string;
+    searchmMinPrice: string;
+    searchmMaxPrice: string;
+  };
+  sort: string;
   currentRakutenPage: number;
   setCurrentRakutenPage: React.Dispatch<SetStateAction<number>>;
 };
 
 export const ResultRakuten = memo(
-  ({ search, currentRakutenPage, setCurrentRakutenPage }: Props) => {
+  ({
+    search,
+    price,
+    sort,
+    currentRakutenPage,
+    setCurrentRakutenPage,
+  }: Props) => {
+    const selectSorts = (sort: string) => {
+      switch (sort) {
+        case "standard":
+          return "standard";
+        case "plusPrice":
+          return "+itemPrice";
+        case "minusPrice":
+          return "-itemPrice";
+        case "reviewCount":
+          return "-reviewAverage";
+        default:
+          return "standard";
+      }
+    };
     const { data, refetch, isLoading, isFetching } = useQueryRakuten(
       search,
+      price,
+      selectSorts(sort),
       currentRakutenPage
     );
 
@@ -26,7 +55,14 @@ export const ResultRakuten = memo(
     useEffect(() => {
       refetch();
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentRakutenPage, search, refetch]);
+    }, [
+      currentRakutenPage,
+      search,
+      price.searchmMinPrice,
+      price.searchmMaxPrice,
+      sort,
+      refetch,
+    ]);
 
     if (isLoading || isFetching) {
       return <ResultSkeleton />;

@@ -1,20 +1,31 @@
+import { useState } from "react";
 import { css } from "@emotion/react";
 import { TextBox } from "@/components/elements/textBox";
 import { ButtonBox } from "@/components/elements/buttonBox";
-import { useState } from "react";
 import { ResultYahoo } from "@/components/product-search/resultYahoo";
 import { ResultRakuten } from "@/components/product-search/resultRakuten";
 import { TabsBox } from "@/components/elements/tabsBox";
+import { AccordionBox } from "@/components/elements/accordionBox";
+import { SearchOption } from "@/components/product-search/searchOption";
+import { ProductSearchValidation } from "@/utils/validations/productSearchValidation";
 
 const Index = () => {
   const [search, setSearch] = useState({
     input: "",
     search: "",
   });
+  const [price, setPrice] = useState({
+    min: "",
+    max: "",
+    searchmMinPrice: "",
+    searchmMaxPrice: "",
+  });
+  const [sort, setSort] = useState("standard");
+  const [selectSort, setSelectSort] = useState("standard");
   const [currentYahooPage, setCurrentYahooPage] = useState(1);
   const [currentRakutenPage, setCurrentRakutenPage] = useState(1);
-
   const [selectTab, setSelectTab] = useState(0);
+  const { productSearchValidation } = ProductSearchValidation();
 
   const onClickSearch = () => {
     setCurrentYahooPage(1);
@@ -23,6 +34,12 @@ const Index = () => {
       ...search,
       search: search.input,
     });
+    setPrice({
+      ...price,
+      searchmMinPrice: price.min,
+      searchmMaxPrice: price.max,
+    });
+    setSelectSort(sort);
   };
 
   return (
@@ -47,8 +64,24 @@ const Index = () => {
               }
               fullWidth
             />
-            <ButtonBox onClick={() => onClickSearch()}>検索</ButtonBox>
+            <ButtonBox
+              onClick={() => productSearchValidation(price) && onClickSearch()}
+            >
+              検索
+            </ButtonBox>
           </div>
+          <AccordionBox
+            title="オプション"
+            text="値段で絞り込みができます。"
+            components={
+              <SearchOption
+                price={price}
+                setPrice={setPrice}
+                sort={sort}
+                setSort={setSort}
+              />
+            }
+          />
         </div>
 
         <div css={resultBox}>
@@ -65,6 +98,8 @@ const Index = () => {
             {search.search !== "" && (
               <ResultYahoo
                 search={search.search}
+                price={price}
+                sort={selectSort}
                 currentYahooPage={currentYahooPage}
                 setCurrentYahooPage={setCurrentYahooPage}
               />
@@ -72,6 +107,8 @@ const Index = () => {
             {search.search !== "" && (
               <ResultRakuten
                 search={search.search}
+                price={price}
+                sort={selectSort}
                 currentRakutenPage={currentRakutenPage}
                 setCurrentRakutenPage={setCurrentRakutenPage}
               />
@@ -82,6 +119,8 @@ const Index = () => {
               ? search.search !== "" && (
                   <ResultYahoo
                     search={search.search}
+                    price={price}
+                    sort={selectSort}
                     currentYahooPage={currentYahooPage}
                     setCurrentYahooPage={setCurrentYahooPage}
                   />
@@ -89,6 +128,8 @@ const Index = () => {
               : search.search !== "" && (
                   <ResultRakuten
                     search={search.search}
+                    price={price}
+                    sort={selectSort}
                     currentRakutenPage={currentRakutenPage}
                     setCurrentRakutenPage={setCurrentRakutenPage}
                   />
