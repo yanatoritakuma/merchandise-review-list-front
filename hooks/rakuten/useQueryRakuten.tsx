@@ -10,6 +10,7 @@ export type TPrice = {
 export const useQueryRakuten = (
   search: string,
   price: TPrice,
+  sort: string,
   page: number
 ) => {
   const getRakuten = async () => {
@@ -17,9 +18,10 @@ export const useQueryRakuten = (
     const { data } = await axios.get<TRakutenProducts>("/api/rakuten", {
       params: {
         search: search,
-        page: page,
         minPrice: price.min,
         maxPrice: price.max,
+        sort: sort,
+        page: page,
       },
     });
     return data;

@@ -28,19 +28,19 @@ export const ProductSearchValidation = () => {
         type: "error",
       });
     } else if (
-      !validator.isInt(String(conditions.min), { min: 1, max: 999999999 })
+      !validator.isInt(String(conditions.min), { min: 1, max: 99999999 })
     ) {
       return setMessage({
         ...message,
-        text: "最小価格は0より大きく999,999,999未満の整数で入力してください。",
+        text: "最小価格は0より大きく99,999,999未満の整数で入力してください。",
         type: "error",
       });
     } else if (
-      !validator.isInt(String(conditions.max), { min: 1, max: 999999999 })
+      !validator.isInt(String(conditions.max), { min: 1, max: 99999999 })
     ) {
       return setMessage({
         ...message,
-        text: "最大価格は0より大きく999,999,999未満の整数で入力してください。",
+        text: "最大価格は0より大きく99,999,99未満の整数で入力してください。",
         type: "error",
       });
     } else if (Number(conditions.min) > Number(conditions.max)) {

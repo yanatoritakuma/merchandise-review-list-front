@@ -15,13 +15,29 @@ type Props = {
   };
   currentYahooPage: number;
   setCurrentYahooPage: React.Dispatch<SetStateAction<number>>;
+  sort: string;
 };
 
 export const ResultYahoo = memo(
-  ({ search, price, currentYahooPage, setCurrentYahooPage }: Props) => {
+  ({ search, price, sort, currentYahooPage, setCurrentYahooPage }: Props) => {
+    const selectSorts = (sort: string) => {
+      switch (sort) {
+        case "standard":
+          return "-score";
+        case "plusPrice":
+          return "+price";
+        case "minusPrice":
+          return "-price";
+        case "reviewCount":
+          return "-review_count";
+        default:
+          return "-score";
+      }
+    };
     const { data, refetch, isLoading, isFetching } = useQueryYahoo(
       search,
       price,
+      selectSorts(sort),
       currentYahooPage
     );
 
@@ -30,13 +46,13 @@ export const ResultYahoo = memo(
 
     useEffect(() => {
       refetch();
-
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
       currentYahooPage,
       search,
       price.searchmMinPrice,
       price.searchmMaxPrice,
+      sort,
       refetch,
     ]);
 

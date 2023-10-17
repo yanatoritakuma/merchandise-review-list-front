@@ -20,6 +20,8 @@ const Index = () => {
     searchmMinPrice: "",
     searchmMaxPrice: "",
   });
+  const [sort, setSort] = useState("standard");
+  const [selectSort, setSelectSort] = useState("standard");
   const [currentYahooPage, setCurrentYahooPage] = useState(1);
   const [currentRakutenPage, setCurrentRakutenPage] = useState(1);
   const [selectTab, setSelectTab] = useState(0);
@@ -37,6 +39,7 @@ const Index = () => {
       searchmMinPrice: price.min,
       searchmMaxPrice: price.max,
     });
+    setSelectSort(sort);
   };
 
   return (
@@ -70,7 +73,14 @@ const Index = () => {
           <AccordionBox
             title="オプション"
             text="値段で絞り込みができます。"
-            components={<SearchOption price={price} setPrice={setPrice} />}
+            components={
+              <SearchOption
+                price={price}
+                setPrice={setPrice}
+                sort={sort}
+                setSort={setSort}
+              />
+            }
           />
         </div>
 
@@ -89,6 +99,7 @@ const Index = () => {
               <ResultYahoo
                 search={search.search}
                 price={price}
+                sort={selectSort}
                 currentYahooPage={currentYahooPage}
                 setCurrentYahooPage={setCurrentYahooPage}
               />
@@ -97,6 +108,7 @@ const Index = () => {
               <ResultRakuten
                 search={search.search}
                 price={price}
+                sort={selectSort}
                 currentRakutenPage={currentRakutenPage}
                 setCurrentRakutenPage={setCurrentRakutenPage}
               />
@@ -108,6 +120,7 @@ const Index = () => {
                   <ResultYahoo
                     search={search.search}
                     price={price}
+                    sort={selectSort}
                     currentYahooPage={currentYahooPage}
                     setCurrentYahooPage={setCurrentYahooPage}
                   />
@@ -116,6 +129,7 @@ const Index = () => {
                   <ResultRakuten
                     search={search.search}
                     price={price}
+                    sort={selectSort}
                     currentRakutenPage={currentRakutenPage}
                     setCurrentRakutenPage={setCurrentRakutenPage}
                   />

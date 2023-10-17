@@ -13,15 +13,37 @@ type Props = {
     searchmMinPrice: string;
     searchmMaxPrice: string;
   };
+  sort: string;
   currentRakutenPage: number;
   setCurrentRakutenPage: React.Dispatch<SetStateAction<number>>;
 };
 
 export const ResultRakuten = memo(
-  ({ search, price, currentRakutenPage, setCurrentRakutenPage }: Props) => {
+  ({
+    search,
+    price,
+    sort,
+    currentRakutenPage,
+    setCurrentRakutenPage,
+  }: Props) => {
+    const selectSorts = (sort: string) => {
+      switch (sort) {
+        case "standard":
+          return "standard";
+        case "plusPrice":
+          return "+itemPrice";
+        case "minusPrice":
+          return "-itemPrice";
+        case "reviewCount":
+          return "-reviewAverage";
+        default:
+          return "standard";
+      }
+    };
     const { data, refetch, isLoading, isFetching } = useQueryRakuten(
       search,
       price,
+      selectSorts(sort),
       currentRakutenPage
     );
 
@@ -38,6 +60,7 @@ export const ResultRakuten = memo(
       search,
       price.searchmMinPrice,
       price.searchmMaxPrice,
+      sort,
       refetch,
     ]);
 
