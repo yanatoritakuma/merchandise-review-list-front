@@ -18,8 +18,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-export const BackdropProvider = (props: Props) => {
-  const { children } = props;
+export const BackdropProvider = ({ children }: Props) => {
   const [backdropFlag, setBackdropFlag] = useState(false);
   const [apiTimeOutFlag, setApiTimeOutFlag] = useState(false);
 

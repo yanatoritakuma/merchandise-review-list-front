@@ -13,33 +13,32 @@ type Props = {
   size?: "small" | "medium" | "large";
 };
 
-export const ButtonBox = memo((props: Props) => {
-  const { children, onClick, upload, onChange, variant, disabled, size } =
-    props;
-
-  return (
-    <>
-      {!upload ? (
-        <Button
-          onClick={onClick}
-          variant={variant !== undefined ? variant : "contained"}
-          disabled={disabled}
-          size={size}
-        >
-          {children}
-        </Button>
-      ) : (
-        <IconButton
-          color="primary"
-          aria-label="upload picture"
-          component="label"
-        >
-          <input hidden accept="image/*" type="file" onChange={onChange} />
-          <PhotoCamera />
-        </IconButton>
-      )}
-    </>
-  );
-});
+export const ButtonBox = memo(
+  ({ children, onClick, upload, onChange, variant, disabled, size }: Props) => {
+    return (
+      <>
+        {!upload ? (
+          <Button
+            onClick={onClick}
+            variant={variant !== undefined ? variant : "contained"}
+            disabled={disabled}
+            size={size}
+          >
+            {children}
+          </Button>
+        ) : (
+          <IconButton
+            color="primary"
+            aria-label="upload picture"
+            component="label"
+          >
+            <input hidden accept="image/*" type="file" onChange={onChange} />
+            <PhotoCamera />
+          </IconButton>
+        )}
+      </>
+    );
+  }
+);
 
 ButtonBox.displayName = "ButtonBox";

@@ -9,24 +9,24 @@ type Props = {
   setSelectTab: React.Dispatch<React.SetStateAction<number>>;
 };
 
-export const TabsBox = memo((props: Props) => {
-  const { labels, icon, selectTab, setSelectTab } = props;
+export const TabsBox = memo(
+  ({ labels, icon, selectTab, setSelectTab }: Props) => {
+    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+      setSelectTab(newValue);
+    };
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setSelectTab(newValue);
-  };
-
-  return (
-    <Tabs value={selectTab} onChange={handleChange}>
-      {labels.map((label, index) => (
-        <Tab
-          icon={icon !== undefined ? icon[index] : ""}
-          label={label}
-          key={index}
-        />
-      ))}
-    </Tabs>
-  );
-});
+    return (
+      <Tabs value={selectTab} onChange={handleChange}>
+        {labels.map((label, index) => (
+          <Tab
+            icon={icon !== undefined ? icon[index] : ""}
+            label={label}
+            key={index}
+          />
+        ))}
+      </Tabs>
+    );
+  }
+);
 
 TabsBox.displayName = "TabsBox";

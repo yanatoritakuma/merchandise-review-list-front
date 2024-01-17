@@ -15,9 +15,7 @@ type Props = {
   }[];
 };
 
-export const SelectBox = memo((props: Props) => {
-  const { label, value, onChange, menuItem } = props;
-
+export const SelectBox = memo(({ label, value, onChange, menuItem }: Props) => {
   return (
     <Box>
       <FormControl fullWidth>

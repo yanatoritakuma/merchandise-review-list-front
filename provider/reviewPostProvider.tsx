@@ -41,8 +41,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-export const ReviewPostProvider = (props: Props) => {
-  const { children } = props;
+export const ReviewPostProvider = ({ children }: Props) => {
   const [reviewPostGlobal, setReviewPostGlobal] = useState({
     id: 0,
     title: "",
