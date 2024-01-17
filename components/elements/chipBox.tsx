@@ -1,15 +1,13 @@
-import { memo } from 'react';
-import Chip from '@mui/material/Chip';
-import Stack from '@mui/material/Stack';
+import { memo } from "react";
+import Chip from "@mui/material/Chip";
+import Stack from "@mui/material/Stack";
 
 type Props = {
   label: string;
   onClick: () => void;
 };
 
-export const ChipBox = memo((props: Props) => {
-  const { label, onClick } = props;
-
+export const ChipBox = memo(({ label, onClick }: Props) => {
   return (
     <Stack direction="row" spacing={1}>
       <Chip label={label} variant="outlined" onDelete={onClick} />
@@ -17,4 +15,4 @@ export const ChipBox = memo((props: Props) => {
   );
 });
 
-ChipBox.displayName = 'ChipBox';
+ChipBox.displayName = "ChipBox";

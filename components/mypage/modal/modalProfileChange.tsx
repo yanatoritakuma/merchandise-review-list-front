@@ -16,8 +16,7 @@ type Props = {
   setOpen: (value: React.SetStateAction<boolean>) => void;
 };
 
-export const ModalProfileChange = memo((props: Props) => {
-  const { open, setOpen } = props;
+export const ModalProfileChange = memo(({ open, setOpen }: Props) => {
   const { data: user } = useQueryUser();
   const { onClickRegistration } = ImageRegistration();
   const { updateUserMutation } = useMutateUser();

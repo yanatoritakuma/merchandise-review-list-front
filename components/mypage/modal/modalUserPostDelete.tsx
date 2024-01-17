@@ -16,8 +16,7 @@ type Props = {
   type: "user" | "post";
 };
 
-export const ModalUserPostDelete = memo((props: Props) => {
-  const { open, setOpen, type } = props;
+export const ModalUserPostDelete = memo(({ open, setOpen, type }: Props) => {
   const { reviewPostGlobal, setReviewPostProcess } =
     useContext(ReviewPostContext);
   const { deleteReviewPostMutation } = useMutateReviewPost();

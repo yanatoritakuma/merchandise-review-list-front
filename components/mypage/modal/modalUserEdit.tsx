@@ -13,8 +13,7 @@ type Props = {
   setOpen: (value: React.SetStateAction<boolean>) => void;
 };
 
-export const ModalUserEdit = memo((props: Props) => {
-  const { open, setOpen } = props;
+export const ModalUserEdit = memo(({ open, setOpen }: Props) => {
   const { data: user } = useQueryUser();
   const { updateUserMutation } = useMutateUser();
   const { accountRegisterValidation } = UserValidation();

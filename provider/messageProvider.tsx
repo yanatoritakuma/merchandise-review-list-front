@@ -25,8 +25,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-export const MessageProvider = (props: Props) => {
-  const { children } = props;
+export const MessageProvider = ({ children }: Props) => {
   const [message, setMessage] = useState<{
     text: string;
     type: "error" | "warning" | "info" | "success";
