@@ -1,7 +1,7 @@
-import { memo, useContext } from "react";
+import { memo, useContext, useEffect, useState } from "react";
 import { css } from "@emotion/react";
 import Image from "next/image";
-import { TResReviewPost, TReviewPosts } from "@/types/reviewPost";
+import { TReviewPosts } from "@/types/reviewPost";
 import NoPostImage from "@/images/noimage.png";
 import NoUserImage from "@/images/noimage-user.png";
 import { RatingBox } from "@/components/elements/ratingBox";
@@ -12,25 +12,55 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import { useMutateLike } from "@/hooks/like/useMutateLike";
 import { MessageContext } from "@/provider/messageProvider";
 import { TUser } from "@/types/user";
-import {
-  QueryObserverResult,
-  RefetchOptions,
-  RefetchQueryFilters,
-} from "@tanstack/react-query";
-import { TError } from "@/types/error";
+import CircularProgress from "@mui/material/CircularProgress";
 
 type Props = {
   reviewPost: TReviewPosts;
   user?: TUser;
-  refetch: <TPageData>(
-    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
-  ) => Promise<QueryObserverResult<TResReviewPost, TError>>;
 };
 
-export const ItmeReviewPost = memo(({ reviewPost, user, refetch }: Props) => {
+export const ItmeReviewPost = memo(({ reviewPost, user }: Props) => {
   const { setReviewPostGlobal } = useContext(ReviewPostContext);
   const { message, setMessage } = useContext(MessageContext);
+  const [likeState, setLikeState] = useState({
+    count: 0,
+    status: false,
+  });
   const { likeMutation, likeDeleteMutation } = useMutateLike();
+  const likePostUserId = String(reviewPost.id) + String(user?.id);
+
+  const DisplayLike = () => {
+    return (
+      <>
+        {likeState.status ? (
+          <span className="itemCartBox__like">
+            <FavoriteOutlinedIcon onClick={() => onClickDeleteLike()} />
+          </span>
+        ) : (
+          <span className="itemCartBox__like" onClick={() => onClickLike()}>
+            <FavoriteBorderOutlinedIcon />
+          </span>
+        )}
+        {likeMutation.isLoading || likeDeleteMutation.isLoading ? (
+          <CircularProgress
+            color="inherit"
+            style={{ width: "18px", height: "18px" }}
+          />
+        ) : (
+          <span>{likeState.count}</span>
+        )}
+      </>
+    );
+  };
+
+  useEffect(() => {
+    setLikeState({
+      ...likeState,
+      count: reviewPost.like_count,
+      status: reviewPost.like_id !== 0,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onClickEdit = (selectPost: TReviewPosts) => {
     setReviewPostGlobal({
@@ -43,7 +73,7 @@ export const ItmeReviewPost = memo(({ reviewPost, user, refetch }: Props) => {
     });
   };
 
-  const onClickLike = async (postId: number) => {
+  const onClickLike = async () => {
     if (!user) {
       setMessage({
         ...message,
@@ -54,19 +84,30 @@ export const ItmeReviewPost = memo(({ reviewPost, user, refetch }: Props) => {
     }
     try {
       const req = {
-        post_id: postId,
+        post_id: reviewPost.id,
+        post_user_id: Number(likePostUserId),
       };
       await likeMutation.mutateAsync(req);
-      refetch();
+      setLikeState({
+        ...likeState,
+        count: likeState.count + 1,
+        status: true,
+      });
+      // refetch();
     } catch (err) {
       console.error(err);
     }
   };
 
-  const onClickDeleteLike = async (likeId: number) => {
+  const onClickDeleteLike = async () => {
     try {
-      await likeDeleteMutation.mutateAsync(likeId);
-      refetch();
+      await likeDeleteMutation.mutateAsync(Number(likePostUserId));
+      // refetch();
+      setLikeState({
+        ...likeState,
+        count: likeState.count - 1,
+        status: false,
+      });
     } catch (err) {
       console.error(err);
     }
@@ -116,21 +157,14 @@ export const ItmeReviewPost = memo(({ reviewPost, user, refetch }: Props) => {
         </span>
       </span>
       <div className="itemCartBox__likeBox">
-        {reviewPost.like_id !== 0 ? (
-          <span className="itemCartBox__like">
-            <FavoriteOutlinedIcon
-              onClick={() => onClickDeleteLike(reviewPost.like_id)}
-            />
-          </span>
+        {likeMutation.isLoading || likeDeleteMutation.isLoading ? (
+          <CircularProgress
+            color="inherit"
+            style={{ width: "18px", height: "18px" }}
+          />
         ) : (
-          <span
-            className="itemCartBox__like"
-            onClick={() => onClickLike(reviewPost.id)}
-          >
-            <FavoriteBorderOutlinedIcon />
-          </span>
+          <DisplayLike />
         )}
-        <span>{reviewPost.like_count}</span>
       </div>
       <div className="itemCartBox__postImg">
         {reviewPost.image !== "" ? (

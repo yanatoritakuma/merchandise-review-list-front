@@ -45,7 +45,6 @@ export const ReviewPost = memo(() => {
           key={reviewPost.id}
           reviewPost={reviewPost}
           user={user}
-          refetch={refetch}
         />
       ))}
       <PaginationBox
