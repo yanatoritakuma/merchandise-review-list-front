@@ -6,6 +6,7 @@ import { MessageContext } from "@/provider/messageProvider";
 
 export type TReqLike = {
   post_id: number;
+  post_user_id: number;
 };
 
 export const useMutateLike = () => {
