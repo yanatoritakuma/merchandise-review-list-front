@@ -28,25 +28,36 @@ const Index = () => {
   const { productSearchValidation } = ProductSearchValidation();
 
   const onClickSearch = () => {
-    setCurrentYahooPage(1);
-    setCurrentRakutenPage(1);
-    setSearch({
-      ...search,
-      search: search.input,
-    });
-    setPrice({
-      ...price,
-      searchmMinPrice: price.min,
-      searchmMaxPrice: price.max,
-    });
-    setSelectSort(sort);
+    if (productSearchValidation(price, search.input)) {
+      setCurrentYahooPage(1);
+      setCurrentRakutenPage(1);
+      setSearch({
+        ...search,
+        search: search.input,
+      });
+      setPrice({
+        ...price,
+        searchmMinPrice: price.min,
+        searchmMaxPrice: price.max,
+      });
+      setSelectSort(sort);
+    }
+  };
+
+  // Enterキーが押された場合に検索を実行
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!e.nativeEvent.isComposing) {
+      if (productSearchValidation(price, search.input)) {
+        onClickSearch();
+      }
+    }
   };
 
   return (
     <main css={productSearch}>
       <div className="productSearch__box">
         <h2>商品検索</h2>
-        <div className="productSearch__inputMainBox">
+        <div className="productSearch__inputMainBox" onKeyDown={handleKeyDown}>
           <p>
             Yahooショッピングと楽天市場の商品を同時に検索できます。
             <br />
@@ -64,11 +75,7 @@ const Index = () => {
               }
               fullWidth
             />
-            <ButtonBox
-              onClick={() => productSearchValidation(price) && onClickSearch()}
-            >
-              検索
-            </ButtonBox>
+            <ButtonBox onClick={() => onClickSearch()}>検索</ButtonBox>
           </div>
           <AccordionBox
             title="オプション"
