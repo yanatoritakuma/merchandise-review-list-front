@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { css } from "@emotion/react";
 import { TextBox } from "@/components/elements/textBox";
 import { ButtonBox } from "@/components/elements/buttonBox";
@@ -46,7 +46,7 @@ const Index = () => {
 
   // Enterキーが押された場合に検索を実行
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!e.nativeEvent.isComposing) {
+    if (e.key === "Enter" && !e.nativeEvent.isComposing) {
       if (productSearchValidation(price, search.input)) {
         onClickSearch();
       }
