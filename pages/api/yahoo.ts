@@ -13,7 +13,9 @@ export default async function handler(
     const page = req.query.page as string;
 
     const response = await axios.get(
-      `https://shopping.yahooapis.jp/ShoppingWebService/V3/itemSearch?appid=${process.env.NEXT_PUBLIC_YAHOO_API_URL}&query=${search}&price_from=${minPrice}&price_to=${maxPrice}&sort=${sort}&start=${page}`
+      `https://shopping.yahooapis.jp/ShoppingWebService/V3/itemSearch?appid=${
+        process.env.NEXT_PUBLIC_YAHOO_API_URL
+      }&query=${search}&price_from=${minPrice}&price_to=${maxPrice}&sort=${sort}&start=${page}&image_size=${600}`
     );
 
     res.status(200).json(response.data);

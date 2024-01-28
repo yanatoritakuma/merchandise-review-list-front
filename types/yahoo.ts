@@ -20,6 +20,9 @@ export type TYahooHit = {
     small: string;
     medium: string;
   };
+  exImage: {
+    url: string;
+  };
   review: {
     rate: number; //レビュー平均
   };

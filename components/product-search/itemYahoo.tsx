@@ -121,7 +121,7 @@ export const ItemYahoo = memo(({ hit, index }: TItem) => {
           <CircularProgress />
         </span>
       )}
-      <Image src={hit.image?.medium} width={320} height={320} alt="商品画像" />
+      <Image src={hit.exImage.url} width={320} height={320} alt="商品画像" />
     </div>
   );
 });

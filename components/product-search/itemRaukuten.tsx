@@ -68,6 +68,10 @@ export const ItemRaukuten = memo(({ item, index }: TItem) => {
     }
   };
 
+  const imgResizing = (imgUrl: string) => {
+    return imgUrl.replace("128x128", "600x600");
+  };
+
   return (
     <div css={rakutenItemBox}>
       <h4>{item.Item.itemName}</h4>
@@ -124,10 +128,10 @@ export const ItemRaukuten = memo(({ item, index }: TItem) => {
       )}
 
       <Image
-        src={item.Item.mediumImageUrls[0]?.imageUrl}
+        src={imgResizing(item.Item.mediumImageUrls[0]?.imageUrl)}
         width={320}
         height={320}
-        alt="プロフィール画像"
+        alt="商品画像"
       />
     </div>
   );
