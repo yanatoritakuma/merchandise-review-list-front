@@ -10,7 +10,15 @@ type TConditions = {
 export const ProductSearchValidation = () => {
   const { message, setMessage } = useContext(MessageContext);
 
-  const productSearchValidation = (conditions: TConditions) => {
+  const productSearchValidation = (conditions: TConditions, text: string) => {
+    if (validator.isEmpty(text) || validator.isEmpty(text.trim())) {
+      return setMessage({
+        ...message,
+        text: "未入力です。",
+        type: "error",
+      });
+    }
+
     if (conditions.min.trim() === "" && conditions.max.trim() === "") {
       return true;
     }
