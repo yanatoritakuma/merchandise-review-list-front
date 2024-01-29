@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { MessageContext } from "@/provider/messageProvider";
 import validator from "validator";
 import { TReqReviewPost } from "@/types/reviewPost";
+import { containsJapanese } from "@/utils/validations/containsJapaneseValidation";
 
 export const ReviewPostValidation = () => {
   const { message, setMessage } = useContext(MessageContext);
@@ -10,12 +11,6 @@ export const ReviewPostValidation = () => {
     reviewPost: TReqReviewPost,
     photoUrl: File | null
   ) => {
-    const containsJapanese = (fileName: string) => {
-      const japaneseRegex =
-        /[一-龠々〆ヵヶぁ-ゔゞァ-・ヽヾ゛゜ー「」｢｣()〔〕［］｛｝〈〉《》【】〖〗〘〙〚〛〜～]/;
-      return japaneseRegex.test(fileName);
-    };
-
     if (validator.isEmpty(reviewPost.title)) {
       return setMessage({
         ...message,

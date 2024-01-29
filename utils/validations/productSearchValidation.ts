@@ -19,7 +19,10 @@ export const ProductSearchValidation = () => {
       });
     }
 
-    if (conditions.min.trim() === "" && conditions.max.trim() === "") {
+    if (
+      validator.isEmpty(conditions.min) &&
+      validator.isEmpty(conditions.max)
+    ) {
       return true;
     }
 

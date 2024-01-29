@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { MessageContext } from "@/provider/messageProvider";
 import validator from "validator";
+import { containsJapanese } from "@/utils/validations/containsJapaneseValidation";
 
 type TReqUpDate = {
   email: string;
@@ -14,12 +15,6 @@ export const UserValidation = () => {
     photoUrl: File | null,
     register?: TReqUpDate
   ) => {
-    const containsJapanese = (fileName: string) => {
-      const japaneseRegex =
-        /[一-龠々〆ヵヶぁ-ゔゞァ-・ヽヾ゛゜ー「」｢｣()〔〕［］｛｝〈〉《》【】〖〗〘〙〚〛〜～]/;
-      return japaneseRegex.test(fileName);
-    };
-
     if (register && validator.isEmpty(register.email)) {
       return setMessage({
         ...message,
