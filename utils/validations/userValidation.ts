@@ -1,7 +1,4 @@
-import { useContext } from "react";
-import { MessageContext } from "@/provider/messageProvider";
-import validator from "validator";
-import { containsJapanese } from "@/utils/validations/containsJapaneseValidation";
+import { Validation } from "@/utils/validations/validation";
 
 type TReqUpDate = {
   email: string;
@@ -9,45 +6,38 @@ type TReqUpDate = {
 };
 
 export const UserValidation = () => {
-  const { message, setMessage } = useContext(MessageContext);
+  const { required, emailFormat, below, japaneseProhibited } = Validation();
 
   const accountRegisterValidation = (
     photoUrl: File | null,
     register?: TReqUpDate
   ) => {
-    if (register && validator.isEmpty(register.email)) {
-      return setMessage({
-        ...message,
-        text: "メールアドレスは必須です。",
-        type: "error",
-      });
-    } else if (register && !validator.isEmail(register.email)) {
-      return setMessage({
-        ...message,
-        text: "メールアドレスの形式が正しくありません。",
-        type: "error",
-      });
-    } else if (register && validator.isEmpty(register.name)) {
-      return setMessage({
-        ...message,
-        text: "名前は必須です。",
-        type: "error",
-      });
-    } else if (register && !validator.isLength(register.name, { max: 30 })) {
-      return setMessage({
-        ...message,
-        text: "名前は30文字以下で入力してください。",
-        type: "error",
-      });
-    } else if (photoUrl && containsJapanese(photoUrl.name)) {
-      return setMessage({
-        ...message,
-        text: "画像名に日本語を入れないでください。",
-        type: "error",
-      });
-    } else {
-      return true;
+    // 必須チェック
+    if (register) {
+      if (
+        required(register.email, "メールアドレス") ||
+        required(register.name, "名前")
+      ) {
+        return false;
+      }
     }
+
+    // メールアドレスの形式チェック
+    if (register && emailFormat(register.email)) {
+      return false;
+    }
+
+    // 以下チェック
+    if (register && below(register.name, "名前", 30)) {
+      return false;
+    }
+
+    // 画像URLに日本語が入っていないかチェック
+    if (japaneseProhibited(photoUrl)) {
+      return false;
+    }
+
+    return true;
   };
 
   return { accountRegisterValidation };

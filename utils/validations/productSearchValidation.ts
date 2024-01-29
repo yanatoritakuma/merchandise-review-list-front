@@ -1,6 +1,5 @@
-import { useContext } from "react";
-import { MessageContext } from "@/provider/messageProvider";
 import validator from "validator";
+import { Validation } from "@/utils/validations/validation";
 
 type TConditions = {
   min: string;
@@ -8,17 +7,15 @@ type TConditions = {
 };
 
 export const ProductSearchValidation = () => {
-  const { message, setMessage } = useContext(MessageContext);
+  const { required, number, bigger, smaller } = Validation();
 
   const productSearchValidation = (conditions: TConditions, text: string) => {
-    if (validator.isEmpty(text) || validator.isEmpty(text.trim())) {
-      return setMessage({
-        ...message,
-        text: "未入力です。",
-        type: "error",
-      });
+    // 必須チェック
+    if (required(text, "商品検索")) {
+      return false;
     }
 
+    // スペース削除
     if (
       validator.isEmpty(conditions.min) &&
       validator.isEmpty(conditions.max)
@@ -26,43 +23,34 @@ export const ProductSearchValidation = () => {
       return true;
     }
 
-    if (!validator.isNumeric(String(conditions.min))) {
-      return setMessage({
-        ...message,
-        text: "最小価格には半角数字を入力してください。",
-        type: "error",
-      });
-    } else if (!validator.isNumeric(String(conditions.max))) {
-      return setMessage({
-        ...message,
-        text: "最大価格には半角数字を入力してください。",
-        type: "error",
-      });
-    } else if (
-      !validator.isInt(String(conditions.min), { min: 1, max: 99999999 })
+    // 半角数字チェック
+    if (
+      number(String(conditions.min), "最小価格") ||
+      number(String(conditions.max), "最大価格")
     ) {
-      return setMessage({
-        ...message,
-        text: "最小価格は0より大きく99,999,999未満の整数で入力してください。",
-        type: "error",
-      });
-    } else if (
-      !validator.isInt(String(conditions.max), { min: 1, max: 99999999 })
-    ) {
-      return setMessage({
-        ...message,
-        text: "最大価格は0より大きく99,999,99未満の整数で入力してください。",
-        type: "error",
-      });
-    } else if (Number(conditions.min) > Number(conditions.max)) {
-      return setMessage({
-        ...message,
-        text: "最小価格は最大価格より小さい価格で入力してください。",
-        type: "error",
-      });
-    } else {
-      return true;
+      return false;
     }
+    // 比較チェック
+    if (
+      bigger(String(conditions.min), "最小価格", 1, 99999999) ||
+      bigger(String(conditions.max), "最大価格", 1, 99999999)
+    ) {
+      return false;
+    }
+
+    // より小さい比較チェック
+    if (
+      smaller(
+        Number(conditions.min),
+        Number(conditions.max),
+        "最小価格",
+        "最大価格"
+      )
+    ) {
+      return false;
+    }
+
+    return true;
   };
 
   return { productSearchValidation };
