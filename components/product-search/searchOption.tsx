@@ -34,7 +34,7 @@ export const SearchOption = memo(
               onChange={(e) =>
                 setPrice({
                   ...price,
-                  min: e.target.value,
+                  min: e.target.value.replace(/\s/g, ""),
                 })
               }
             />
@@ -47,7 +47,7 @@ export const SearchOption = memo(
               onChange={(e) =>
                 setPrice({
                   ...price,
-                  max: e.target.value,
+                  max: e.target.value.replace(/\s/g, ""),
                 })
               }
             />
