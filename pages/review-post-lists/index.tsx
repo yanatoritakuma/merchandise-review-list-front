@@ -81,11 +81,7 @@ const Index = () => {
         {data?.reviewPosts.length !== 0 ? (
           <div>
             {data?.reviewPosts.map((reviewPost) => (
-              <ItmeReviewPost
-                key={reviewPost.id}
-                reviewPost={reviewPost}
-                user={user}
-              />
+              <ItmeReviewPost key={reviewPost.id} reviewPost={reviewPost} />
             ))}
             <PaginationBox
               count={countPages(data !== undefined ? data.totalPageCount : 0)}

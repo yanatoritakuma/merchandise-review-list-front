@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { css } from "@emotion/react";
 import { TextBox } from "@/components/elements/textBox";
 import { ButtonBox } from "@/components/elements/buttonBox";

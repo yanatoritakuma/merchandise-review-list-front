@@ -1,6 +1,5 @@
 import { memo, useEffect, useState } from "react";
 import { useQueryUserLike } from "@/hooks/review-post/useQueryUserLike";
-import { useQueryUser } from "@/hooks/user/useQueryUser";
 import { ItemSkeleton } from "@/components/common/itemSkeleton";
 import { ItmeReviewPost } from "@/components/common/itmeReviewPost";
 import { PaginationBox } from "@/components/common/paginationBox";
@@ -11,7 +10,6 @@ export const LikePost = memo(() => {
     currentPage,
     10
   );
-  const { data: user } = useQueryUser();
 
   const countPages = (totalPage: number) => {
     const total = totalPage / 10;
@@ -30,11 +28,7 @@ export const LikePost = memo(() => {
   return (
     <section>
       {data?.reviewPosts.map((reviewPost) => (
-        <ItmeReviewPost
-          key={reviewPost.id}
-          reviewPost={reviewPost}
-          user={user}
-        />
+        <ItmeReviewPost key={reviewPost.id} reviewPost={reviewPost} />
       ))}
       <PaginationBox
         count={countPages(data !== undefined ? data.totalPageCount : 0)}
