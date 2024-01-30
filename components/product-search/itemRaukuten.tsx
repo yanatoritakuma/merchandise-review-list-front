@@ -6,9 +6,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { CircularProgress } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { useQueryUser } from "@/hooks/user/useQueryUser";
 import { MessageContext } from "@/provider/messageProvider";
 import { RatingBox } from "@/components/elements/ratingBox";
+import { useQueryClient } from "@tanstack/react-query";
+import { TUser } from "@/types/user";
 
 type TItem = {
   item: TItems;
@@ -16,7 +17,8 @@ type TItem = {
 };
 
 export const ItemRaukuten = memo(({ item, index }: TItem) => {
-  const { data } = useQueryUser();
+  const queryClient = useQueryClient();
+  const data: TUser | undefined = queryClient.getQueryData(["user"]);
   const { productMutation } = useMutateProduct();
   const { setMessage } = useContext(MessageContext);
   const initialFlagCount = 20;

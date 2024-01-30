@@ -4,7 +4,6 @@ import { ItmeReviewPost } from "@/components/common/itmeReviewPost";
 import { PaginationBox } from "@/components/common/paginationBox";
 import { ItemSkeleton } from "@/components/common/itemSkeleton";
 import { ReviewPostContext } from "@/provider/reviewPostProvider";
-import { useQueryUser } from "@/hooks/user/useQueryUser";
 
 export const ReviewPost = memo(() => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -14,7 +13,6 @@ export const ReviewPost = memo(() => {
     refetch,
     isFetching,
   } = useQueryUserReviewPost(currentPage, 10);
-  const { data: user } = useQueryUser();
   const { reviewPostProcess, setReviewPostProcess } =
     useContext(ReviewPostContext);
 
@@ -41,11 +39,7 @@ export const ReviewPost = memo(() => {
   return (
     <section>
       {userReviewPosts?.reviewPosts.map((reviewPost) => (
-        <ItmeReviewPost
-          key={reviewPost.id}
-          reviewPost={reviewPost}
-          user={user}
-        />
+        <ItmeReviewPost key={reviewPost.id} reviewPost={reviewPost} />
       ))}
       <PaginationBox
         count={countPages(

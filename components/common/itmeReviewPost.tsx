@@ -13,13 +13,15 @@ import { useMutateLike } from "@/hooks/like/useMutateLike";
 import { MessageContext } from "@/provider/messageProvider";
 import { TUser } from "@/types/user";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useQueryClient } from "@tanstack/react-query";
 
 type Props = {
   reviewPost: TReviewPosts;
-  user?: TUser;
 };
 
-export const ItmeReviewPost = memo(({ reviewPost, user }: Props) => {
+export const ItmeReviewPost = memo(({ reviewPost }: Props) => {
+  const queryClient = useQueryClient();
+  const user: TUser | undefined = queryClient.getQueryData(["user"]);
   const { setReviewPostGlobal } = useContext(ReviewPostContext);
   const { message, setMessage } = useContext(MessageContext);
   const [likeState, setLikeState] = useState({

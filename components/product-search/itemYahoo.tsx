@@ -6,9 +6,10 @@ import Image from "next/image";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useMutateProduct } from "@/hooks/product/useMutateProduct";
 import { CircularProgress } from "@mui/material";
-import { useQueryUser } from "@/hooks/user/useQueryUser";
 import { MessageContext } from "@/provider/messageProvider";
 import { RatingBox } from "@/components/elements/ratingBox";
+import { useQueryClient } from "@tanstack/react-query";
+import { TUser } from "@/types/user";
 
 type TItem = {
   hit: TYahooHit;
@@ -16,7 +17,8 @@ type TItem = {
 };
 
 export const ItemYahoo = memo(({ hit, index }: TItem) => {
-  const { data } = useQueryUser();
+  const queryClient = useQueryClient();
+  const data: TUser | undefined = queryClient.getQueryData(["user"]);
   const { productMutation } = useMutateProduct();
   const { setMessage } = useContext(MessageContext);
   const initialFlagCount = 20;
