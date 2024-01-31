@@ -14,6 +14,7 @@ import { MessageContext } from "@/provider/messageProvider";
 import { TUser } from "@/types/user";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useQueryClient } from "@tanstack/react-query";
+import { CommentBox } from "./commentBox";
 
 type Props = {
   reviewPost: TReviewPosts;
@@ -168,6 +169,9 @@ export const ItmeReviewPost = memo(({ reviewPost }: Props) => {
           <DisplayLike />
         )}
       </div>
+
+      <CommentBox postId={reviewPost.id} />
+
       <div className="itemCartBox__postImg">
         {reviewPost.image !== "" ? (
           <Image

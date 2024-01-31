@@ -35,6 +35,7 @@ const Index = () => {
     } else {
       setBackdropFlag(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading]);
 
   useEffect(() => {
