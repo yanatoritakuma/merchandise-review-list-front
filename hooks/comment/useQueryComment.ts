@@ -22,5 +22,6 @@ export const useQueryComment = (
         console.error("コメントの取得に失敗しました。");
       }
     },
+    enabled: false,
   });
 };

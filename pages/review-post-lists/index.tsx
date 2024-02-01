@@ -9,6 +9,7 @@ import { ReviewPostContext } from "@/provider/reviewPostProvider";
 import { ItemSkeleton } from "@/components/common/itemSkeleton";
 import { useQueryUser } from "@/hooks/user/useQueryUser";
 import { BackdropContext } from "@/provider/backdropProvider";
+import { ModalComment } from "@/components/common/modalComment";
 
 const Index = () => {
   const { reviewPostProcess, setReviewPostProcess } =
@@ -23,7 +24,7 @@ const Index = () => {
     10,
     user?.id
   );
-  const [commentFlag, setCommentFlag] = useState<number | null>(null);
+  const [postId, setPostId] = useState<number | null>(null);
 
   const countPages = (totalPage: number) => {
     const total = totalPage / 10;
@@ -45,11 +46,11 @@ const Index = () => {
   }, [currentPage]);
 
   useEffect(() => {
-    setTimeout(() => {
+    if (postId === null) {
       refetch();
-    }, 100);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id]);
+  }, [postId]);
 
   useEffect(() => {
     refetch();
@@ -86,8 +87,8 @@ const Index = () => {
               <ItmeReviewPost
                 key={reviewPost.id}
                 reviewPost={reviewPost}
-                commentFlag={commentFlag}
-                setCommentFlag={setCommentFlag}
+                commentFlag={postId}
+                setCommentFlag={setPostId}
               />
             ))}
             <PaginationBox
@@ -102,6 +103,7 @@ const Index = () => {
           </h3>
         )}
       </div>
+      <ModalComment postId={postId} setPostId={setPostId} />
     </main>
   );
 };

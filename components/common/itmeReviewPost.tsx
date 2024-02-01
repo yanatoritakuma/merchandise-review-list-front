@@ -14,7 +14,7 @@ import { MessageContext } from "@/provider/messageProvider";
 import { TUser } from "@/types/user";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useQueryClient } from "@tanstack/react-query";
-import { CommentBox } from "./commentBox";
+import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 
 type Props = {
   reviewPost: TReviewPosts;
@@ -173,12 +173,13 @@ export const ItmeReviewPost = memo(
           )}
         </div>
 
-        <CommentBox
-          postId={reviewPost.id}
-          count={reviewPost.comment_count}
-          commentFlag={commentFlag}
-          setCommentFlag={setCommentFlag}
-        />
+        <div
+          className="itemCartBox__commentIcon"
+          onClick={() => setCommentFlag(reviewPost.id)}
+        >
+          <ChatBubbleOutlineOutlinedIcon />
+          <span>{reviewPost.comment_count}</span>
+        </div>
 
         <div className="itemCartBox__postImg">
           {reviewPost.image !== "" ? (
@@ -249,6 +250,17 @@ const itmeReviewPostBox = css`
       min-width: 210px;
       height: auto;
       object-fit: contain;
+    }
+  }
+
+  .itemCartBox__commentIcon {
+    cursor: pointer;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+
+    span {
+      margin-left: 6px;
     }
   }
 
