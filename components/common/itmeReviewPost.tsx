@@ -18,175 +18,184 @@ import { CommentBox } from "./commentBox";
 
 type Props = {
   reviewPost: TReviewPosts;
+  commentFlag: number | null;
+  setCommentFlag: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
-export const ItmeReviewPost = memo(({ reviewPost }: Props) => {
-  const queryClient = useQueryClient();
-  const user: TUser | undefined = queryClient.getQueryData(["user"]);
-  const { setReviewPostGlobal } = useContext(ReviewPostContext);
-  const { message, setMessage } = useContext(MessageContext);
-  const [likeState, setLikeState] = useState({
-    count: 0,
-    status: false,
-  });
-  const { likeMutation, likeDeleteMutation } = useMutateLike();
-  const likePostUserId = String(reviewPost.id) + String(user?.id);
+export const ItmeReviewPost = memo(
+  ({ reviewPost, commentFlag, setCommentFlag }: Props) => {
+    const queryClient = useQueryClient();
+    const user: TUser | undefined = queryClient.getQueryData(["user"]);
+    const { setReviewPostGlobal } = useContext(ReviewPostContext);
+    const { message, setMessage } = useContext(MessageContext);
+    const [likeState, setLikeState] = useState({
+      count: 0,
+      status: false,
+    });
+    const { likeMutation, likeDeleteMutation } = useMutateLike();
+    const likePostUserId = String(reviewPost.id) + String(user?.id);
 
-  const DisplayLike = () => {
+    const DisplayLike = () => {
+      return (
+        <>
+          {likeState.status ? (
+            <span className="itemCartBox__like">
+              <FavoriteOutlinedIcon onClick={() => onClickDeleteLike()} />
+            </span>
+          ) : (
+            <span className="itemCartBox__like" onClick={() => onClickLike()}>
+              <FavoriteBorderOutlinedIcon />
+            </span>
+          )}
+          {likeMutation.isLoading || likeDeleteMutation.isLoading ? (
+            <CircularProgress
+              color="inherit"
+              style={{ width: "18px", height: "18px" }}
+            />
+          ) : (
+            <span>{likeState.count}</span>
+          )}
+        </>
+      );
+    };
+
+    useEffect(() => {
+      setLikeState({
+        ...likeState,
+        count: reviewPost.like_count,
+        status: reviewPost.like_id !== 0,
+      });
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const onClickEdit = (selectPost: TReviewPosts) => {
+      setReviewPostGlobal({
+        id: selectPost.id,
+        title: selectPost.title,
+        text: selectPost.text,
+        category: selectPost.category,
+        image: selectPost.image,
+        review: selectPost.review,
+      });
+    };
+
+    const onClickLike = async () => {
+      if (!user) {
+        setMessage({
+          ...message,
+          text: "いいねをするにはログインが必要です",
+          type: "error",
+        });
+        return;
+      }
+      try {
+        const req = {
+          post_id: reviewPost.id,
+          post_user_id: Number(likePostUserId),
+        };
+        await likeMutation.mutateAsync(req);
+        setLikeState({
+          ...likeState,
+          count: likeState.count + 1,
+          status: true,
+        });
+        // refetch();
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    const onClickDeleteLike = async () => {
+      try {
+        await likeDeleteMutation.mutateAsync(Number(likePostUserId));
+        // refetch();
+        setLikeState({
+          ...likeState,
+          count: likeState.count - 1,
+          status: false,
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
     return (
-      <>
-        {likeState.status ? (
-          <span className="itemCartBox__like">
-            <FavoriteOutlinedIcon onClick={() => onClickDeleteLike()} />
+      <div key={reviewPost.id} css={itmeReviewPostBox}>
+        <div className="itemCartBox__userBox">
+          {reviewPost.reviewPostUserResponse.image !== "" ? (
+            <Image
+              src={reviewPost.reviewPostUserResponse.image}
+              width={60}
+              height={60}
+              alt="プロフィール画像"
+            />
+          ) : (
+            <Image
+              src={NoUserImage}
+              width={60}
+              height={60}
+              alt="プロフィール画像"
+            />
+          )}
+          <h5>{reviewPost.reviewPostUserResponse.name}</h5>
+          {user?.id === reviewPost.reviewPostUserResponse.id && (
+            <div
+              className="itemCartBox__editBox"
+              onClick={() => onClickEdit(reviewPost)}
+            >
+              <ReviewPostEdit />
+            </div>
+          )}
+        </div>
+        <h4>{reviewPost.title}</h4>
+        <div className="itemCartBox__textBox">
+          <h5>レビュー内容</h5>
+          <p>{reviewPost.text}</p>
+        </div>
+        <div className="itemCartBox__textBox">
+          <h5>カテゴリー</h5>
+          <p>{reviewPost.category}</p>
+        </div>
+        <span className="itemCartBox__reviewBox">
+          レビュー:
+          <span className="itemCartBox__review">
+            <RatingBox reviewState={reviewPost.review} readOnly />
           </span>
-        ) : (
-          <span className="itemCartBox__like" onClick={() => onClickLike()}>
-            <FavoriteBorderOutlinedIcon />
-          </span>
-        )}
-        {likeMutation.isLoading || likeDeleteMutation.isLoading ? (
-          <CircularProgress
-            color="inherit"
-            style={{ width: "18px", height: "18px" }}
-          />
-        ) : (
-          <span>{likeState.count}</span>
-        )}
-      </>
-    );
-  };
-
-  useEffect(() => {
-    setLikeState({
-      ...likeState,
-      count: reviewPost.like_count,
-      status: reviewPost.like_id !== 0,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const onClickEdit = (selectPost: TReviewPosts) => {
-    setReviewPostGlobal({
-      id: selectPost.id,
-      title: selectPost.title,
-      text: selectPost.text,
-      category: selectPost.category,
-      image: selectPost.image,
-      review: selectPost.review,
-    });
-  };
-
-  const onClickLike = async () => {
-    if (!user) {
-      setMessage({
-        ...message,
-        text: "いいねをするにはログインが必要です",
-        type: "error",
-      });
-      return;
-    }
-    try {
-      const req = {
-        post_id: reviewPost.id,
-        post_user_id: Number(likePostUserId),
-      };
-      await likeMutation.mutateAsync(req);
-      setLikeState({
-        ...likeState,
-        count: likeState.count + 1,
-        status: true,
-      });
-      // refetch();
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const onClickDeleteLike = async () => {
-    try {
-      await likeDeleteMutation.mutateAsync(Number(likePostUserId));
-      // refetch();
-      setLikeState({
-        ...likeState,
-        count: likeState.count - 1,
-        status: false,
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  return (
-    <div key={reviewPost.id} css={itmeReviewPostBox}>
-      <div className="itemCartBox__userBox">
-        {reviewPost.reviewPostUserResponse.image !== "" ? (
-          <Image
-            src={reviewPost.reviewPostUserResponse.image}
-            width={60}
-            height={60}
-            alt="プロフィール画像"
-          />
-        ) : (
-          <Image
-            src={NoUserImage}
-            width={60}
-            height={60}
-            alt="プロフィール画像"
-          />
-        )}
-        <h5>{reviewPost.reviewPostUserResponse.name}</h5>
-        {user?.id === reviewPost.reviewPostUserResponse.id && (
-          <div
-            className="itemCartBox__editBox"
-            onClick={() => onClickEdit(reviewPost)}
-          >
-            <ReviewPostEdit />
-          </div>
-        )}
-      </div>
-      <h4>{reviewPost.title}</h4>
-      <div className="itemCartBox__textBox">
-        <h5>レビュー内容</h5>
-        <p>{reviewPost.text}</p>
-      </div>
-      <div className="itemCartBox__textBox">
-        <h5>カテゴリー</h5>
-        <p>{reviewPost.category}</p>
-      </div>
-      <span className="itemCartBox__reviewBox">
-        レビュー:
-        <span className="itemCartBox__review">
-          <RatingBox reviewState={reviewPost.review} readOnly />
         </span>
-      </span>
-      <div className="itemCartBox__likeBox">
-        {likeMutation.isLoading || likeDeleteMutation.isLoading ? (
-          <CircularProgress
-            color="inherit"
-            style={{ width: "18px", height: "18px" }}
-          />
-        ) : (
-          <DisplayLike />
-        )}
-      </div>
+        <div className="itemCartBox__likeBox">
+          {likeMutation.isLoading || likeDeleteMutation.isLoading ? (
+            <CircularProgress
+              color="inherit"
+              style={{ width: "18px", height: "18px" }}
+            />
+          ) : (
+            <DisplayLike />
+          )}
+        </div>
 
-      <CommentBox postId={reviewPost.id} />
+        <CommentBox
+          postId={reviewPost.id}
+          count={reviewPost.comment_count}
+          commentFlag={commentFlag}
+          setCommentFlag={setCommentFlag}
+        />
 
-      <div className="itemCartBox__postImg">
-        {reviewPost.image !== "" ? (
-          <Image
-            src={reviewPost.image}
-            width={320}
-            height={320}
-            alt="商品画像"
-          />
-        ) : (
-          <Image src={NoPostImage} width={320} height={320} alt="商品画像" />
-        )}
+        <div className="itemCartBox__postImg">
+          {reviewPost.image !== "" ? (
+            <Image
+              src={reviewPost.image}
+              width={320}
+              height={320}
+              alt="商品画像"
+            />
+          ) : (
+            <Image src={NoPostImage} width={320} height={320} alt="商品画像" />
+          )}
+        </div>
       </div>
-    </div>
-  );
-});
+    );
+  }
+);
 
 ItmeReviewPost.displayName = "ItmeReviewPost";
 

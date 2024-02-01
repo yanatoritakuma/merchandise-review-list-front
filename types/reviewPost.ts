@@ -34,4 +34,5 @@ export type TReviewPosts = {
   like_id: number;
   like_post_user_id: number;
   created_at: string;
+  comment_count: number;
 };

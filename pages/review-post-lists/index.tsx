@@ -23,6 +23,7 @@ const Index = () => {
     10,
     user?.id
   );
+  const [commentFlag, setCommentFlag] = useState<number | null>(null);
 
   const countPages = (totalPage: number) => {
     const total = totalPage / 10;
@@ -82,7 +83,12 @@ const Index = () => {
         {data?.reviewPosts.length !== 0 ? (
           <div>
             {data?.reviewPosts.map((reviewPost) => (
-              <ItmeReviewPost key={reviewPost.id} reviewPost={reviewPost} />
+              <ItmeReviewPost
+                key={reviewPost.id}
+                reviewPost={reviewPost}
+                commentFlag={commentFlag}
+                setCommentFlag={setCommentFlag}
+              />
             ))}
             <PaginationBox
               count={countPages(data !== undefined ? data.totalPageCount : 0)}
