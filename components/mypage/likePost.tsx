@@ -33,7 +33,6 @@ export const LikePost = memo(() => {
         <ItmeReviewPost
           key={reviewPost.id}
           reviewPost={reviewPost}
-          commentFlag={postId}
           setCommentFlag={setPostId}
         />
       ))}

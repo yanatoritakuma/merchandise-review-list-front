@@ -87,7 +87,6 @@ const Index = () => {
               <ItmeReviewPost
                 key={reviewPost.id}
                 reviewPost={reviewPost}
-                commentFlag={postId}
                 setCommentFlag={setPostId}
               />
             ))}
