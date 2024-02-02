@@ -9,66 +9,71 @@ import { Modal } from "@mui/material";
 type Props = {
   postId: number | null;
   setPostId: React.Dispatch<React.SetStateAction<number | null>>;
+  updateCount: number;
+  setUpdateCount: React.Dispatch<React.SetStateAction<number>>;
 };
 
-export const ModalComment = memo(({ postId, setPostId }: Props) => {
-  const [comment, setComment] = useState("");
-  const { commentMutation } = useMutateComment();
-  const { data, refetch } = useQueryComment(
-    1,
-    10,
-    postId !== null ? postId : 0
-  );
+export const ModalComment = memo(
+  ({ postId, setPostId, updateCount, setUpdateCount }: Props) => {
+    const [comment, setComment] = useState("");
+    const { commentMutation } = useMutateComment();
+    const { data, refetch } = useQueryComment(
+      1,
+      10,
+      postId !== null ? postId : 0
+    );
 
-  useEffect(() => {
-    if (postId !== null) {
-      refetch();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [postId]);
+    useEffect(() => {
+      if (postId !== null) {
+        refetch();
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [postId]);
 
-  const onClickAddComment = async () => {
-    try {
-      await commentMutation.mutateAsync({
-        text: comment,
-        post_id: postId !== null ? postId : 0,
-      });
-      setComment("");
-      refetch();
-    } catch (err) {
-      console.error("err", err);
-    }
-  };
+    const onClickAddComment = async () => {
+      try {
+        await commentMutation.mutateAsync({
+          text: comment,
+          post_id: postId !== null ? postId : 0,
+        });
+        setComment("");
+        setUpdateCount(updateCount + 1);
+        refetch();
+      } catch (err) {
+        console.error("err", err);
+      }
+    };
 
-  return (
-    <Modal open={postId !== null} onClose={() => setPostId(null)}>
-      <div css={commentBox}>
-        <div className="commentsBox__textBox">
-          <TextBox
-            label="コメント"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            multiline
-            rows={5}
-            fullWidth
-          />
-          <ButtonBox
-            onClick={() => onClickAddComment()}
-            disabled={comment === ""}
-          >
-            コメント追加
-          </ButtonBox>
-        </div>
-        {data?.commentsRes.map((com, index) => (
-          <div key={index}>
-            <h3>{com.comment_user.name}</h3>
-            <p>{com.text}</p>
+    return (
+      <Modal open={postId !== null} onClose={() => setPostId(null)}>
+        <div css={commentBox}>
+          <div className="commentsBox__textBox">
+            <TextBox
+              label="コメント"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              multiline
+              rows={5}
+              fullWidth
+            />
+            <ButtonBox
+              onClick={() => onClickAddComment()}
+              disabled={comment === ""}
+            >
+              コメント追加
+            </ButtonBox>
           </div>
-        ))}
-      </div>
-    </Modal>
-  );
-});
+          {data?.commentsRes.map((com, index) => (
+            <div key={index}>
+              <h3>{com.comment_user.name}</h3>
+              <p>{com.text}</p>
+            </div>
+          ))}
+        </div>
+      </Modal>
+    );
+  }
+);
 
 ModalComment.displayName = "ModalComment";
 

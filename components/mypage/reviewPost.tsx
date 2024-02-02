@@ -4,11 +4,9 @@ import { ItmeReviewPost } from "@/components/common/itmeReviewPost";
 import { PaginationBox } from "@/components/common/paginationBox";
 import { ItemSkeleton } from "@/components/common/itemSkeleton";
 import { ReviewPostContext } from "@/provider/reviewPostProvider";
-import { ModalComment } from "@/components/common/modalComment";
 
 export const ReviewPost = memo(() => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [postId, setPostId] = useState<number | null>(null);
 
   const {
     data: userReviewPosts,
@@ -42,11 +40,7 @@ export const ReviewPost = memo(() => {
   return (
     <section>
       {userReviewPosts?.reviewPosts.map((reviewPost) => (
-        <ItmeReviewPost
-          key={reviewPost.id}
-          reviewPost={reviewPost}
-          setCommentFlag={setPostId}
-        />
+        <ItmeReviewPost key={reviewPost.id} reviewPost={reviewPost} />
       ))}
       <PaginationBox
         count={countPages(
@@ -55,7 +49,6 @@ export const ReviewPost = memo(() => {
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
       />
-      <ModalComment postId={postId} setPostId={setPostId} />
     </section>
   );
 });

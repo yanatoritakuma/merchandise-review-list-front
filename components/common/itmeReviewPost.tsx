@@ -15,13 +15,13 @@ import { TUser } from "@/types/user";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useQueryClient } from "@tanstack/react-query";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
+import { ModalComment } from "./modalComment";
 
 type Props = {
   reviewPost: TReviewPosts;
-  setCommentFlag: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
-export const ItmeReviewPost = memo(({ reviewPost, setCommentFlag }: Props) => {
+export const ItmeReviewPost = memo(({ reviewPost }: Props) => {
   const queryClient = useQueryClient();
   const user: TUser | undefined = queryClient.getQueryData(["user"]);
   const { setReviewPostGlobal } = useContext(ReviewPostContext);
@@ -30,6 +30,8 @@ export const ItmeReviewPost = memo(({ reviewPost, setCommentFlag }: Props) => {
     count: 0,
     status: false,
   });
+  const [postId, setPostId] = useState<number | null>(null);
+  const [updateCount, setUpdateCount] = useState(0);
   const { likeMutation, likeDeleteMutation } = useMutateLike();
   const likePostUserId = String(reviewPost.id) + String(user?.id);
 
@@ -173,10 +175,14 @@ export const ItmeReviewPost = memo(({ reviewPost, setCommentFlag }: Props) => {
 
       <div
         className="itemCartBox__commentIcon"
-        onClick={() => setCommentFlag(reviewPost.id)}
+        onClick={() => setPostId(reviewPost.id)}
       >
         <ChatBubbleOutlineOutlinedIcon />
-        <span>{reviewPost.comment_count}</span>
+        {updateCount === 0 ? (
+          <span>{reviewPost.comment_count}</span>
+        ) : (
+          <span>{reviewPost.comment_count + updateCount}</span>
+        )}
       </div>
 
       <div className="itemCartBox__postImg">
@@ -191,6 +197,12 @@ export const ItmeReviewPost = memo(({ reviewPost, setCommentFlag }: Props) => {
           <Image src={NoPostImage} width={320} height={320} alt="商品画像" />
         )}
       </div>
+      <ModalComment
+        postId={postId}
+        setPostId={setPostId}
+        updateCount={updateCount}
+        setUpdateCount={setUpdateCount}
+      />
     </div>
   );
 });
