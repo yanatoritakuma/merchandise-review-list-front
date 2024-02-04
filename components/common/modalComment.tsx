@@ -5,6 +5,8 @@ import { ButtonBox } from "@/components/elements/buttonBox";
 import { useMutateComment } from "@/hooks/comment/useMutateComment";
 import { useQueryComment } from "@/hooks/comment/useQueryComment";
 import { Modal } from "@mui/material";
+import { PaginationBox } from "@/components/common/paginationBox";
+import { countPages } from "@/utils/countPages";
 
 type Props = {
   postId: number | null;
@@ -16,9 +18,10 @@ type Props = {
 export const ModalComment = memo(
   ({ postId, setPostId, updateCount, setUpdateCount }: Props) => {
     const [comment, setComment] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
     const { commentMutation } = useMutateComment();
     const { data, refetch } = useQueryComment(
-      1,
+      currentPage,
       10,
       postId !== null ? postId : 0
     );
@@ -28,7 +31,7 @@ export const ModalComment = memo(
         refetch();
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [postId]);
+    }, [postId, currentPage]);
 
     const onClickAddComment = async () => {
       try {
@@ -69,6 +72,11 @@ export const ModalComment = memo(
               <p>{com.text}</p>
             </div>
           ))}
+          <PaginationBox
+            count={countPages(data !== undefined ? data?.totalPageCount : 0)}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
         </div>
       </Modal>
     );

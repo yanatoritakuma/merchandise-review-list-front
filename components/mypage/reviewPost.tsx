@@ -4,6 +4,7 @@ import { ItmeReviewPost } from "@/components/common/itmeReviewPost";
 import { PaginationBox } from "@/components/common/paginationBox";
 import { ItemSkeleton } from "@/components/common/itemSkeleton";
 import { ReviewPostContext } from "@/provider/reviewPostProvider";
+import { countPages } from "@/utils/countPages";
 
 export const ReviewPost = memo(() => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,11 +17,6 @@ export const ReviewPost = memo(() => {
   } = useQueryUserReviewPost(currentPage, 10);
   const { reviewPostProcess, setReviewPostProcess } =
     useContext(ReviewPostContext);
-
-  const countPages = (totalPage: number) => {
-    const total = totalPage / 10;
-    return Math.ceil(total);
-  };
 
   useEffect(() => {
     refetch();

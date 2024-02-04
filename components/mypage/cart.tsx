@@ -3,6 +3,7 @@ import { PaginationBox } from "@/components/common/paginationBox";
 import { useQueryUserProduct } from "@/hooks/product/useQueryUserProduct";
 import { ItemCart } from "./itemCart";
 import { ItemSkeleton } from "@/components/common/itemSkeleton";
+import { countPages } from "@/utils/countPages";
 
 export const Cart = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,11 +29,6 @@ export const Cart = () => {
     setMoreTextFlag(initialMoreTextFlags);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
-
-  const countPages = (totalPage: number) => {
-    const total = totalPage / 10;
-    return Math.ceil(total);
-  };
 
   if (isLoading || isFetching) {
     return <ItemSkeleton />;

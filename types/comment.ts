@@ -1,5 +1,6 @@
 export type TResComments = {
   commentsRes: TComments[];
+  totalPageCount: number;
 };
 
 type TComments = {

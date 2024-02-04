@@ -9,6 +9,7 @@ import { ReviewPostContext } from "@/provider/reviewPostProvider";
 import { ItemSkeleton } from "@/components/common/itemSkeleton";
 import { useQueryUser } from "@/hooks/user/useQueryUser";
 import { BackdropContext } from "@/provider/backdropProvider";
+import { countPages } from "@/utils/countPages";
 
 const Index = () => {
   const { reviewPostProcess, setReviewPostProcess } =
@@ -23,11 +24,6 @@ const Index = () => {
     10,
     user?.id
   );
-
-  const countPages = (totalPage: number) => {
-    const total = totalPage / 10;
-    return Math.ceil(total);
-  };
 
   useEffect(() => {
     if (isLoading) {
