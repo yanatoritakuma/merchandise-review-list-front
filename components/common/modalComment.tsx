@@ -1,5 +1,6 @@
 import { memo, useEffect, useState } from "react";
 import { css } from "@emotion/react";
+import Image from "next/image";
 import { TextBox } from "@/components/elements/textBox";
 import { ButtonBox } from "@/components/elements/buttonBox";
 import { useMutateComment } from "@/hooks/comment/useMutateComment";
@@ -67,9 +68,17 @@ export const ModalComment = memo(
             </ButtonBox>
           </div>
           {data?.commentsRes.map((com, index) => (
-            <div key={index}>
-              <h3>{com.comment_user.name}</h3>
-              <p>{com.text}</p>
+            <div key={index} className="commentsBox__comments">
+              <Image
+                src={com.comment_user.image}
+                width={60}
+                height={60}
+                alt="プロフィール画像"
+              />
+              <div className="commentsBox__userBox">
+                <h3>{com.comment_user.name}</h3>
+                <p>{com.text}</p>
+              </div>
             </div>
           ))}
           <PaginationBox
@@ -108,5 +117,29 @@ const commentBox = css`
   button {
     margin: 20px auto;
     display: block;
+  }
+
+  .commentsBox__comments {
+    margin: 16px 0;
+    display: flex;
+    align-items: center;
+
+    img {
+      border-radius: 50%;
+      object-fit: cover;
+    }
+  }
+
+  .commentsBox__userBox {
+    margin: 10px 0 10px 8px;
+    width: 100%;
+
+    h3 {
+      margin: 6px 0;
+    }
+
+    p {
+      margin: 0;
+    }
   }
 `;
