@@ -45,6 +45,14 @@ const Index = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reviewPostProcess]);
 
+  // ブラウザをリロードされるとログインユーザーのいいね状態がわからなくなってしまうので、レビュー投稿を再取得している
+  useEffect(() => {
+    setTimeout(() => {
+      refetch();
+    }, 100);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
+
   if (isLoading || isFetching) {
     return (
       <main css={reviewPostListsBox}>
