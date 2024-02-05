@@ -8,6 +8,7 @@ import { useQueryComment } from "@/hooks/comment/useQueryComment";
 import { Modal } from "@mui/material";
 import { PaginationBox } from "@/components/common/paginationBox";
 import { countPages } from "@/utils/countPages";
+import { CommentValidation } from "@/utils/validations/commentValidation";
 
 type Props = {
   postId: number | null;
@@ -21,6 +22,7 @@ export const ModalComment = memo(
     const [comment, setComment] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const { commentMutation } = useMutateComment();
+    const { commentValidation } = CommentValidation();
     const { data, refetch } = useQueryComment(
       currentPage,
       10,
@@ -35,16 +37,18 @@ export const ModalComment = memo(
     }, [postId, currentPage]);
 
     const onClickAddComment = async () => {
-      try {
-        await commentMutation.mutateAsync({
-          text: comment,
-          post_id: postId !== null ? postId : 0,
-        });
-        setComment("");
-        setUpdateCount(updateCount + 1);
-        refetch();
-      } catch (err) {
-        console.error("err", err);
+      if (commentValidation(comment)) {
+        try {
+          await commentMutation.mutateAsync({
+            text: comment,
+            post_id: postId !== null ? postId : 0,
+          });
+          setComment("");
+          setUpdateCount(updateCount + 1);
+          refetch();
+        } catch (err) {
+          console.error("err", err);
+        }
       }
     };
 
