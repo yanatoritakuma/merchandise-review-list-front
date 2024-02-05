@@ -85,6 +85,7 @@ export const ModalComment = memo(
             count={countPages(data !== undefined ? data?.totalPageCount : 0)}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
+            noScroll
           />
         </div>
       </Modal>
