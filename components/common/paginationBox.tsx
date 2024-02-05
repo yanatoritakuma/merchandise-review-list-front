@@ -8,22 +8,25 @@ type Props = {
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   targetScroll?: string;
+  noScroll?: boolean;
 };
 
 export const PaginationBox = memo(
-  ({ count, currentPage, setCurrentPage, targetScroll }: Props) => {
+  ({ count, currentPage, setCurrentPage, targetScroll, noScroll }: Props) => {
     const [beforeCurrentPage, _] = useState(currentPage);
-
+    console.log("noScroll", noScroll);
     useEffect(() => {
-      if (currentPage !== beforeCurrentPage) {
-        if (!targetScroll) {
-          scroll.scrollToTop();
-        } else {
-          scroller.scrollTo(targetScroll, {
-            smooth: true,
-            duration: 500,
-            offset: -150,
-          });
+      if (noScroll === undefined) {
+        if (currentPage !== beforeCurrentPage) {
+          if (!targetScroll) {
+            scroll.scrollToTop();
+          } else {
+            scroller.scrollTo(targetScroll, {
+              smooth: true,
+              duration: 500,
+              offset: -150,
+            });
+          }
         }
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps

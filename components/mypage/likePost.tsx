@@ -3,6 +3,7 @@ import { useQueryUserLike } from "@/hooks/review-post/useQueryUserLike";
 import { ItemSkeleton } from "@/components/common/itemSkeleton";
 import { ItmeReviewPost } from "@/components/common/itmeReviewPost";
 import { PaginationBox } from "@/components/common/paginationBox";
+import { countPages } from "@/utils/countPages";
 
 export const LikePost = memo(() => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -10,11 +11,6 @@ export const LikePost = memo(() => {
     currentPage,
     10
   );
-
-  const countPages = (totalPage: number) => {
-    const total = totalPage / 10;
-    return Math.ceil(total);
-  };
 
   useEffect(() => {
     refetch();

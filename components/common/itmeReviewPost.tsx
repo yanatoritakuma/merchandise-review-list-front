@@ -14,6 +14,8 @@ import { MessageContext } from "@/provider/messageProvider";
 import { TUser } from "@/types/user";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useQueryClient } from "@tanstack/react-query";
+import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
+import { ModalComment } from "./modalComment";
 
 type Props = {
   reviewPost: TReviewPosts;
@@ -28,6 +30,8 @@ export const ItmeReviewPost = memo(({ reviewPost }: Props) => {
     count: 0,
     status: false,
   });
+  const [postId, setPostId] = useState<number | null>(null);
+  const [updateCount, setUpdateCount] = useState(0);
   const { likeMutation, likeDeleteMutation } = useMutateLike();
   const likePostUserId = String(reviewPost.id) + String(user?.id);
 
@@ -95,7 +99,6 @@ export const ItmeReviewPost = memo(({ reviewPost }: Props) => {
         count: likeState.count + 1,
         status: true,
       });
-      // refetch();
     } catch (err) {
       console.error(err);
     }
@@ -104,7 +107,6 @@ export const ItmeReviewPost = memo(({ reviewPost }: Props) => {
   const onClickDeleteLike = async () => {
     try {
       await likeDeleteMutation.mutateAsync(Number(likePostUserId));
-      // refetch();
       setLikeState({
         ...likeState,
         count: likeState.count - 1,
@@ -168,6 +170,19 @@ export const ItmeReviewPost = memo(({ reviewPost }: Props) => {
           <DisplayLike />
         )}
       </div>
+
+      <div
+        className="itemCartBox__commentIcon"
+        onClick={() => setPostId(reviewPost.id)}
+      >
+        <ChatBubbleOutlineOutlinedIcon />
+        {updateCount === 0 ? (
+          <span>{reviewPost.comment_count}</span>
+        ) : (
+          <span>{reviewPost.comment_count + updateCount}</span>
+        )}
+      </div>
+
       <div className="itemCartBox__postImg">
         {reviewPost.image !== "" ? (
           <Image
@@ -180,6 +195,12 @@ export const ItmeReviewPost = memo(({ reviewPost }: Props) => {
           <Image src={NoPostImage} width={320} height={320} alt="商品画像" />
         )}
       </div>
+      <ModalComment
+        postId={postId}
+        setPostId={setPostId}
+        updateCount={updateCount}
+        setUpdateCount={setUpdateCount}
+      />
     </div>
   );
 });
@@ -236,6 +257,17 @@ const itmeReviewPostBox = css`
       min-width: 210px;
       height: auto;
       object-fit: contain;
+    }
+  }
+
+  .itemCartBox__commentIcon {
+    cursor: pointer;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+
+    span {
+      margin-left: 6px;
     }
   }
 

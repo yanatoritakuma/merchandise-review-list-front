@@ -9,6 +9,7 @@ import { ReviewPostContext } from "@/provider/reviewPostProvider";
 import { ItemSkeleton } from "@/components/common/itemSkeleton";
 import { useQueryUser } from "@/hooks/user/useQueryUser";
 import { BackdropContext } from "@/provider/backdropProvider";
+import { countPages } from "@/utils/countPages";
 
 const Index = () => {
   const { reviewPostProcess, setReviewPostProcess } =
@@ -24,17 +25,13 @@ const Index = () => {
     user?.id
   );
 
-  const countPages = (totalPage: number) => {
-    const total = totalPage / 10;
-    return Math.ceil(total);
-  };
-
   useEffect(() => {
     if (isLoading) {
       setBackdropFlag(true);
     } else {
       setBackdropFlag(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading]);
 
   useEffect(() => {
@@ -43,17 +40,18 @@ const Index = () => {
   }, [currentPage]);
 
   useEffect(() => {
+    refetch();
+    setReviewPostProcess(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reviewPostProcess]);
+
+  // ブラウザをリロードされるとログインユーザーのいいね状態がわからなくなってしまうので、レビュー投稿を再取得している
+  useEffect(() => {
     setTimeout(() => {
       refetch();
     }, 100);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
-
-  useEffect(() => {
-    refetch();
-    setReviewPostProcess(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reviewPostProcess]);
 
   if (isLoading || isFetching) {
     return (

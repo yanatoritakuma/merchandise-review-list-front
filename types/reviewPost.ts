@@ -32,6 +32,6 @@ export type TReviewPosts = {
   user_id: number;
   like_count: number;
   like_id: number;
-  like_post_user_id: number;
   created_at: string;
+  comment_count: number;
 };
