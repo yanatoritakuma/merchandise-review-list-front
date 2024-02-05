@@ -38,7 +38,27 @@ export const useMutateComment = () => {
     }
   );
 
+  const commentDeleteMutation = useMutation(
+    async (id: number) =>
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/comment/${id}`),
+    {
+      onSuccess: () => {
+        setMessage({
+          text: "コメントを削除しました。",
+          type: "success",
+        });
+      },
+      onError: () => {
+        setMessage({
+          text: "コメントの削除に失敗しました。",
+          type: "error",
+        });
+      },
+    }
+  );
+
   return {
     commentMutation,
+    commentDeleteMutation,
   };
 };

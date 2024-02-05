@@ -6,9 +6,12 @@ import { ButtonBox } from "@/components/elements/buttonBox";
 import { useMutateComment } from "@/hooks/comment/useMutateComment";
 import { useQueryComment } from "@/hooks/comment/useQueryComment";
 import { Modal } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { PaginationBox } from "@/components/common/paginationBox";
 import { countPages } from "@/utils/countPages";
 import { CommentValidation } from "@/utils/validations/commentValidation";
+import { useQueryClient } from "@tanstack/react-query";
+import { TUser } from "@/types/user";
 
 type Props = {
   postId: number | null;
@@ -19,9 +22,11 @@ type Props = {
 
 export const ModalComment = memo(
   ({ postId, setPostId, updateCount, setUpdateCount }: Props) => {
+    const queryClient = useQueryClient();
+    const user: TUser | undefined = queryClient.getQueryData(["user"]);
     const [comment, setComment] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-    const { commentMutation } = useMutateComment();
+    const { commentMutation, commentDeleteMutation } = useMutateComment();
     const { commentValidation } = CommentValidation();
     const { data, refetch } = useQueryComment(
       currentPage,
@@ -49,6 +54,16 @@ export const ModalComment = memo(
         } catch (err) {
           console.error("err", err);
         }
+      }
+    };
+
+    const onClickDeleteComment = async (id: number) => {
+      try {
+        await commentDeleteMutation.mutateAsync(id);
+        setUpdateCount(updateCount - 1);
+        refetch();
+      } catch (error) {
+        console.error(error);
       }
     };
 
@@ -83,6 +98,9 @@ export const ModalComment = memo(
                 <h3>{com.comment_user.name}</h3>
                 <p>{com.text}</p>
               </div>
+              {com.user_id === user?.id && (
+                <DeleteIcon onClick={() => onClickDeleteComment(com.id)} />
+              )}
             </div>
           ))}
           <PaginationBox
@@ -132,6 +150,11 @@ const commentBox = css`
     img {
       border-radius: 50%;
       object-fit: cover;
+    }
+
+    svg {
+      color: #e9546b;
+      cursor: pointer;
     }
   }
 

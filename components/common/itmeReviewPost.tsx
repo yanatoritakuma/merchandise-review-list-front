@@ -99,7 +99,6 @@ export const ItmeReviewPost = memo(({ reviewPost }: Props) => {
         count: likeState.count + 1,
         status: true,
       });
-      // refetch();
     } catch (err) {
       console.error(err);
     }
@@ -108,7 +107,6 @@ export const ItmeReviewPost = memo(({ reviewPost }: Props) => {
   const onClickDeleteLike = async () => {
     try {
       await likeDeleteMutation.mutateAsync(Number(likePostUserId));
-      // refetch();
       setLikeState({
         ...likeState,
         count: likeState.count - 1,
