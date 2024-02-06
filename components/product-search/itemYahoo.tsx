@@ -61,7 +61,7 @@ export const ItemYahoo = memo(({ hit, index }: TItem) => {
           price: product.price,
           review: product.review.rate,
           url: product.url,
-          image: product.image.medium,
+          image: product.exImage.url,
           code: product.code,
         });
       } catch (err) {

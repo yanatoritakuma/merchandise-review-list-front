@@ -236,6 +236,7 @@ const itmeReviewPostBox = css`
     h5 {
       margin: 0 0 0 12px;
       font-size: 18px;
+      width: 100%;
     }
 
     img {

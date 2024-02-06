@@ -61,7 +61,7 @@ export const ItemRaukuten = memo(({ item, index }: TItem) => {
           price: items.Item.itemPrice,
           review: items.Item.reviewAverage,
           url: items.Item.itemUrl,
-          image: items.Item.mediumImageUrls[0].imageUrl,
+          image: imgResizing(item.Item.mediumImageUrls[0]?.imageUrl),
           code: items.Item.itemCode,
         });
       } catch (err) {
@@ -106,7 +106,7 @@ export const ItemRaukuten = memo(({ item, index }: TItem) => {
       <span>在庫: {item.Item.availability !== 0 ? "あり" : "なし"}</span>
       <span>価格: {item.Item.itemPrice.toLocaleString()}円</span>
       <span className="rakutenItemBox__ratingBox">
-        レビュー平均:{" "}
+        レビュー平均:
         <span className="rakutenItemBox__rating">
           <RatingBox reviewState={item.Item.reviewAverage} readOnly />
         </span>
