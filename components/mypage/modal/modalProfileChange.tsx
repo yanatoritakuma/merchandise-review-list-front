@@ -23,7 +23,7 @@ export const ModalProfileChange = memo(({ open, setOpen }: Props) => {
   const { deleteImg } = DeleteImgStorage();
   const [previewUrl, setPreviewUrl] = useState("");
   const { onChangeImageHandler, photoUrl, setPhotoUrl } = useChangeImage();
-  const { accountRegisterValidation } = UserValidation();
+  const { accountUpdateValidation } = UserValidation();
 
   useEffect(() => {
     if (user !== undefined) {
@@ -87,7 +87,7 @@ export const ModalProfileChange = memo(({ open, setOpen }: Props) => {
         </div>
         <ButtonBox
           onClick={() => {
-            if (accountRegisterValidation(photoUrl)) {
+            if (accountUpdateValidation(photoUrl)) {
               onClickRegistration(
                 photoUrl,
                 setPhotoUrl,
