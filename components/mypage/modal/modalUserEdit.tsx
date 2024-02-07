@@ -16,7 +16,7 @@ type Props = {
 export const ModalUserEdit = memo(({ open, setOpen }: Props) => {
   const { data: user } = useQueryUser();
   const { updateUserMutation } = useMutateUser();
-  const { accountRegisterValidation } = UserValidation();
+  const { accountUpdateValidation } = UserValidation();
 
   const [authStatte, setAuthStatte] = useState({
     email: "",
@@ -80,7 +80,7 @@ export const ModalUserEdit = memo(({ open, setOpen }: Props) => {
         </div>
         <ButtonBox
           onClick={() => {
-            if (accountRegisterValidation(null, authStatte)) {
+            if (accountUpdateValidation(null, authStatte)) {
               onClickUpDate();
               setOpen(false);
             }

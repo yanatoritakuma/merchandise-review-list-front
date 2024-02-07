@@ -34,7 +34,21 @@ export const Validation = () => {
     }
   };
 
-  // 比較チェック
+  // 半角英数字チェック
+  const alphanumeric = (checkText: string, messages: string) => {
+    if (!validator.isAlphanumeric(checkText)) {
+      setMessage({
+        ...message,
+        text: `${messages}には半角英数字を入力してください。`,
+        type: "error",
+      });
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  // 整数の比較チェック
   const bigger = (
     checkText: string,
     messages: string,
@@ -45,6 +59,28 @@ export const Validation = () => {
       setMessage({
         ...message,
         text: `${messages}は${min.toLocaleString()}より大きく${max.toLocaleString()}未満の整数で入力してください。`,
+        type: "error",
+      });
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  // 半角英数字の比較チェック
+  const alphanumericComparison = (
+    checkText: string,
+    messages: string,
+    min: number,
+    max: number
+  ) => {
+    if (
+      validator.isAlphanumeric(checkText) &&
+      !validator.isLength(String(checkText), { min, max })
+    ) {
+      setMessage({
+        ...message,
+        text: `${messages}は${min.toLocaleString()}文字より大きく${max.toLocaleString()}文字未満の半角英数字で入力してください。`,
         type: "error",
       });
       return true;
@@ -123,7 +159,9 @@ export const Validation = () => {
   return {
     required,
     number,
+    alphanumeric,
     bigger,
+    alphanumericComparison,
     smaller,
     japaneseProhibited,
     below,

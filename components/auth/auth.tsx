@@ -4,12 +4,14 @@ import { useRouter } from "next/router";
 import { TextBox } from "@/components/elements/textBox";
 import { ButtonBox } from "@/components/elements/buttonBox";
 import { useMutateAuth } from "@/hooks/auth/useMutateAuth";
+import { UserValidation } from "@/utils/validations/userValidation";
 
 export const Auth = () => {
   const { loginMutation, registerMutation } = useMutateAuth();
+  const { accountRegisterValidation, loginValidation } = UserValidation();
   const router = useRouter();
   const [authState, setAuthState] = useState({
-    mail: "",
+    email: "",
     password: "",
     name: "",
   });
@@ -18,14 +20,14 @@ export const Auth = () => {
   const createAccount = async () => {
     try {
       await registerMutation.mutateAsync({
-        email: authState.mail,
+        email: authState.email,
         password: authState.password,
         name: authState.name,
         image: "",
       });
 
       await loginMutation.mutateAsync({
-        email: authState.mail,
+        email: authState.email,
         password: authState.password,
       });
 
@@ -36,13 +38,20 @@ export const Auth = () => {
   };
 
   const onClickAuth = () => {
+    const loginReq = {
+      email: authState.email,
+      password: authState.password,
+    };
+
     if (isLogin) {
-      loginMutation.mutate({
-        email: authState.mail,
-        password: authState.password,
-      });
+      if (loginValidation(loginReq)) {
+        loginMutation.mutate({
+          email: authState.email,
+          password: authState.password,
+        });
+      }
     } else {
-      createAccount();
+      accountRegisterValidation(authState) && createAccount();
     }
   };
 
@@ -52,11 +61,11 @@ export const Auth = () => {
       <div className="authInputBox__inputBox">
         <TextBox
           label="メールアドレス"
-          value={authState.mail}
+          value={authState.email}
           onChange={(e) =>
             setAuthState({
               ...authState,
-              mail: e.target.value,
+              email: e.target.value,
             })
           }
           className="authInputBox__input"

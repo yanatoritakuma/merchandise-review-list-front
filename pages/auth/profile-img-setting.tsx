@@ -15,7 +15,7 @@ const ProfileImgSetting = () => {
   const { updateUserMutation } = useMutateUser();
   const [previewUrl, setPreviewUrl] = useState("");
   const { onChangeImageHandler, photoUrl, setPhotoUrl } = useChangeImage();
-  const { accountRegisterValidation } = UserValidation();
+  const { accountUpdateValidation } = UserValidation();
   const router = useRouter();
 
   const registrationImage = async (file: string | null) => {
@@ -74,7 +74,7 @@ const ProfileImgSetting = () => {
               </div>
               <ButtonBox
                 onClick={() => {
-                  if (accountRegisterValidation(photoUrl)) {
+                  if (accountUpdateValidation(photoUrl)) {
                     onClickRegistration(
                       photoUrl,
                       setPhotoUrl,

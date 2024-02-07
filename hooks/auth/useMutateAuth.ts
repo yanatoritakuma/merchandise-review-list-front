@@ -7,6 +7,7 @@ import { useQueryUser } from "@/hooks/user/useQueryUser";
 import { useContext } from "react";
 import { MessageContext } from "@/provider/messageProvider";
 import { BackdropContext } from "@/provider/backdropProvider";
+import { TResponseError } from "@/types/responseError";
 
 export const useMutateAuth = () => {
   const router = useRouter();
@@ -51,13 +52,25 @@ export const useMutateAuth = () => {
       onSuccess: () => {
         setBackdropFlag(false);
       },
-      onError: () => {
-        setBackdropFlag(false);
-        setMessage({
-          ...message,
-          text: "アカウント作成に失敗しました。",
-          type: "error",
-        });
+      onError: (error: TResponseError) => {
+        if (
+          error.response.data ===
+          'ERROR: duplicate key value violates unique constraint "users_email_key" (SQLSTATE 23505)'
+        ) {
+          setBackdropFlag(false);
+          setMessage({
+            ...message,
+            text: "既に登録されているメールアドレスです。",
+            type: "error",
+          });
+        } else {
+          setBackdropFlag(false);
+          setMessage({
+            ...message,
+            text: "アカウント作成に失敗しました。",
+            type: "error",
+          });
+        }
       },
       onMutate: () => {
         setBackdropFlag(true);
