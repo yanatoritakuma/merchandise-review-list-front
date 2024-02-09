@@ -62,6 +62,7 @@ export const ItemRaukuten = memo(({ item, index }: TItem) => {
           review: items.Item.reviewAverage,
           url: items.Item.itemUrl,
           image: imgResizing(item.Item.mediumImageUrls[0]?.imageUrl),
+          provider: "rakuten",
           code: items.Item.itemCode,
         });
       } catch (err) {
