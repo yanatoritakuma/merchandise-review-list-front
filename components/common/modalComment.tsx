@@ -12,6 +12,7 @@ import { countPages } from "@/utils/countPages";
 import { CommentValidation } from "@/utils/validations/commentValidation";
 import { useQueryClient } from "@tanstack/react-query";
 import { TUser } from "@/types/user";
+import NoUserImage from "@/images/noimage-user.png";
 
 type Props = {
   postId: number | null;
@@ -88,12 +89,22 @@ export const ModalComment = memo(
           </div>
           {data?.commentsRes.map((com, index) => (
             <div key={index} className="commentsBox__comments">
-              <Image
-                src={com.comment_user.image}
-                width={60}
-                height={60}
-                alt="プロフィール画像"
-              />
+              {com.comment_user.image !== "" ? (
+                <Image
+                  src={com.comment_user.image}
+                  width={60}
+                  height={60}
+                  alt="プロフィール画像"
+                />
+              ) : (
+                <Image
+                  src={NoUserImage}
+                  width={60}
+                  height={60}
+                  alt="プロフィール画像"
+                />
+              )}
+
               <div className="commentsBox__userBox">
                 <h3>{com.comment_user.name}</h3>
                 <p>{com.text}</p>
