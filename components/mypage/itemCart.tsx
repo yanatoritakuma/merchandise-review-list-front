@@ -3,6 +3,8 @@ import { css } from "@emotion/react";
 import { TProduct, TResProduct } from "@/types/product";
 import Link from "next/link";
 import Image from "next/image";
+import YahooIcon from "@/images/yahoo.png";
+import RakutenIcon from "@/images/rakuten.png";
 import { ButtonBox } from "@/components/elements/buttonBox";
 import { TError } from "@/types/error";
 import { useMutateProduct } from "@/hooks/product/useMutateProduct";
@@ -67,6 +69,13 @@ export const ItemCart = memo(
 
     return (
       <div key={pr.id} css={itemCartBox}>
+        <Image
+          src={pr.provider === "yahoo" ? YahooIcon : RakutenIcon}
+          alt="商品の提供元アイコン"
+          width={50}
+          height={50}
+          className="itemCartBox__icon"
+        />
         <h4>{pr.name}</h4>
         <div className="itemCartBox__textBox">
           <h5>商品説明</h5>
@@ -112,7 +121,13 @@ export const ItemCart = memo(
           商品のレビューをする
         </ButtonBox>
 
-        <Image src={pr.image} width={320} height={320} alt="商品画像" />
+        <Image
+          className="itemCartBox__productImg"
+          src={pr.image}
+          width={320}
+          height={320}
+          alt="商品画像"
+        />
         <ModalReviewForm
           open={modalReviewFlag}
           setOpen={() => setModalReviewFlag(false)}
@@ -159,12 +174,17 @@ const itemCartBox = css`
     display: block;
   }
 
-  img {
+  .itemCartBox__productImg {
     margin: 20px auto;
     display: block;
     width: 60%;
     height: auto;
     object-fit: contain;
+  }
+
+  .itemCartBox__icon {
+    object-fit: cover;
+    margin: 4px;
   }
 
   .itemCartBox__textBox {

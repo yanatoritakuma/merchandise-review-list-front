@@ -6,6 +6,7 @@ export type TReqProduct = {
   review: number;
   url: string;
   image: string;
+  provider: "yahoo" | "rakuten";
   code: string;
 };
 
@@ -23,5 +24,6 @@ export type TProduct = {
   review: number;
   url: string;
   image: string;
+  provider: "yahoo" | "rakuten";
   createdAt: string;
 };
