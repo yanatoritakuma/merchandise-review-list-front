@@ -15,6 +15,9 @@ import {
 } from "@tanstack/react-query";
 import { ModalReviewForm } from "@/components/review-post/modal/modalReviewForm";
 import { ReviewPostContext } from "@/provider/reviewPostProvider";
+import { ModalProductTimeLimit } from "@/components/mypage/modal/modalProductTimeLimit";
+import EditCalendarIcon from "@mui/icons-material/EditCalendar";
+import dayjs from "dayjs";
 
 type TItem = {
   pr: TProduct;
@@ -32,6 +35,8 @@ export const ItemCart = memo(
     const { reviewPostGlobal, setReviewPostGlobal } =
       useContext(ReviewPostContext);
     const [modalReviewFlag, setModalReviewFlag] = useState(false);
+    const [modalProductTimeLimitFlag, setModalProductTimeLimitFlag] =
+      useState(false);
 
     //   todo:共通化したい
     const truncateString = (inputString: string, maxLength: number) => {
@@ -69,13 +74,21 @@ export const ItemCart = memo(
 
     return (
       <div key={pr.id} css={itemCartBox}>
-        <Image
-          src={pr.provider === "yahoo" ? YahooIcon : RakutenIcon}
-          alt="商品の提供元アイコン"
-          width={50}
-          height={50}
-          className="itemCartBox__icon"
-        />
+        <div className="itemCartBox__topBox">
+          <Image
+            src={pr.provider === "yahoo" ? YahooIcon : RakutenIcon}
+            alt="商品の提供元アイコン"
+            width={50}
+            height={50}
+            className="itemCartBox__icon"
+          />
+          <div
+            onClick={() => setModalProductTimeLimitFlag(true)}
+            className="itemCartBox__topIcon"
+          >
+            <EditCalendarIcon />
+          </div>
+        </div>
         <h4>{pr.name}</h4>
         <div className="itemCartBox__textBox">
           <h5>商品説明</h5>
@@ -104,22 +117,27 @@ export const ItemCart = memo(
             {moreTextDescription(pr.description, moreTextFlag[index])}
           </span>
         </div>
-        <span>在庫: {pr.stock ? "あり" : "なし"}</span>
-        <span>価格: {pr.price.toLocaleString()}円</span>
-        <span>レビュー平均: {pr.review}</span>
+        <span className="itemCartBox__text">
+          在庫: {pr.stock ? "あり" : "なし"}
+        </span>
+        <span className="itemCartBox__text">
+          価格: {pr.price.toLocaleString()}円
+        </span>
+        <span className="itemCartBox__text">レビュー平均: {pr.review}</span>
         <Link prefetch={false} href={pr.url} target="_blank">
           商品のサイトへ
         </Link>
-
-        <ButtonBox
-          onClick={() => onClickDelete(pr.id)}
-          disabled={deleteProductMutation.isLoading}
-        >
-          {!deleteProductMutation.isLoading ? "カートから削除" : "削除実行中"}
-        </ButtonBox>
-        <ButtonBox onClick={() => onClickModalReview()}>
-          商品のレビューをする
-        </ButtonBox>
+        <div className="itemCartBox__button">
+          <ButtonBox
+            onClick={() => onClickDelete(pr.id)}
+            disabled={deleteProductMutation.isLoading}
+          >
+            {!deleteProductMutation.isLoading ? "カートから削除" : "削除実行中"}
+          </ButtonBox>
+          <ButtonBox onClick={() => onClickModalReview()}>
+            商品のレビューをする
+          </ButtonBox>
+        </div>
 
         <Image
           className="itemCartBox__productImg"
@@ -131,6 +149,12 @@ export const ItemCart = memo(
         <ModalReviewForm
           open={modalReviewFlag}
           setOpen={() => setModalReviewFlag(false)}
+        />
+
+        <ModalProductTimeLimit
+          open={modalProductTimeLimitFlag}
+          setOpen={setModalProductTimeLimitFlag}
+          timeLimit={dayjs(pr.timeLimit)}
         />
       </div>
     );
@@ -155,12 +179,23 @@ const itemCartBox = css`
     height: 400px;
   }
 
+  .itemCartBox__topBox {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .itemCartBox__topIcon {
+    cursor: pointer;
+  }
+
   h4 {
     margin-top: 0;
     font-size: 20px;
   }
 
-  span {
+  .itemCartBox__text {
     margin: 6px 0;
     display: block;
   }
@@ -169,9 +204,11 @@ const itemCartBox = css`
     color: #1976d2;
   }
 
-  button {
-    margin: 20px 0;
-    display: block;
+  .itemCartBox__button {
+    button {
+      margin: 20px 0;
+      display: block;
+    }
   }
 
   .itemCartBox__productImg {

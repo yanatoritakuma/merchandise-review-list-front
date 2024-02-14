@@ -9,9 +9,13 @@ import { TabsBox } from "@/components/elements/tabsBox";
 import { Cart } from "@/components/mypage/cart";
 import { ReviewPost } from "@/components/mypage/reviewPost";
 import { LikePost } from "@/components/mypage/likePost";
+import { useQueryUserProductTimeLimit } from "@/hooks/product/useQueryUserProductTimeLimit";
 
 export const Profile = () => {
   const { data: user, isLoading } = useQueryUser();
+  const { data: productTimeLimit } = useQueryUserProductTimeLimit(1, 10);
+
+  console.log("productTimeLimit", productTimeLimit);
 
   const [selectTab, setSelectTab] = useState(0);
 

@@ -25,5 +25,6 @@ export type TProduct = {
   url: string;
   image: string;
   provider: "yahoo" | "rakuten";
+  timeLimit: string;
   createdAt: string;
 };
