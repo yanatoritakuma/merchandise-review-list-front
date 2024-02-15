@@ -5,31 +5,54 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { DatePickerBox } from "@/components/elements/datePickerBox";
 import { ButtonBox } from "@/components/elements/buttonBox";
+import { useMutateProduct } from "@/hooks/product/useMutateProduct";
 
 type Props = {
   open: boolean;
   setOpen: (value: React.SetStateAction<boolean>) => void;
   timeLimit: Dayjs;
+  productId: number;
 };
 
 export const ModalProductTimeLimit = memo(
-  ({ open, setOpen, timeLimit }: Props) => {
-    const currentDate: Dayjs = dayjs();
-    const selectDay = timeLimit.isBefore(currentDate);
+  ({ open, setOpen, timeLimit, productId }: Props) => {
+    const cutoffDate: Dayjs = dayjs("1990-01-01");
+    const pastDate = timeLimit.isBefore(cutoffDate);
+    const [date, setDate] = useState<Dayjs | null>(pastDate ? null : timeLimit);
+    const { updateProductMutation } = useMutateProduct();
 
-    const [date, setDate] = useState<Dayjs | null>(
-      selectDay ? currentDate : timeLimit
-    );
+    const onClickUpdateProduct = () => {
+      const reqProduct = {
+        productId: productId,
+        timeLimit: date,
+      };
+      updateProductMutation.mutate(reqProduct);
+      setOpen(false);
+    };
+
+    const onClickResetProduct = () => {
+      const reqProduct = {
+        productId: productId,
+        timeLimit: null,
+      };
+      updateProductMutation.mutate(reqProduct);
+      setOpen(false);
+    };
 
     return (
       <Modal open={open} onClose={() => setOpen(false)}>
-        <Box css={editBox}>
+        <Box css={timeLimitBox}>
           <h3>購入期日</h3>
           <DatePickerBox
             value={date}
             onChange={(newValue) => setDate(newValue)}
           />
-          <ButtonBox>登録</ButtonBox>
+          <ButtonBox onClick={() => onClickUpdateProduct()}>登録</ButtonBox>
+          {date !== null && (
+            <ButtonBox onClick={() => onClickResetProduct()}>
+              リセット
+            </ButtonBox>
+          )}
         </Box>
       </Modal>
     );
@@ -38,7 +61,7 @@ export const ModalProductTimeLimit = memo(
 
 ModalProductTimeLimit.displayName = "ModalProductTimeLimit";
 
-const editBox = css`
+const timeLimitBox = css`
   padding: 20px;
   position: absolute;
   top: 50%;
@@ -60,30 +83,5 @@ const editBox = css`
   button {
     margin: 20px auto;
     display: block;
-  }
-
-  .profilePictureInBox__uploadIcon {
-    text-align: center;
-    svg {
-      width: 38px;
-      height: 38px;
-    }
-  }
-`;
-
-const previewBox = css`
-  margin: 12px auto;
-  width: 260px;
-  height: 250px;
-  position: relative;
-
-  @media (max-width: 425px) {
-    width: 200px;
-    height: 200px;
-  }
-
-  img {
-    object-fit: cover;
-    border-radius: 50%;
   }
 `;

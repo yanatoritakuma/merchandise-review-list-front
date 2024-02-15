@@ -34,6 +34,30 @@ export const useMutateProduct = () => {
     }
   );
 
+  const updateProductMutation = useMutation(
+    async (reqReviewPosts: any) =>
+      await axios.put(
+        `${process.env.NEXT_PUBLIC_API_URL}/product/${reqReviewPosts.productId}`,
+        reqReviewPosts
+      ),
+    {
+      onSuccess: () => {
+        setBackdropFlag(false);
+        setMessage({
+          text: "カレンダー設定完了しました。",
+          type: "success",
+        });
+      },
+      onError: () => {
+        setBackdropFlag(false);
+        setMessage({
+          text: "カレンダー設定失敗しました。",
+          type: "error",
+        });
+      },
+    }
+  );
+
   const deleteProductMutation = useMutation(
     async (id: number) =>
       await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/product/${id}`),
@@ -55,5 +79,5 @@ export const useMutateProduct = () => {
     }
   );
 
-  return { productMutation, deleteProductMutation };
+  return { productMutation, deleteProductMutation, updateProductMutation };
 };

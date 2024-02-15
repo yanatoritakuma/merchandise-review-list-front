@@ -1,4 +1,4 @@
-import { memo, useContext, useState } from "react";
+import { memo, useContext, useEffect, useState } from "react";
 import { css } from "@emotion/react";
 import { TProduct, TResProduct } from "@/types/product";
 import Link from "next/link";
@@ -17,7 +17,7 @@ import { ModalReviewForm } from "@/components/review-post/modal/modalReviewForm"
 import { ReviewPostContext } from "@/provider/reviewPostProvider";
 import { ModalProductTimeLimit } from "@/components/mypage/modal/modalProductTimeLimit";
 import EditCalendarIcon from "@mui/icons-material/EditCalendar";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 type TItem = {
   pr: TProduct;
@@ -37,6 +37,9 @@ export const ItemCart = memo(
     const [modalReviewFlag, setModalReviewFlag] = useState(false);
     const [modalProductTimeLimitFlag, setModalProductTimeLimitFlag] =
       useState(false);
+
+    const cutoffDate: Dayjs = dayjs("1990-01-01");
+    const targetDate: Dayjs = dayjs(pr.timeLimit);
 
     //   todo:共通化したい
     const truncateString = (inputString: string, maxLength: number) => {
@@ -87,6 +90,7 @@ export const ItemCart = memo(
             className="itemCartBox__topIcon"
           >
             <EditCalendarIcon />
+            {targetDate.isAfter(cutoffDate) && <span>設定済み</span>}
           </div>
         </div>
         <h4>{pr.name}</h4>
@@ -155,6 +159,7 @@ export const ItemCart = memo(
           open={modalProductTimeLimitFlag}
           setOpen={setModalProductTimeLimitFlag}
           timeLimit={dayjs(pr.timeLimit)}
+          productId={pr.id}
         />
       </div>
     );
@@ -188,6 +193,12 @@ const itemCartBox = css`
 
   .itemCartBox__topIcon {
     cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    span {
+      margin-left: 6px;
+    }
   }
 
   h4 {
@@ -208,6 +219,10 @@ const itemCartBox = css`
     button {
       margin: 20px 0;
       display: block;
+
+      &:nth-of-type(1) {
+        background-color: #e9546b;
+      }
     }
   }
 
