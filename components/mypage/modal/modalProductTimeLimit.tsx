@@ -12,10 +12,11 @@ type Props = {
   setOpen: (value: React.SetStateAction<boolean>) => void;
   timeLimit: Dayjs;
   productId: number;
+  setTimeLimitUpdateFalg: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const ModalProductTimeLimit = memo(
-  ({ open, setOpen, timeLimit, productId }: Props) => {
+  ({ open, setOpen, timeLimit, productId, setTimeLimitUpdateFalg }: Props) => {
     const cutoffDate: Dayjs = dayjs("1990-01-01");
     const pastDate = timeLimit.isBefore(cutoffDate);
     const [date, setDate] = useState<Dayjs | null>(pastDate ? null : timeLimit);
@@ -27,6 +28,7 @@ export const ModalProductTimeLimit = memo(
         timeLimit: date,
       };
       updateProductMutation.mutate(reqProduct);
+      setTimeLimitUpdateFalg(true);
       setOpen(false);
     };
 
@@ -36,6 +38,7 @@ export const ModalProductTimeLimit = memo(
         timeLimit: null,
       };
       updateProductMutation.mutate(reqProduct);
+      setTimeLimitUpdateFalg(true);
       setOpen(false);
     };
 

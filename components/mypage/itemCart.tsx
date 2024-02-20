@@ -38,6 +38,8 @@ export const ItemCart = memo(
     const [modalProductTimeLimitFlag, setModalProductTimeLimitFlag] =
       useState(false);
 
+    const [timeLimitUpdateFalg, setTimeLimitUpdateFalg] = useState(false);
+
     const cutoffDate: Dayjs = dayjs("1990-01-01");
     const targetDate: Dayjs = dayjs(pr.timeLimit);
 
@@ -74,6 +76,16 @@ export const ItemCart = memo(
         image: pr.image,
       });
     };
+
+    useEffect(() => {
+      if (timeLimitUpdateFalg) {
+        setTimeout(() => {
+          refetch();
+        }, 100);
+      }
+      setTimeLimitUpdateFalg(false);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [timeLimitUpdateFalg]);
 
     return (
       <div key={pr.id} css={itemCartBox}>
@@ -160,6 +172,7 @@ export const ItemCart = memo(
           setOpen={setModalProductTimeLimitFlag}
           timeLimit={dayjs(pr.timeLimit)}
           productId={pr.id}
+          setTimeLimitUpdateFalg={setTimeLimitUpdateFalg}
         />
       </div>
     );
