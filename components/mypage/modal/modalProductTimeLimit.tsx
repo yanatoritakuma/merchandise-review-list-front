@@ -46,11 +46,21 @@ export const ModalProductTimeLimit = memo(
       <Modal open={open} onClose={() => setOpen(false)}>
         <Box css={timeLimitBox}>
           <h3>購入期日</h3>
+          <p>
+            購入期日をカレンダーに登録できます。
+            <br />
+            購入期日の3日前に、マイページに通知が届きます。
+          </p>
           <DatePickerBox
             value={date}
             onChange={(newValue) => setDate(newValue)}
           />
-          <ButtonBox onClick={() => onClickUpdateProduct()}>登録</ButtonBox>
+          <ButtonBox
+            onClick={() => onClickUpdateProduct()}
+            disabled={date === null}
+          >
+            登録
+          </ButtonBox>
           {date !== null && (
             <ButtonBox onClick={() => onClickResetProduct()}>
               リセット

@@ -15,6 +15,11 @@ export type TResProduct = {
   products: TProduct[];
 };
 
+export type TResProductTimeLimit = {
+  totalPageCount: number;
+  productsTimeLimit: TProduct[];
+};
+
 export type TProduct = {
   id: number;
   name: string;

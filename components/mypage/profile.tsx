@@ -4,12 +4,15 @@ import { css } from "@emotion/react";
 import { useQueryUser } from "@/hooks/user/useQueryUser";
 import { ProfileSkeleton } from "@/components/mypage/profileSkeleton";
 import NoImage from "@/images/noimage-user.png";
+import Badge from "@mui/material/Badge";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { UserEditMenu } from "@/components/mypage/userEditMenu";
 import { TabsBox } from "@/components/elements/tabsBox";
 import { Cart } from "@/components/mypage/cart";
 import { ReviewPost } from "@/components/mypage/reviewPost";
 import { LikePost } from "@/components/mypage/likePost";
 import { useQueryUserProductTimeLimit } from "@/hooks/product/useQueryUserProductTimeLimit";
+import { ModalCalendarRegistered } from "@/components/mypage/modal/modalCalendarRegistered";
 
 export const Profile = () => {
   const { data: user, isLoading } = useQueryUser();
@@ -18,6 +21,8 @@ export const Profile = () => {
   console.log("productTimeLimit", productTimeLimit);
 
   const [selectTab, setSelectTab] = useState(0);
+  const [modalCalendarRegisteredFlag, setModalCalendarRegisteredFlag] =
+    useState(false);
 
   const formatDate = (inputDate: string) => {
     const date = new Date(inputDate);
@@ -70,6 +75,14 @@ export const Profile = () => {
             <h4>{user?.name}</h4>
             <div className="profile__editIcon">
               <UserEditMenu />
+              <span onClick={() => setModalCalendarRegisteredFlag(true)}>
+                <Badge
+                  badgeContent={productTimeLimit?.totalPageCount}
+                  color="error"
+                >
+                  <CalendarMonthIcon className="profile__calendarIcon" />
+                </Badge>
+              </span>
             </div>
           </div>
           <span className="profile__useDate">
@@ -91,6 +104,11 @@ export const Profile = () => {
           <h4>ログインしていません。</h4>
         </>
       )}
+      <ModalCalendarRegistered
+        open={modalCalendarRegisteredFlag}
+        setOpen={() => setModalCalendarRegisteredFlag(false)}
+        productTimeLimit={productTimeLimit}
+      />
     </section>
   );
 };
@@ -125,6 +143,14 @@ const profile = css`
   .profile__editIcon {
     position: absolute;
     right: -14px;
+    display: flex;
+    align-items: center;
+  }
+
+  .profile__calendarIcon {
+    width: 34px;
+    height: 34px;
+    cursor: pointer;
   }
 `;
 
