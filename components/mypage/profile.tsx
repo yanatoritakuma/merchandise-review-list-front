@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { css } from "@emotion/react";
+import { useRouter } from "next/router";
 import { useQueryUser } from "@/hooks/user/useQueryUser";
 import { ProfileSkeleton } from "@/components/mypage/profileSkeleton";
 import NoImage from "@/images/noimage-user.png";
@@ -12,17 +13,16 @@ import { Cart } from "@/components/mypage/cart";
 import { ReviewPost } from "@/components/mypage/reviewPost";
 import { LikePost } from "@/components/mypage/likePost";
 import { useQueryUserProductTimeLimit } from "@/hooks/product/useQueryUserProductTimeLimit";
-import { ModalCalendarRegistered } from "@/components/mypage/modal/modalCalendarRegistered";
 
 export const Profile = () => {
+  const router = useRouter();
   const { data: user, isLoading } = useQueryUser();
-  const { data: productTimeLimit } = useQueryUserProductTimeLimit(1, 10);
-
-  console.log("productTimeLimit", productTimeLimit);
+  const { data: productTimeLimit, refetch } = useQueryUserProductTimeLimit(
+    1,
+    10
+  );
 
   const [selectTab, setSelectTab] = useState(0);
-  const [modalCalendarRegisteredFlag, setModalCalendarRegisteredFlag] =
-    useState(false);
 
   const formatDate = (inputDate: string) => {
     const date = new Date(inputDate);
@@ -75,7 +75,7 @@ export const Profile = () => {
             <h4>{user?.name}</h4>
             <div className="profile__editIcon">
               <UserEditMenu />
-              <span onClick={() => setModalCalendarRegisteredFlag(true)}>
+              <span onClick={() => router.push("/mypage/calendar-registered")}>
                 <Badge
                   badgeContent={productTimeLimit?.totalPageCount}
                   color="error"
@@ -104,11 +104,6 @@ export const Profile = () => {
           <h4>ログインしていません。</h4>
         </>
       )}
-      <ModalCalendarRegistered
-        open={modalCalendarRegisteredFlag}
-        setOpen={() => setModalCalendarRegisteredFlag(false)}
-        productTimeLimit={productTimeLimit}
-      />
     </section>
   );
 };

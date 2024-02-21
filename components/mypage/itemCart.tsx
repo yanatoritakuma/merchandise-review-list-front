@@ -20,17 +20,25 @@ import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 import dayjs, { Dayjs } from "dayjs";
 
 type TItem = {
-  pr: TProduct;
+  product: TProduct;
   index: number;
   refetch: <TPageData>(
     options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
   ) => Promise<QueryObserverResult<TResProduct, TError>>;
   moreTextFlag: boolean[];
   setMoreTextFlag: React.Dispatch<React.SetStateAction<boolean[]>>;
+  displayRemainingFlag?: boolean;
 };
 
 export const ItemCart = memo(
-  ({ pr, index, refetch, moreTextFlag, setMoreTextFlag }: TItem) => {
+  ({
+    product,
+    index,
+    refetch,
+    moreTextFlag,
+    setMoreTextFlag,
+    displayRemainingFlag,
+  }: TItem) => {
     const { deleteProductMutation } = useMutateProduct();
     const { reviewPostGlobal, setReviewPostGlobal } =
       useContext(ReviewPostContext);
@@ -41,7 +49,7 @@ export const ItemCart = memo(
     const [timeLimitUpdateFalg, setTimeLimitUpdateFalg] = useState(false);
 
     const cutoffDate: Dayjs = dayjs("1990-01-01");
-    const targetDate: Dayjs = dayjs(pr.timeLimit);
+    const targetDate: Dayjs = dayjs(product.timeLimit);
 
     //   todo:共通化したい
     const truncateString = (inputString: string, maxLength: number) => {
@@ -72,8 +80,8 @@ export const ItemCart = memo(
       setModalReviewFlag(true);
       setReviewPostGlobal({
         ...reviewPostGlobal,
-        title: pr.name.slice(0, 50),
-        image: pr.image,
+        title: product.name.slice(0, 50),
+        image: product.image,
       });
     };
 
@@ -87,11 +95,28 @@ export const ItemCart = memo(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [timeLimitUpdateFalg]);
 
+    const timeLimitDay = new Date(product.timeLimit);
+    const currentDate = new Date();
+
+    const timeDifference: number = Math.floor(
+      (currentDate.getTime() - timeLimitDay.getTime()) / (1000 * 60 * 60 * 24)
+    );
+
     return (
-      <div key={pr.id} css={itemCartBox}>
+      <div key={product.id} css={itemCartBox}>
+        {displayRemainingFlag &&
+          (timeDifference < 0 ? (
+            <span className="itemCartBox__dueDate remaining">
+              購入期日まで残り{String(timeDifference).replace("-", "")}日
+            </span>
+          ) : (
+            <span className="itemCartBox__dueDate expired">
+              購入期日から{timeDifference}日経過。
+            </span>
+          ))}
         <div className="itemCartBox__topBox">
           <Image
-            src={pr.provider === "yahoo" ? YahooIcon : RakutenIcon}
+            src={product.provider === "yahoo" ? YahooIcon : RakutenIcon}
             alt="商品の提供元アイコン"
             width={50}
             height={50}
@@ -105,19 +130,19 @@ export const ItemCart = memo(
             {targetDate.isAfter(cutoffDate) && <span>設定済み</span>}
           </div>
         </div>
-        <h4>{pr.name}</h4>
+        <h4>{product.name}</h4>
         <div className="itemCartBox__textBox">
           <h5>商品説明</h5>
           {!moreTextFlag[index] ? (
             <p
               dangerouslySetInnerHTML={{
-                __html: truncateString(pr.description, 100),
+                __html: truncateString(product.description, 100),
               }}
             />
           ) : (
             <p
               dangerouslySetInnerHTML={{
-                __html: pr.description,
+                __html: product.description,
               }}
             />
           )}
@@ -130,22 +155,24 @@ export const ItemCart = memo(
               setMoreTextFlag(newArray);
             }}
           >
-            {moreTextDescription(pr.description, moreTextFlag[index])}
+            {moreTextDescription(product.description, moreTextFlag[index])}
           </span>
         </div>
         <span className="itemCartBox__text">
-          在庫: {pr.stock ? "あり" : "なし"}
+          在庫: {product.stock ? "あり" : "なし"}
         </span>
         <span className="itemCartBox__text">
-          価格: {pr.price.toLocaleString()}円
+          価格: {product.price.toLocaleString()}円
         </span>
-        <span className="itemCartBox__text">レビュー平均: {pr.review}</span>
-        <Link prefetch={false} href={pr.url} target="_blank">
+        <span className="itemCartBox__text">
+          レビュー平均: {product.review}
+        </span>
+        <Link prefetch={false} href={product.url} target="_blank">
           商品のサイトへ
         </Link>
         <div className="itemCartBox__button">
           <ButtonBox
-            onClick={() => onClickDelete(pr.id)}
+            onClick={() => onClickDelete(product.id)}
             disabled={deleteProductMutation.isLoading}
           >
             {!deleteProductMutation.isLoading ? "カートから削除" : "削除実行中"}
@@ -157,7 +184,7 @@ export const ItemCart = memo(
 
         <Image
           className="itemCartBox__productImg"
-          src={pr.image}
+          src={product.image}
           width={320}
           height={320}
           alt="商品画像"
@@ -170,8 +197,8 @@ export const ItemCart = memo(
         <ModalProductTimeLimit
           open={modalProductTimeLimitFlag}
           setOpen={setModalProductTimeLimitFlag}
-          timeLimit={dayjs(pr.timeLimit)}
-          productId={pr.id}
+          timeLimit={dayjs(product.timeLimit)}
+          productId={product.id}
           setTimeLimitUpdateFalg={setTimeLimitUpdateFalg}
         />
       </div>
@@ -228,6 +255,21 @@ const itemCartBox = css`
     color: #1976d2;
   }
 
+  .itemCartBox__dueDate {
+    font-size: 20px;
+    font-weight: bold;
+    display: block;
+    text-align: center;
+  }
+
+  .remaining {
+    color: #f8b500;
+  }
+
+  .expired {
+    color: #e9546b;
+  }
+
   .itemCartBox__button {
     button {
       margin: 20px 0;
@@ -265,8 +307,9 @@ const itemCartBox = css`
   }
 
   .itemCartBox__moreText {
-    margin: 12px 0;
-    text-align: center;
+    margin: 12px auto;
+    display: block;
+    width: fit-content;
     cursor: pointer;
   }
 `;

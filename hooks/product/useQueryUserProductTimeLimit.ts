@@ -1,14 +1,14 @@
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { TError } from "@/types/error";
-import { TResProductTimeLimit } from "@/types/product";
+import { TResProduct } from "@/types/product";
 
 export const useQueryUserProductTimeLimit = (
   page: number,
   pageSize: number
 ) => {
   const getProductTimeLimit = async () => {
-    const { data } = await axios.get<TResProductTimeLimit>(
+    const { data } = await axios.get<TResProduct>(
       `${process.env.NEXT_PUBLIC_API_URL}/product/timeLimit?page=${page}&pageSize=${pageSize}`
     );
     return data;

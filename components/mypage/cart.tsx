@@ -39,7 +39,7 @@ export const Cart = () => {
       {products?.products.map((pr, index) => (
         <ItemCart
           key={index}
-          pr={pr}
+          product={pr}
           index={index}
           refetch={refetch}
           moreTextFlag={moreTextFlag}
