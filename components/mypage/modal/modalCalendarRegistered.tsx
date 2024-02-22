@@ -27,12 +27,6 @@ export const ModalCalendarRegistered = memo(
     //   todo:共通化したい
     const [moreTextFlag, setMoreTextFlag] = useState(initialMoreTextFlags);
 
-    // useEffect(() => {
-    //   refetch();
-    //   setMoreTextFlag(initialMoreTextFlags);
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [currentPage]);
-
     return (
       <Modal open={open} onClose={() => setOpen(false)}>
         <Box css={calendarRegisteredBox}>
@@ -40,7 +34,7 @@ export const ModalCalendarRegistered = memo(
           {productTimeLimit?.products?.map((product, index) => (
             <ItemCart
               key={index}
-              pr={product}
+              product={product}
               index={index}
               refetch={refetch}
               moreTextFlag={moreTextFlag}

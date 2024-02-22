@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import Image from "next/image";
 import { css } from "@emotion/react";
-import { useRouter } from "next/router";
 import { useQueryUser } from "@/hooks/user/useQueryUser";
 import { ProfileSkeleton } from "@/components/mypage/profileSkeleton";
 import NoImage from "@/images/noimage-user.png";
@@ -13,14 +12,12 @@ import { Cart } from "@/components/mypage/cart";
 import { ReviewPost } from "@/components/mypage/reviewPost";
 import { LikePost } from "@/components/mypage/likePost";
 import { useQueryUserProductTimeLimit } from "@/hooks/product/useQueryUserProductTimeLimit";
+import { ModalCalendar } from "@/components/mypage/modal/modalCalendar";
 
 export const Profile = () => {
-  const router = useRouter();
   const { data: user, isLoading } = useQueryUser();
-  const { data: productTimeLimit, refetch } = useQueryUserProductTimeLimit(
-    1,
-    10
-  );
+  const { data: productTimeLimit } = useQueryUserProductTimeLimit(1, 10);
+  const [modalCalendarFlag, setModalCalendarFlag] = useState(false);
 
   const [selectTab, setSelectTab] = useState(0);
 
@@ -75,7 +72,7 @@ export const Profile = () => {
             <h4>{user?.name}</h4>
             <div className="profile__editIcon">
               <UserEditMenu />
-              <span onClick={() => router.push("/mypage/calendar-registered")}>
+              <span onClick={() => setModalCalendarFlag(true)}>
                 <Badge
                   badgeContent={productTimeLimit?.totalPageCount}
                   color="error"
@@ -84,6 +81,10 @@ export const Profile = () => {
                 </Badge>
               </span>
             </div>
+            <ModalCalendar
+              open={modalCalendarFlag}
+              setOpen={setModalCalendarFlag}
+            />
           </div>
           <span className="profile__useDate">
             {formatDate(user?.created_at)}から利用しています
