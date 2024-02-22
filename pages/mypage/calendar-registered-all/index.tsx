@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { css } from "@emotion/react";
 import { ItemCart } from "@/components/mypage/itemCart";
-import { useQueryUserProductTimeLimit } from "@/hooks/product/useQueryUserProductTimeLimit";
+import { useQueryUserProductTimeLimitAll } from "@/hooks/product/useQueryUserProductTimeLimitAll";
 import { PaginationBox } from "@/components/common/paginationBox";
 import { countPages } from "@/utils/countPages";
 
 const Index = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const { data: productTimeLimit, refetch } = useQueryUserProductTimeLimit(
+  const { data: productTimeLimit, refetch } = useQueryUserProductTimeLimitAll(
     currentPage,
     10
   );

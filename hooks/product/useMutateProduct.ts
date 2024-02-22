@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useContext } from "react";
 import { BackdropContext } from "@/provider/backdropProvider";
 import { MessageContext } from "@/provider/messageProvider";
-import { TReqProduct } from "@/types/product";
+import { TReqProduct, TReqProductTime } from "@/types/product";
 
 export const useMutateProduct = () => {
   const { setBackdropFlag } = useContext(BackdropContext);
@@ -35,7 +35,7 @@ export const useMutateProduct = () => {
   );
 
   const updateProductMutation = useMutation(
-    async (reqReviewPosts: any) =>
+    async (reqReviewPosts: TReqProductTime) =>
       await axios.put(
         `${process.env.NEXT_PUBLIC_API_URL}/product/${reqReviewPosts.productId}`,
         reqReviewPosts

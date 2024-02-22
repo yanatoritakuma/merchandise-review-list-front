@@ -11,6 +11,7 @@ import { PickersDay, PickersDayProps } from "@mui/x-date-pickers/PickersDay";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { DayCalendarSkeleton } from "@mui/x-date-pickers/DayCalendarSkeleton";
 import { ButtonBox } from "@/components/elements/buttonBox";
+import { useQueryUserProductTimeLimitYearMonth } from "@/hooks/product/useQueryUserProductTimeLimitYearMonth";
 
 type Props = {
   open: boolean;
@@ -45,6 +46,18 @@ const ServerDay = (
 
 export const ModalCalendar = ({ open, setOpen }: Props) => {
   const router = useRouter();
+
+  const getCurrentYearMonth = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1;
+
+    const yearMonth = year * 100 + month;
+
+    return yearMonth;
+  };
+
+  const { data } = useQueryUserProductTimeLimitYearMonth(getCurrentYearMonth());
   const requestAbortController = useRef<AbortController | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [highlightedDays, setHighlightedDays] = useState<number[]>([]);
@@ -67,8 +80,6 @@ export const ModalCalendar = ({ open, setOpen }: Props) => {
 
   const handleMonthChange = () => {
     if (requestAbortController.current) {
-      // make sure that you are aborting useless requests
-      // because it is possible to switch between months pretty quickly
       requestAbortController.current.abort();
     }
 

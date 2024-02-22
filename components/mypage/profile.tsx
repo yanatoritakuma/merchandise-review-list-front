@@ -11,12 +11,12 @@ import { TabsBox } from "@/components/elements/tabsBox";
 import { Cart } from "@/components/mypage/cart";
 import { ReviewPost } from "@/components/mypage/reviewPost";
 import { LikePost } from "@/components/mypage/likePost";
-import { useQueryUserProductTimeLimit } from "@/hooks/product/useQueryUserProductTimeLimit";
+import { useQueryUserProductTimeLimitAll } from "@/hooks/product/useQueryUserProductTimeLimitAll";
 import { ModalCalendar } from "@/components/mypage/modal/modalCalendar";
 
 export const Profile = () => {
   const { data: user, isLoading } = useQueryUser();
-  const { data: productTimeLimit } = useQueryUserProductTimeLimit(1, 10);
+  const { data: productTimeLimit } = useQueryUserProductTimeLimitAll(1, 10);
   const [modalCalendarFlag, setModalCalendarFlag] = useState(false);
 
   const [selectTab, setSelectTab] = useState(0);
