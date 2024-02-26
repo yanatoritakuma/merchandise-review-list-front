@@ -35,7 +35,6 @@ export const Profile = () => {
     switch (tab) {
       case 0:
         return <Cart />;
-
       case 1:
         return <ReviewPost />;
       case 2:

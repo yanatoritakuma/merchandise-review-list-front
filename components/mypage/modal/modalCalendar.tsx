@@ -5,6 +5,7 @@ import dayjs, { Dayjs } from "dayjs";
 import Badge from "@mui/material/Badge";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
+import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { PickersDay, PickersDayProps } from "@mui/x-date-pickers/PickersDay";
@@ -33,7 +34,13 @@ const ServerDay = (
     <Badge
       key={props.day.toString()}
       overlap="circular"
-      badgeContent={isSelected ? "!!!" : undefined}
+      badgeContent={
+        isSelected ? (
+          <span css={badgeIcon}>
+            <PriorityHighIcon />
+          </span>
+        ) : undefined
+      }
     >
       <PickersDay
         {...other}
@@ -46,6 +53,7 @@ const ServerDay = (
 
 export const ModalCalendar = ({ open, setOpen }: Props) => {
   const router = useRouter();
+  const [currentYearMonth, setCurrentYearMonth] = useState<number | null>();
 
   const getCurrentYearMonth = () => {
     const now = new Date();
@@ -57,15 +65,31 @@ export const ModalCalendar = ({ open, setOpen }: Props) => {
     return yearMonth;
   };
 
-  const { data } = useQueryUserProductTimeLimitYearMonth(getCurrentYearMonth());
+  const {
+    data,
+    isLoading: timeLimitYearMonthIsLoading,
+    refetch,
+  } = useQueryUserProductTimeLimitYearMonth(
+    currentYearMonth !== null && currentYearMonth !== undefined
+      ? currentYearMonth
+      : getCurrentYearMonth()
+  );
+  console.log("data", data);
   const requestAbortController = useRef<AbortController | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [highlightedDays, setHighlightedDays] = useState<number[]>([]);
 
+  const timeLimits = data?.productNumbers.map((num) => {
+    return num.timeLimit.substring(8, 10);
+  });
+
+  const timeLimitArray = timeLimits?.map((str) => parseInt(str, 10));
+
+  const fixedHighlightedDays: number[] =
+    timeLimitArray !== undefined ? timeLimitArray : [];
+
   const fetchHighlightedDays = () => {
     const controller = new AbortController();
-
-    const fixedHighlightedDays = [1, 2, 3];
 
     setHighlightedDays(fixedHighlightedDays);
     setIsLoading(false);
@@ -76,9 +100,78 @@ export const ModalCalendar = ({ open, setOpen }: Props) => {
   useEffect(() => {
     fetchHighlightedDays();
     return () => requestAbortController.current?.abort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleMonthChange = () => {
+  useEffect(() => {
+    refetch();
+    fetchHighlightedDays();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentYearMonth]);
+
+  useEffect(() => {
+    fetchHighlightedDays();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+
+  // 年月日のフォーマット形成
+  const convertYearMonthToNumber = (d: string) => {
+    const regex = /(\b\w{3}\b) (\b\w{3}\b) (\d{2}) (\d{4})/;
+    const match = String(d).match(regex);
+
+    const month = match && match[2]; // 月
+
+    const year = match && match[4]; // 年
+
+    let yearMonth = "";
+
+    switch (month) {
+      case "Jan":
+        yearMonth = year + "01";
+        break;
+      case "Feb":
+        yearMonth = year + "02";
+        break;
+      case "Mar":
+        yearMonth = year + "03";
+        break;
+      case "Apr":
+        yearMonth = year + "04";
+        break;
+      case "May":
+        yearMonth = year + "05";
+        break;
+      case "Jun":
+        yearMonth = year + "06";
+        break;
+      case "Jul":
+        yearMonth = year + "07";
+        break;
+      case "Aug":
+        yearMonth = year + "08";
+        break;
+      case "Sep":
+        yearMonth = year + "09";
+        break;
+      case "Oct":
+        yearMonth = year + "10";
+        break;
+      case "Nov":
+        yearMonth = year + "11";
+        break;
+      case "Dec":
+        yearMonth = year + "12";
+        break;
+
+      default:
+        break;
+    }
+
+    return yearMonth;
+  };
+
+  // 先月、来月のonChange
+  const handleMonthChange = (d: any) => {
     if (requestAbortController.current) {
       requestAbortController.current.abort();
     }
@@ -86,32 +179,40 @@ export const ModalCalendar = ({ open, setOpen }: Props) => {
     setIsLoading(true);
     setHighlightedDays([]);
     fetchHighlightedDays();
+    setCurrentYearMonth(Number(convertYearMonthToNumber(d.$d)));
   };
 
   return (
     <Modal open={open} onClose={() => setOpen(false)}>
       <Box css={modalCalendarBox}>
-        <ButtonBox
-          onClick={() => router.push("/mypage/calendar-registered-all")}
-        >
-          購入期日を設定した商品全てを見る
-        </ButtonBox>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DateCalendar
-            defaultValue={initialValue}
-            loading={isLoading}
-            onMonthChange={handleMonthChange}
-            renderLoading={() => <DayCalendarSkeleton />}
-            slots={{
-              day: ServerDay,
-            }}
-            slotProps={{
-              day: {
-                highlightedDays,
-              } as any,
-            }}
-          />
-        </LocalizationProvider>
+        {!timeLimitYearMonthIsLoading ? (
+          <>
+            <ButtonBox
+              onClick={() => router.push("/mypage/calendar-registered-all")}
+            >
+              購入期日を設定した商品全てを見る
+            </ButtonBox>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateCalendar
+                defaultValue={initialValue}
+                loading={isLoading}
+                onMonthChange={(d) => handleMonthChange(d)}
+                renderLoading={() => <DayCalendarSkeleton />}
+                slots={{
+                  day: ServerDay,
+                }}
+                slotProps={{
+                  day: {
+                    highlightedDays,
+                  } as any,
+                }}
+                onChange={(e) => console.log(e)}
+              />
+            </LocalizationProvider>
+          </>
+        ) : (
+          "Loading"
+        )}
       </Box>
     </Modal>
   );
@@ -134,5 +235,21 @@ const modalCalendarBox = css`
     margin: 0 auto;
     margin-bottom: 20px;
     display: block;
+  }
+
+  div {
+    max-height: unset;
+    height: unset;
+  }
+`;
+
+const badgeIcon = css`
+  padding: 2px;
+  background-color: #e9546b;
+  border-radius: 50%;
+
+  svg {
+    width: 12px;
+    height: 12px;
   }
 `;
