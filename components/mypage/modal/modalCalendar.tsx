@@ -75,6 +75,7 @@ export const ModalCalendar = ({ open, setOpen }: Props) => {
       : getCurrentYearMonth()
   );
   console.log("data", data);
+
   const requestAbortController = useRef<AbortController | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [highlightedDays, setHighlightedDays] = useState<number[]>([]);
