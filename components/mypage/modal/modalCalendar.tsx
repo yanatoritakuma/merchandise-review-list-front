@@ -13,6 +13,7 @@ import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { DayCalendarSkeleton } from "@mui/x-date-pickers/DayCalendarSkeleton";
 import { ButtonBox } from "@/components/elements/buttonBox";
 import { useQueryUserProductTimeLimitYearMonth } from "@/hooks/product/useQueryUserProductTimeLimitYearMonth";
+import { convertDateString } from "@/utils/convertDate";
 
 type Props = {
   open: boolean;
@@ -74,7 +75,6 @@ export const ModalCalendar = ({ open, setOpen }: Props) => {
       ? currentYearMonth
       : getCurrentYearMonth()
   );
-  console.log("data", data);
 
   const requestAbortController = useRef<AbortController | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -207,7 +207,14 @@ export const ModalCalendar = ({ open, setOpen }: Props) => {
                     highlightedDays,
                   } as any,
                 }}
-                onChange={(e) => console.log(e)}
+                onChange={(e) =>
+                  router.push(
+                    `/mypage/calendar-registered-date?date=${convertDateString(
+                      e.$d
+                    )}`
+                  )
+                }
+                // onChange={(e) => console.log(e.$d)}
               />
             </LocalizationProvider>
           </>

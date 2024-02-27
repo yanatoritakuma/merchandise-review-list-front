@@ -1,18 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { css } from "@emotion/react";
+import { useRouter } from "next/router";
 import { ItemCart } from "@/components/mypage/itemCart";
 import { useQueryUserProductTimeLimitDate } from "@/hooks/product/useQueryUserProductTimeLimitDate";
 import { PaginationBox } from "@/components/common/paginationBox";
 import { countPages } from "@/utils/countPages";
+import { convertDateText, convertDateUtc } from "@/utils/convertDate";
 
 const Index = () => {
+  const router = useRouter();
+  const { date } = router.query;
   const [currentPage, setCurrentPage] = useState(1);
   const { data: productDate, refetch } = useQueryUserProductTimeLimitDate(
     currentPage,
     10,
     // 登録した時の時間とDB保存の時間差があるので正しいデータ取得できない
-    20240227
+    convertDateUtc(String(date))
   );
+
   const initialMoreTextFlags = Array.from({ length: 20 }, () => false);
   //   todo:共通化したい
   const [moreTextFlag, setMoreTextFlag] = useState(initialMoreTextFlags);
@@ -20,7 +25,7 @@ const Index = () => {
   return (
     <main css={productTimeLimitBox}>
       <div className="productTimeLimitBox__box">
-        <h2>？？？？年？月？日までの期日商品一覧</h2>
+        <h2>{convertDateText(Number(date))}までの期日商品一覧</h2>
         {productDate?.products?.map((product, index) => (
           <ItemCart
             key={index}
