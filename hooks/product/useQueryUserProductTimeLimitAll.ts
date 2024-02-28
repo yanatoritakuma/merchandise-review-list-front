@@ -5,11 +5,12 @@ import { TResProduct } from "@/types/product";
 
 export const useQueryUserProductTimeLimitAll = (
   page: number,
-  pageSize: number
+  pageSize: number,
+  sort: boolean
 ) => {
   const getProductTimeLimit = async () => {
     const { data } = await axios.get<TResProduct>(
-      `${process.env.NEXT_PUBLIC_API_URL}/product/timeLimitAll?page=${page}&pageSize=${pageSize}`
+      `${process.env.NEXT_PUBLIC_API_URL}/product/timeLimitAll?page=${page}&pageSize=${pageSize}&sort=${sort}`
     );
     return data;
   };

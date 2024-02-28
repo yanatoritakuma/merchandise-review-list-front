@@ -14,13 +14,22 @@ const Index = () => {
   const { data: productDate, refetch } = useQueryUserProductTimeLimitDate(
     currentPage,
     10,
-    // 登録した時の時間とDB保存の時間差があるので正しいデータ取得できない
     convertDateUtc(String(date))
   );
 
   const initialMoreTextFlags = Array.from({ length: 20 }, () => false);
   //   todo:共通化したい
   const [moreTextFlag, setMoreTextFlag] = useState(initialMoreTextFlags);
+
+  useEffect(() => {
+    refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
+
+  useEffect(() => {
+    refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [convertDateUtc(String(date))]);
 
   return (
     <main css={productTimeLimitBox}>

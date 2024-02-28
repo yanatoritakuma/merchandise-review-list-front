@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { css } from "@emotion/react";
 import { ItemCart } from "@/components/mypage/itemCart";
 import { useQueryUserProductTimeLimitAll } from "@/hooks/product/useQueryUserProductTimeLimitAll";
@@ -9,11 +9,17 @@ const Index = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const { data: productTimeLimit, refetch } = useQueryUserProductTimeLimitAll(
     currentPage,
-    10
+    10,
+    true
   );
   const initialMoreTextFlags = Array.from({ length: 20 }, () => false);
   //   todo:共通化したい
   const [moreTextFlag, setMoreTextFlag] = useState(initialMoreTextFlags);
+
+  useEffect(() => {
+    refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
 
   return (
     <main css={productTimeLimitBox}>

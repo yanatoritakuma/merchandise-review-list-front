@@ -16,7 +16,12 @@ import { ModalCalendar } from "@/components/mypage/modal/modalCalendar";
 
 export const Profile = () => {
   const { data: user, isLoading } = useQueryUser();
-  const { data: productTimeLimit } = useQueryUserProductTimeLimitAll(1, 10);
+  // todo:期日設定済みの商品全てを取得して、Badgeに個数を表示しているが期日3日前の商品数だけでもよいかも
+  const { data: productTimeLimit } = useQueryUserProductTimeLimitAll(
+    1,
+    10,
+    true
+  );
   const [modalCalendarFlag, setModalCalendarFlag] = useState(false);
 
   const [selectTab, setSelectTab] = useState(0);

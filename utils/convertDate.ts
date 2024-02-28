@@ -23,6 +23,12 @@ export const convertDateUtc = (resultString: string) => {
   const getDay = parseInt(resultString.slice(6, 8), 10);
   //   新しい Date オブジェクトを作成
   const dateNewObject = new Date(getYear, getMonth, getDay);
+
+  // バリデーション: 有効な日付でない場合、0を返す
+  if (isNaN(dateNewObject.getTime())) {
+    return 0;
+  }
+
   //   UTC 時間に変換された Date オブジェクト
   const dateUtc = dateNewObject.toISOString();
   //   文字列を Date オブジェクトに変換
@@ -34,6 +40,8 @@ export const convertDateUtc = (resultString: string) => {
   // 年月日を組み合わせて数値に変換
   const numericDate = parseInt(`${year}${month}${day}`, 10);
   return numericDate;
+
+  return 0;
 };
 
 // 年月日を文字列に変換

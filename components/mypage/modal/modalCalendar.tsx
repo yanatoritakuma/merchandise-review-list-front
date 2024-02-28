@@ -6,6 +6,7 @@ import Badge from "@mui/material/Badge";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
+import { CircularProgress } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { PickersDay, PickersDayProps } from "@mui/x-date-pickers/PickersDay";
@@ -198,6 +199,7 @@ export const ModalCalendar = ({ open, setOpen }: Props) => {
                 defaultValue={initialValue}
                 loading={isLoading}
                 onMonthChange={(d) => handleMonthChange(d)}
+                onYearChange={(d) => handleMonthChange(d)}
                 renderLoading={() => <DayCalendarSkeleton />}
                 slots={{
                   day: ServerDay,
@@ -207,19 +209,21 @@ export const ModalCalendar = ({ open, setOpen }: Props) => {
                     highlightedDays,
                   } as any,
                 }}
-                onChange={(e) =>
+                onChange={(e, selectionState) =>
+                  selectionState === "finish" &&
                   router.push(
                     `/mypage/calendar-registered-date?date=${convertDateString(
                       e.$d
                     )}`
                   )
                 }
-                // onChange={(e) => console.log(e.$d)}
               />
             </LocalizationProvider>
           </>
         ) : (
-          "Loading"
+          <span className="resultRakutenBox__cartIsLoading">
+            <CircularProgress />
+          </span>
         )}
       </Box>
     </Modal>
@@ -246,7 +250,7 @@ const modalCalendarBox = css`
   }
 
   div {
-    max-height: unset;
+    max-height: 700px;
     height: unset;
   }
 `;
