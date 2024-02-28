@@ -1,16 +1,18 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { css } from "@emotion/react";
 import { ItemCart } from "@/components/mypage/itemCart";
 import { useQueryUserProductTimeLimitAll } from "@/hooks/product/useQueryUserProductTimeLimitAll";
 import { PaginationBox } from "@/components/common/paginationBox";
 import { countPages } from "@/utils/countPages";
+import { RadioBox } from "@/components/elements/radioBox";
 
 const Index = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [timeLimitSort, setTimeLimitSort] = useState("new");
   const { data: productTimeLimit, refetch } = useQueryUserProductTimeLimitAll(
     currentPage,
     10,
-    true
+    timeLimitSort === "new" ? true : false
   );
   const initialMoreTextFlags = Array.from({ length: 20 }, () => false);
   //   todo:共通化したい
@@ -19,12 +21,20 @@ const Index = () => {
   useEffect(() => {
     refetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage]);
+  }, [currentPage, timeLimitSort]);
 
   return (
     <main css={productTimeLimitBox}>
       <div className="productTimeLimitBox__box">
-        <h2>購入期日3日以内の商品</h2>
+        <h2>購入期日設定済みの商品</h2>
+        <div>
+          <RadioBox
+            labels={["近い期日順", "遠い期日順"]}
+            radioValues={["new", "old"]}
+            value={timeLimitSort}
+            onChange={(e) => setTimeLimitSort(e.target.value)}
+          />
+        </div>
         {productTimeLimit?.products?.map((product, index) => (
           <ItemCart
             key={index}
