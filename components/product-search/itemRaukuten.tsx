@@ -72,7 +72,7 @@ export const ItemRaukuten = memo(({ item, index }: TItem) => {
   };
 
   const imgResizing = (imgUrl: string) => {
-    return imgUrl.replace("128x128", "600x600");
+    return imgUrl?.replace("128x128", "600x600");
   };
 
   return (

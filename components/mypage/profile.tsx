@@ -1,17 +1,28 @@
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import Image from "next/image";
 import { css } from "@emotion/react";
 import { useQueryUser } from "@/hooks/user/useQueryUser";
 import { ProfileSkeleton } from "@/components/mypage/profileSkeleton";
 import NoImage from "@/images/noimage-user.png";
+import Badge from "@mui/material/Badge";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { UserEditMenu } from "@/components/mypage/userEditMenu";
 import { TabsBox } from "@/components/elements/tabsBox";
 import { Cart } from "@/components/mypage/cart";
 import { ReviewPost } from "@/components/mypage/reviewPost";
 import { LikePost } from "@/components/mypage/likePost";
+import { useQueryUserProductTimeLimitAll } from "@/hooks/product/useQueryUserProductTimeLimitAll";
+import { ModalCalendar } from "@/components/mypage/modal/modalCalendar";
 
 export const Profile = () => {
   const { data: user, isLoading } = useQueryUser();
+  // todo:期日設定済みの商品全てを取得して、Badgeに個数を表示しているが期日3日前の商品数だけでもよいかも
+  const { data: productTimeLimit } = useQueryUserProductTimeLimitAll(
+    1,
+    10,
+    true
+  );
+  const [modalCalendarFlag, setModalCalendarFlag] = useState(false);
 
   const [selectTab, setSelectTab] = useState(0);
 
@@ -29,7 +40,6 @@ export const Profile = () => {
     switch (tab) {
       case 0:
         return <Cart />;
-
       case 1:
         return <ReviewPost />;
       case 2:
@@ -66,7 +76,19 @@ export const Profile = () => {
             <h4>{user?.name}</h4>
             <div className="profile__editIcon">
               <UserEditMenu />
+              <span onClick={() => setModalCalendarFlag(true)}>
+                <Badge
+                  badgeContent={productTimeLimit?.totalPageCount}
+                  color="error"
+                >
+                  <CalendarMonthIcon className="profile__calendarIcon" />
+                </Badge>
+              </span>
             </div>
+            <ModalCalendar
+              open={modalCalendarFlag}
+              setOpen={setModalCalendarFlag}
+            />
           </div>
           <span className="profile__useDate">
             {formatDate(user?.created_at)}から利用しています
@@ -121,6 +143,14 @@ const profile = css`
   .profile__editIcon {
     position: absolute;
     right: -14px;
+    display: flex;
+    align-items: center;
+  }
+
+  .profile__calendarIcon {
+    width: 34px;
+    height: 34px;
+    cursor: pointer;
   }
 `;
 

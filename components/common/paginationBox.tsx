@@ -13,10 +13,12 @@ type Props = {
 
 export const PaginationBox = memo(
   ({ count, currentPage, setCurrentPage, targetScroll, noScroll }: Props) => {
-    const [beforeCurrentPage, _] = useState(currentPage);
-    console.log("noScroll", noScroll);
+    const [beforeCurrentPage, setBeforeCurrentPage] = useState(currentPage);
+
     useEffect(() => {
       if (noScroll === undefined) {
+        setBeforeCurrentPage(currentPage);
+
         if (currentPage !== beforeCurrentPage) {
           if (!targetScroll) {
             scroll.scrollToTop();
