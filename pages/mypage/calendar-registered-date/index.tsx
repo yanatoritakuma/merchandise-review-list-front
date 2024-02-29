@@ -5,7 +5,7 @@ import { ItemCart } from "@/components/mypage/itemCart";
 import { useQueryUserProductTimeLimitDate } from "@/hooks/product/useQueryUserProductTimeLimitDate";
 import { PaginationBox } from "@/components/common/paginationBox";
 import { countPages } from "@/utils/countPages";
-import { convertDateText, convertDateUtc } from "@/utils/convertDate";
+import { convertDateText } from "@/utils/convertDate";
 
 const Index = () => {
   const router = useRouter();
@@ -14,7 +14,7 @@ const Index = () => {
   const { data: productDate, refetch } = useQueryUserProductTimeLimitDate(
     currentPage,
     10,
-    convertDateUtc(String(date))
+    Number(date)
   );
 
   const initialMoreTextFlags = Array.from({ length: 20 }, () => false);
@@ -29,7 +29,7 @@ const Index = () => {
   useEffect(() => {
     refetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [convertDateUtc(String(date))]);
+  }, [date]);
 
   return (
     <main css={productTimeLimitBox}>

@@ -96,6 +96,8 @@ export const ItemCart = memo(
     }, [timeLimitUpdateFalg]);
 
     const timeLimitDay = new Date(product.timeLimit);
+    // 日本時間に戻すと1日プラスなので-1日する
+    timeLimitDay.setDate(timeLimitDay.getDate() - 1);
     const currentDate = new Date();
 
     const timeDifference: number = Math.floor(

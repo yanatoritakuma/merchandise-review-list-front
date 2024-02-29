@@ -18,15 +18,17 @@ type Props = {
 
 export const ModalProductTimeLimit = memo(
   ({ open, setOpen, timeLimit, productId, setTimeLimitUpdateFalg }: Props) => {
+    // Dayjs型だと1日プラスなので-1日する
+    const modifiedTimeLimit = timeLimit.subtract(1, "day");
     const cutoffDate: Dayjs = dayjs("1990-01-01");
-    const pastDate = timeLimit.isBefore(cutoffDate);
-    const [date, setDate] = useState<Dayjs | null>(pastDate ? null : timeLimit);
+    const pastDate = modifiedTimeLimit.isBefore(cutoffDate);
+    const [date, setDate] = useState<Dayjs | null>(
+      pastDate ? null : modifiedTimeLimit
+    );
     const { updateProductMutation } = useMutateProduct();
     const { timeLimitRegisterValidation } = TimeLimitValidation();
 
     const onClickUpdateProduct = () => {
-      // console.log("date", date);
-      // const japanTime = date.tz("Asia/Tokyo");
       const reqProduct = {
         productId: productId,
         timeLimit: date,

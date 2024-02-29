@@ -116,6 +116,11 @@ export const ModalCalendar = ({ open, setOpen }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
+  useEffect(() => {
+    setCurrentYearMonth(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
   // 年月日のフォーマット形成
   const convertYearMonthToNumber = (d: string) => {
     const regex = /(\b\w{3}\b) (\b\w{3}\b) (\d{2}) (\d{4})/;
