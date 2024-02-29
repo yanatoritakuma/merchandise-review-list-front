@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { MessageContext } from "@/provider/messageProvider";
 import validator from "validator";
+import dayjs, { Dayjs } from "dayjs";
 
 export const Validation = () => {
   const { message, setMessage } = useContext(MessageContext);
@@ -156,6 +157,56 @@ export const Validation = () => {
     }
   };
 
+  // 過去の日付かチェック
+  const pastDate = (date: Dayjs | null, messages: string) => {
+    if (date === null) {
+      setMessage({
+        ...message,
+        text: `${messages}を入力してください。`,
+        type: "error",
+      });
+      return true;
+    }
+
+    // 現在の日時を取得
+    const currentDate = dayjs();
+
+    if (date.isBefore(currentDate)) {
+      setMessage({
+        ...message,
+        text: `${messages}は過去の日付を設定できません。`,
+        type: "error",
+      });
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  // 2099年より過去の日付かチェック
+  const beforeDate = (date: Dayjs | null, messages: string) => {
+    if (date === null) {
+      setMessage({
+        ...message,
+        text: `${messages}を入力してください。`,
+        type: "error",
+      });
+      return true;
+    }
+
+    // 指定された日付が2099年より過去の場合はエラー
+    if (date.isAfter(dayjs("2099-12-31"))) {
+      setMessage({
+        ...message,
+        text: `${messages}は2099年より未来の日付を設定できません。`,
+        type: "error",
+      });
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   return {
     required,
     number,
@@ -166,5 +217,7 @@ export const Validation = () => {
     japaneseProhibited,
     below,
     emailFormat,
+    pastDate,
+    beforeDate,
   };
 };

@@ -6,6 +6,7 @@ import Modal from "@mui/material/Modal";
 import { DatePickerBox } from "@/components/elements/datePickerBox";
 import { ButtonBox } from "@/components/elements/buttonBox";
 import { useMutateProduct } from "@/hooks/product/useMutateProduct";
+import { TimeLimitValidation } from "@/utils/validations/timeLimitValidation";
 
 type Props = {
   open: boolean;
@@ -21,8 +22,11 @@ export const ModalProductTimeLimit = memo(
     const pastDate = timeLimit.isBefore(cutoffDate);
     const [date, setDate] = useState<Dayjs | null>(pastDate ? null : timeLimit);
     const { updateProductMutation } = useMutateProduct();
+    const { timeLimitRegisterValidation } = TimeLimitValidation();
 
     const onClickUpdateProduct = () => {
+      // console.log("date", date);
+      // const japanTime = date.tz("Asia/Tokyo");
       const reqProduct = {
         productId: productId,
         timeLimit: date,
@@ -56,7 +60,9 @@ export const ModalProductTimeLimit = memo(
             onChange={(newValue) => setDate(newValue)}
           />
           <ButtonBox
-            onClick={() => onClickUpdateProduct()}
+            onClick={() =>
+              timeLimitRegisterValidation(date) && onClickUpdateProduct()
+            }
             disabled={date === null}
           >
             登録
