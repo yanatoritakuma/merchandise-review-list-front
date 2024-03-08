@@ -12,6 +12,9 @@ import { TUser } from "@/types/user";
 import { ReviewPostContext } from "@/provider/reviewPostProvider";
 import { DeleteImgStorage } from "@/utils/deleteImgStorage";
 import { BackdropContext } from "@/provider/backdropProvider";
+import { SelectBox } from "@/components/elements/selectBox";
+import { SelectChangeEvent } from "@mui/material";
+import { categoryMenuItem } from "@/constants/categoryMenuItem";
 
 type Props = {
   type: "new" | "edit";
@@ -172,7 +175,7 @@ export const ReviewForm = memo(({ type, setOpen, user, review }: Props) => {
       </div>
 
       <div css={textBox}>
-        <TextBox
+        <SelectBox
           label="カテゴリー"
           value={postState.category}
           onChange={(e) =>
@@ -181,7 +184,7 @@ export const ReviewForm = memo(({ type, setOpen, user, review }: Props) => {
               category: e.target.value,
             })
           }
-          fullWidth
+          menuItem={categoryMenuItem}
         />
       </div>
 

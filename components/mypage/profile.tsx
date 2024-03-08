@@ -13,6 +13,7 @@ import { ReviewPost } from "@/components/mypage/reviewPost";
 import { LikePost } from "@/components/mypage/likePost";
 import { useQueryUserProductTimeLimitAll } from "@/hooks/product/useQueryUserProductTimeLimitAll";
 import { ModalCalendar } from "@/components/mypage/modal/modalCalendar";
+import SavingsIcon from "@mui/icons-material/Savings";
 
 export const Profile = () => {
   const { data: user, isLoading } = useQueryUser();
@@ -84,6 +85,9 @@ export const Profile = () => {
                   <CalendarMonthIcon className="profile__calendarIcon" />
                 </Badge>
               </span>
+              <span onClick={() => alert("a")}>
+                <SavingsIcon className="profile__savingsIcon" />
+              </span>
             </div>
             <ModalCalendar
               open={modalCalendarFlag}
@@ -145,9 +149,24 @@ const profile = css`
     right: -14px;
     display: flex;
     align-items: center;
+
+    @media (max-width: 425px) {
+      padding: 0 8px;
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
   }
 
   .profile__calendarIcon {
+    width: 34px;
+    height: 34px;
+    cursor: pointer;
+  }
+
+  .profile__savingsIcon {
+    margin-left: 12px;
     width: 34px;
     height: 34px;
     cursor: pointer;
