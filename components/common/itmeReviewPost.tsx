@@ -77,6 +77,7 @@ export const ItmeReviewPost = memo(({ reviewPost }: Props) => {
       category: selectPost.category,
       image: selectPost.image,
       review: selectPost.review,
+      price: 0,
     });
   };
 
