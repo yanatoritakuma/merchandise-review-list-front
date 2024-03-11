@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import { css } from "@emotion/react";
 import { SelectBox } from "@/components/elements/selectBox";
 import { purchaseQuantityItem } from "@/constants/purchaseQuantityItem";
@@ -7,10 +7,16 @@ type Props = {
   price: number;
   quantity: string;
   setQuantity: React.Dispatch<React.SetStateAction<string>>;
+  setTotalPrice: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export const PurchaseQuantityBox = memo(
-  ({ price, quantity, setQuantity }: Props) => {
+  ({ price, quantity, setQuantity, setTotalPrice }: Props) => {
+    useEffect(() => {
+      setTotalPrice(price * Number(quantity));
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [quantity]);
+
     return (
       <div css={purchaseQuantityBox}>
         <div className="purchaseQuantityBox__quantityBox">

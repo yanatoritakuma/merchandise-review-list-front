@@ -16,6 +16,7 @@ import { SelectBox } from "@/components/elements/selectBox";
 import { categoryMenuItem } from "@/constants/categoryMenuItem";
 import { CheckBox } from "@/components/elements/checkbox";
 import { PurchaseQuantityBox } from "@/components/common/purchaseQuantityBox";
+import { useMutateMoneyManagement } from "@/hooks/money-management/useMutateMoneyManagement";
 
 type Props = {
   type: "new" | "edit";
@@ -30,6 +31,7 @@ export const ReviewForm = memo(({ type, setOpen, user, review }: Props) => {
   const { setBackdropFlag } = useContext(BackdropContext);
   const { reviewPostMutation, updateReviewPostMutation } =
     useMutateReviewPost();
+  const { moneyManagementMutation } = useMutateMoneyManagement();
   const { onClickRegistration } = ImageRegistration();
   const { onChangeImageHandler, photoUrl, setPhotoUrl } = useChangeImage();
   const { deleteImg } = DeleteImgStorage();
@@ -43,6 +45,7 @@ export const ReviewForm = memo(({ type, setOpen, user, review }: Props) => {
 
   const [management, setManagement] = useState(false);
   const [quantity, setQuantity] = useState("1");
+  const [totalPrice, setTotalPrice] = useState(0);
 
   const [previewUrl, setPreviewUrl] = useState("");
   const { reviewPostValid } = ReviewPostValidation();
@@ -102,6 +105,15 @@ export const ReviewForm = memo(({ type, setOpen, user, review }: Props) => {
         image: file,
         review: reviewState,
       });
+      if (review && management) {
+        await moneyManagementMutation.mutateAsync({
+          title: postState.title,
+          category: postState.category,
+          quantity: Number(quantity),
+          unit_price: postState.price,
+          total_price: totalPrice,
+        });
+      }
       setPostState({
         title: "",
         text: "",
@@ -213,6 +225,7 @@ export const ReviewForm = memo(({ type, setOpen, user, review }: Props) => {
           price={postState.price}
           quantity={quantity}
           setQuantity={setQuantity}
+          setTotalPrice={setTotalPrice}
         />
       )}
 
