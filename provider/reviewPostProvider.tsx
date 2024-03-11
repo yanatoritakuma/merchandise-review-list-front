@@ -8,6 +8,7 @@ type TReviewPostGlobal = {
     category: string;
     image: string;
     review: number;
+    price: number;
   };
   setReviewPostGlobal: React.Dispatch<
     React.SetStateAction<{
@@ -17,6 +18,7 @@ type TReviewPostGlobal = {
       category: string;
       image: string;
       review: number;
+      price: number;
     }>
   >;
   reviewPostProcess: boolean;
@@ -31,6 +33,7 @@ export const ReviewPostContext = createContext<TReviewPostGlobal>({
     category: "",
     image: "",
     review: 0,
+    price: 0,
   },
   setReviewPostGlobal: () => {},
   reviewPostProcess: false,
@@ -49,6 +52,7 @@ export const ReviewPostProvider = ({ children }: Props) => {
     category: "",
     image: "",
     review: 0,
+    price: 0,
   });
 
   const [reviewPostProcess, setReviewPostProcess] = useState(false);

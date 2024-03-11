@@ -13,8 +13,9 @@ import { ReviewPostContext } from "@/provider/reviewPostProvider";
 import { DeleteImgStorage } from "@/utils/deleteImgStorage";
 import { BackdropContext } from "@/provider/backdropProvider";
 import { SelectBox } from "@/components/elements/selectBox";
-import { SelectChangeEvent } from "@mui/material";
 import { categoryMenuItem } from "@/constants/categoryMenuItem";
+import { CheckBox } from "@/components/elements/checkbox";
+import { PurchaseQuantityBox } from "@/components/common/purchaseQuantityBox";
 
 type Props = {
   type: "new" | "edit";
@@ -36,8 +37,12 @@ export const ReviewForm = memo(({ type, setOpen, user, review }: Props) => {
     title: "",
     text: "",
     category: "",
+    price: 0,
   });
   const [reviewState, setReviewState] = useState(0.5);
+
+  const [management, setManagement] = useState(false);
+  const [quantity, setQuantity] = useState("1");
 
   const [previewUrl, setPreviewUrl] = useState("");
   const { reviewPostValid } = ReviewPostValidation();
@@ -67,6 +72,7 @@ export const ReviewForm = memo(({ type, setOpen, user, review }: Props) => {
         title: reviewPostGlobal.title,
         text: reviewPostGlobal.text,
         category: reviewPostGlobal.category,
+        price: 0,
       });
       setPreviewUrl(reviewPostGlobal.image);
       setReviewState(reviewPostGlobal.review);
@@ -80,6 +86,7 @@ export const ReviewForm = memo(({ type, setOpen, user, review }: Props) => {
         title: reviewPostGlobal.title,
         text: "",
         category: "",
+        price: reviewPostGlobal.price,
       });
       setPreviewUrl(reviewPostGlobal.image);
     }
@@ -99,6 +106,7 @@ export const ReviewForm = memo(({ type, setOpen, user, review }: Props) => {
         title: "",
         text: "",
         category: "",
+        price: 0,
       });
       setReviewState(0.5);
     } catch (err) {
@@ -191,6 +199,22 @@ export const ReviewForm = memo(({ type, setOpen, user, review }: Props) => {
       <div>
         <RatingBox reviewState={reviewState} setReviewState={setReviewState} />
       </div>
+
+      {review && (
+        <CheckBox
+          label="金額管理に追加する"
+          check={management}
+          onChange={(e) => setManagement(e.target.checked)}
+        />
+      )}
+
+      {management && (
+        <PurchaseQuantityBox
+          price={postState.price}
+          quantity={quantity}
+          setQuantity={setQuantity}
+        />
+      )}
 
       <ButtonBox onChange={onChangeImageHandler} upload />
 
