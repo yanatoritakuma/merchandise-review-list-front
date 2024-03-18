@@ -8,6 +8,7 @@ export const useQueryGetMyMoneyManagements = (
   yearFlag: boolean
 ) => {
   const getProductTimeLimit = async () => {
+    // await new Promise((resolve) => setTimeout(resolve, 3000));
     const { data } = await axios.get<TResMoneyManagement>(
       `${process.env.NEXT_PUBLIC_API_URL}/moneyManagement?yearMonth=${yearMonth}&yearFlag=${yearFlag}`
     );

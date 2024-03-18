@@ -7,15 +7,21 @@ export type TReqMoneyManagementMutation = {
 };
 
 export type TResMoneyManagement = {
-  food: TMoneyManagements[];
-  drink: TMoneyManagements[];
-  book: TMoneyManagements[];
-  fashion: TMoneyManagements[];
-  furniture: TMoneyManagements[];
-  gamesToys: TMoneyManagements[];
-  beauty: TMoneyManagements[];
-  everyDayItems: TMoneyManagements[];
-  other: TMoneyManagements[];
+  food: TMoneyManagementItem;
+  drink: TMoneyManagementItem;
+  book: TMoneyManagementItem;
+  fashion: TMoneyManagementItem;
+  furniture: TMoneyManagementItem;
+  gamesToys: TMoneyManagementItem;
+  beauty: TMoneyManagementItem;
+  everyDayItems: TMoneyManagementItem;
+  other: TMoneyManagementItem;
+  totalPrice: number;
+};
+
+type TMoneyManagementItem = {
+  items: TMoneyManagements[];
+  itemTotalPrice: number;
 };
 
 type TMoneyManagements = {
