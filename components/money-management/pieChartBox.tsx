@@ -30,7 +30,6 @@ type TDataObject = {
 export const PieChartBox = memo(
   ({ data, colors, setPieChartCategory }: TData) => {
     useEffect(() => {
-      console.log(data);
       if (data.map((v) => !Number.isNaN(v.value))) {
         const newLabels = data.map((entry) => {
           const percent =
@@ -39,6 +38,7 @@ export const PieChartBox = memo(
         });
         setPieChartCategory(newLabels);
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
