@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { css } from "@emotion/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { TUser } from "@/types/user";
@@ -6,24 +6,28 @@ import { useQueryGetMyMoneyManagements } from "@/hooks/money-management/useQuery
 import { PieChartBox } from "@/components/money-management/pieChartBox";
 import CircularProgress from "@mui/material/CircularProgress";
 import { PricesByCategoryBox } from "@/components/money-management/pricesByCategoryBox";
+import { colorsCategory } from "@/constants/categoryMenuItem";
+import { DateSelectBox } from "@/components/common/dateSelectBox";
 
 const Index = () => {
-  const { data, isLoading } = useQueryGetMyMoneyManagements(202403, false);
   const queryClient = useQueryClient();
   const user: TUser | undefined = queryClient.getQueryData(["user"]);
   const [pieChartCategory, setPieChartCategory] = useState([""]);
+  const [currentYearMonth, setCurrentYearMonth] = useState<Date>(new Date());
 
-  const colorsCategory = [
-    "#fe4c00", // food
-    "#4357f2", // drink
-    "#bb5520", // book
-    "#f8e113", // fashion
-    "#38b48b", // furniture
-    "#d4dcda", // gamesToys
-    "#e198b4", // beauty
-    "#1e50a2", // everyDayItems
-    "#432f2f", // other
-  ];
+  const date = new Date(currentYearMonth);
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const yearMonth = Number(`${year}${String(month).padStart(2, "0")}`);
+
+  const { data, isLoading, refetch, isFetching } =
+    useQueryGetMyMoneyManagements(yearMonth, false);
+
+  useEffect(() => {
+    refetch();
+    setPieChartCategory([""]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [yearMonth]);
 
   const pieChartData = [
     { name: "food", value: Number(data?.food.itemTotalPrice) },
@@ -43,8 +47,12 @@ const Index = () => {
   return (
     <main css={moneyManagementBox}>
       <h2>お金の管理</h2>
+      <DateSelectBox
+        currentYearMonth={currentYearMonth}
+        setCurrentYearMonth={setCurrentYearMonth}
+      />
       {user !== undefined ? (
-        !isLoading ? (
+        !isLoading && !isFetching ? (
           <>
             <div className="moneyManagementBox__TopBox">
               <div className="moneyManagementBox__pieChartBox">
@@ -69,13 +77,18 @@ const Index = () => {
             <h4 className="moneyManagementBox__totalPrice">
               合計金額: {data?.totalPrice.toLocaleString()}円
             </h4>
-            <PricesByCategoryBox pieChartCategory={pieChartCategory} />
+            <PricesByCategoryBox
+              pieChartCategory={pieChartCategory}
+              moneyManagements={data}
+            />
           </>
         ) : (
-          <CircularProgress
-            color="inherit"
-            style={{ width: "18px", height: "18px" }}
-          />
+          <div className="moneyManagementBox__progressBox">
+            <CircularProgress
+              color="inherit"
+              style={{ width: "30px", height: "30px" }}
+            />
+          </div>
         )
       ) : (
         <h2>ログインしていません</h2>
@@ -178,5 +191,12 @@ const moneyManagementBox = css`
         }
       }
     }
+  }
+
+  .moneyManagementBox__progressBox {
+    height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 `;

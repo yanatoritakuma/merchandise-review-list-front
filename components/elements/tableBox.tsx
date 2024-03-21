@@ -1,4 +1,5 @@
 import { Fragment, useState } from "react";
+import { css } from "@emotion/react";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
@@ -17,11 +18,12 @@ type RowData = {
   [key: string]: any;
 };
 
-type Props<T, U> = {
+type Props<T> = {
   tableHeads: string[];
-  tableDatas: T[];
+  tableDatas: T[]; // 詳細を表示する場合は、オブジェクトにdetails[]を追加する
   tableDetailHeads?: string[];
-  tableDetails?: U[];
+  tableDetails?: boolean;
+  colors?: string[];
 };
 
 export const TableBox = <T extends RowData, U extends RowData>({
@@ -29,8 +31,17 @@ export const TableBox = <T extends RowData, U extends RowData>({
   tableDatas,
   tableDetailHeads,
   tableDetails,
-}: Props<T, U>) => {
-  const Row = ({ row }: { row: T }) => {
+  colors,
+}: Props<T>) => {
+  const Row = ({
+    row,
+    details,
+    color,
+  }: {
+    row: T;
+    details: U[];
+    color?: string;
+  }) => {
     const [open, setOpen] = useState(false);
 
     return (
@@ -48,8 +59,12 @@ export const TableBox = <T extends RowData, U extends RowData>({
             </TableCell>
           )}
           {Object.values(row).map((value, index) => (
-            <TableCell key={index} align={index !== 0 ? "right" : "center"}>
-              {value}
+            <TableCell
+              key={index}
+              align={index !== 0 ? "right" : "center"}
+              style={{ color: color && color }}
+            >
+              {typeof value !== "object" && value?.toLocaleString()}
             </TableCell>
           ))}
         </TableRow>
@@ -64,7 +79,11 @@ export const TableBox = <T extends RowData, U extends RowData>({
                   <Typography variant="h6" gutterBottom component="div">
                     詳細
                   </Typography>
-                  <Table size="small" aria-label="purchases">
+                  <Table
+                    size="small"
+                    aria-label="purchases"
+                    css={tableDetailsBox}
+                  >
                     <TableHead>
                       <TableRow>
                         {tableDetailHeads?.map((head, index) => (
@@ -75,28 +94,15 @@ export const TableBox = <T extends RowData, U extends RowData>({
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {tableDetails?.map(
-                        (detail, index) =>
-                          detail.category === row.category && (
-                            <TableRow key={index}>
-                              <TableCell align="center">
-                                {detail.date}
-                              </TableCell>
-                              <TableCell align="center">
-                                {detail.name}
-                              </TableCell>
-                              <TableCell align="center">
-                                {detail.unitPrice}
-                              </TableCell>
-                              <TableCell align="center">
-                                {detail.quantity}
-                              </TableCell>
-                              <TableCell align="center">
-                                {detail.totalPrice}
-                              </TableCell>
-                            </TableRow>
-                          )
-                      )}
+                      {details?.map((detail, index) => (
+                        <TableRow key={index}>
+                          {Object.values(detail).map((value, detailInd) => (
+                            <TableCell key={detailInd} align="center">
+                              {value?.toLocaleString()}
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      ))}
                     </TableBody>
                   </Table>
                 </Box>
@@ -123,7 +129,12 @@ export const TableBox = <T extends RowData, U extends RowData>({
         </TableHead>
         <TableBody>
           {tableDatas.map((data, index) => (
-            <Row key={index} row={data} />
+            <Row
+              key={index}
+              row={data}
+              details={data.details}
+              color={colors && colors[index]}
+            />
           ))}
         </TableBody>
       </Table>
@@ -132,3 +143,9 @@ export const TableBox = <T extends RowData, U extends RowData>({
 };
 
 TableBox.displayName = "TableBox";
+
+const tableDetailsBox = css`
+  overflow-x: auto;
+  width: 100%;
+  min-width: 500px;
+`;
