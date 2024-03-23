@@ -8,12 +8,14 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { PricesByCategoryBox } from "@/components/money-management/pricesByCategoryBox";
 import { colorsCategory } from "@/constants/categoryMenuItem";
 import { DateSelectBox } from "@/components/common/dateSelectBox";
+import { ButtonBox } from "@/components/elements/buttonBox";
 
 const Index = () => {
   const queryClient = useQueryClient();
   const user: TUser | undefined = queryClient.getQueryData(["user"]);
   const [pieChartCategory, setPieChartCategory] = useState([""]);
   const [currentYearMonth, setCurrentYearMonth] = useState<Date>(new Date());
+  const [tabSelected, setTabSelected] = useState(false);
 
   const date = new Date(currentYearMonth);
   const year = date.getFullYear();
@@ -21,13 +23,13 @@ const Index = () => {
   const yearMonth = Number(`${year}${String(month).padStart(2, "0")}`);
 
   const { data, isLoading, refetch, isFetching } =
-    useQueryGetMyMoneyManagements(yearMonth, false);
+    useQueryGetMyMoneyManagements(yearMonth, tabSelected);
 
   useEffect(() => {
     refetch();
     setPieChartCategory([""]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [yearMonth]);
+  }, [yearMonth, tabSelected]);
 
   const pieChartData = [
     { name: "food", value: Number(data?.food.itemTotalPrice) },
@@ -50,6 +52,8 @@ const Index = () => {
       <DateSelectBox
         currentYearMonth={currentYearMonth}
         setCurrentYearMonth={setCurrentYearMonth}
+        tabSelected={tabSelected}
+        setTabSelected={setTabSelected}
       />
       {user !== undefined ? (
         !isLoading && !isFetching ? (
@@ -77,6 +81,9 @@ const Index = () => {
             <h4 className="moneyManagementBox__totalPrice">
               合計金額: {data?.totalPrice.toLocaleString()}円
             </h4>
+            <div className="moneyManagementBox__addBox">
+              <ButtonBox>管理に追加</ButtonBox>
+            </div>
             <PricesByCategoryBox
               pieChartCategory={pieChartCategory}
               moneyManagements={data}
@@ -198,5 +205,11 @@ const moneyManagementBox = css`
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .moneyManagementBox__addBox {
+    margin: 8px 0;
+    padding: 0 12px;
+    text-align: end;
   }
 `;
