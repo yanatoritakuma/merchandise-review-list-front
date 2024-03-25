@@ -81,7 +81,9 @@ export const ModalInputManagement = memo(
       <Modal open={open} onClose={() => setOpen(false)}>
         <div css={modalInputManagementBox}>
           <div className="modalInputManagementBox__inputBox">
-            <CurrencyYuanIcon />
+            <span className="modalInputManagementBox__inputIconBox">
+              <CurrencyYuanIcon />
+            </span>
             <TextBox
               label="値段"
               value={inputManagement.unitPrice}
@@ -95,13 +97,17 @@ export const ModalInputManagement = memo(
             />
           </div>
           <div className="modalInputManagementBox__inputBox">
-            <CalendarMonthIcon />
+            <span className="modalInputManagementBox__inputIconBox">
+              <CalendarMonthIcon />
+            </span>
             <div className="modalInputManagementBox__dateBox">
               <DatePickerBox value={date} onChange={(e) => setDate(e)} />
             </div>
           </div>
           <div className="modalInputManagementBox__inputBox">
-            <RedeemIcon />
+            <span className="modalInputManagementBox__inputIconBox">
+              <RedeemIcon />
+            </span>
             <TextBox
               label="商品名"
               value={inputManagement.title}
@@ -115,7 +121,9 @@ export const ModalInputManagement = memo(
             />
           </div>
           <div className="modalInputManagementBox__inputBox">
-            <LocalOfferIcon />
+            <span className="modalInputManagementBox__inputIconBox">
+              <LocalOfferIcon />
+            </span>
             <SelectBox
               label="カテゴリー"
               value={inputManagement.category}
@@ -129,7 +137,9 @@ export const ModalInputManagement = memo(
             />
           </div>
           <div className="modalInputManagementBox__inputBox">
-            <ProductionQuantityLimitsIcon />
+            <span className="modalInputManagementBox__inputIconBox">
+              <ProductionQuantityLimitsIcon />
+            </span>
             <SelectBox
               label="個数"
               value={inputManagement.quantity}
@@ -184,7 +194,7 @@ const modalInputManagementBox = css`
     align-items: center;
     justify-content: space-between;
 
-    svg {
+    .modalInputManagementBox__inputIconBox {
       margin-right: 24px;
     }
   }

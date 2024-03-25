@@ -17,10 +17,11 @@ export const PricesByCategoryBox = memo(
         year: "numeric",
         month: "long",
         day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-        second: "numeric",
-        timeZone: "Asia/Tokyo",
+        // 時間帯は非表示
+        // hour: "numeric",
+        // minute: "numeric",
+        // second: "numeric",
+        // timeZone: "Asia/Tokyo",
       };
 
       const foodDetails =
@@ -48,67 +49,88 @@ export const PricesByCategoryBox = memo(
         }) ?? [];
 
       const bookDetails =
-        moneyManagements?.book.items?.map((item) => ({
-          date: item.updated_at,
-          name: item.title,
-          unitPrice: item.unit_price,
-          quantity: item.quantity,
-          totalPrice: item.total_price,
-        })) ?? [];
+        moneyManagements?.book.items?.map((item) => {
+          const date = new Date(item.updated_at);
+          return {
+            date: date.toLocaleString("ja-JP", options),
+            name: item.title,
+            unitPrice: item.unit_price,
+            quantity: item.quantity,
+            totalPrice: item.total_price,
+          };
+        }) ?? [];
 
       const fashionDetails =
-        moneyManagements?.fashion.items?.map((item) => ({
-          date: item.updated_at,
-          name: item.title,
-          unitPrice: item.unit_price,
-          quantity: item.quantity,
-          totalPrice: item.total_price,
-        })) ?? [];
+        moneyManagements?.fashion.items?.map((item) => {
+          const date = new Date(item.updated_at);
+          return {
+            date: date.toLocaleString("ja-JP", options),
+            name: item.title,
+            unitPrice: item.unit_price,
+            quantity: item.quantity,
+            totalPrice: item.total_price,
+          };
+        }) ?? [];
 
       const furnitureDetails =
-        moneyManagements?.furniture.items?.map((item) => ({
-          date: item.updated_at,
-          name: item.title,
-          unitPrice: item.unit_price,
-          quantity: item.quantity,
-          totalPrice: item.total_price,
-        })) ?? [];
+        moneyManagements?.furniture.items?.map((item) => {
+          const date = new Date(item.updated_at);
+          return {
+            date: date.toLocaleString("ja-JP", options),
+            name: item.title,
+            unitPrice: item.unit_price,
+            quantity: item.quantity,
+            totalPrice: item.total_price,
+          };
+        }) ?? [];
 
       const gamesToysDetails =
-        moneyManagements?.gamesToys.items?.map((item) => ({
-          date: item.updated_at,
-          name: item.title,
-          unitPrice: item.unit_price,
-          quantity: item.quantity,
-          totalPrice: item.total_price,
-        })) ?? [];
+        moneyManagements?.gamesToys.items?.map((item) => {
+          const date = new Date(item.updated_at);
+          return {
+            date: date.toLocaleString("ja-JP", options),
+            name: item.title,
+            unitPrice: item.unit_price,
+            quantity: item.quantity,
+            totalPrice: item.total_price,
+          };
+        }) ?? [];
 
       const beautyDetails =
-        moneyManagements?.beauty.items?.map((item) => ({
-          date: item.updated_at,
-          name: item.title,
-          unitPrice: item.unit_price,
-          quantity: item.quantity,
-          totalPrice: item.total_price,
-        })) ?? [];
+        moneyManagements?.beauty.items?.map((item) => {
+          const date = new Date(item.updated_at);
+          return {
+            date: date.toLocaleString("ja-JP", options),
+            name: item.title,
+            unitPrice: item.unit_price,
+            quantity: item.quantity,
+            totalPrice: item.total_price,
+          };
+        }) ?? [];
 
       const everyDayItemsDetails =
-        moneyManagements?.everyDayItems.items?.map((item) => ({
-          date: item.updated_at,
-          name: item.title,
-          unitPrice: item.unit_price,
-          quantity: item.quantity,
-          totalPrice: item.total_price,
-        })) ?? [];
+        moneyManagements?.everyDayItems.items?.map((item) => {
+          const date = new Date(item.updated_at);
+          return {
+            date: date.toLocaleString("ja-JP", options),
+            name: item.title,
+            unitPrice: item.unit_price,
+            quantity: item.quantity,
+            totalPrice: item.total_price,
+          };
+        }) ?? [];
 
       const otherDetails =
-        moneyManagements?.other.items?.map((item) => ({
-          date: item.updated_at,
-          name: item.title,
-          unitPrice: item.unit_price,
-          quantity: item.quantity,
-          totalPrice: item.total_price,
-        })) ?? [];
+        moneyManagements?.other.items?.map((item) => {
+          const date = new Date(item.updated_at);
+          return {
+            date: date.toLocaleString("ja-JP", options),
+            name: item.title,
+            unitPrice: item.unit_price,
+            quantity: item.quantity,
+            totalPrice: item.total_price,
+          };
+        }) ?? [];
 
       return {
         food: foodDetails,
