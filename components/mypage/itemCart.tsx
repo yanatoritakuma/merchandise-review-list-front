@@ -82,6 +82,7 @@ export const ItemCart = memo(
         ...reviewPostGlobal,
         title: product.name.slice(0, 50),
         image: product.image,
+        price: product.price,
       });
     };
 

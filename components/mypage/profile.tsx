@@ -1,4 +1,5 @@
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
+import { useRouter } from "next/router";
 import Image from "next/image";
 import { css } from "@emotion/react";
 import { useQueryUser } from "@/hooks/user/useQueryUser";
@@ -13,9 +14,12 @@ import { ReviewPost } from "@/components/mypage/reviewPost";
 import { LikePost } from "@/components/mypage/likePost";
 import { useQueryUserProductTimeLimitAll } from "@/hooks/product/useQueryUserProductTimeLimitAll";
 import { ModalCalendar } from "@/components/mypage/modal/modalCalendar";
+import SavingsIcon from "@mui/icons-material/Savings";
 
 export const Profile = () => {
   const { data: user, isLoading } = useQueryUser();
+  const router = useRouter();
+
   // todo:期日設定済みの商品全てを取得して、Badgeに個数を表示しているが期日3日前の商品数だけでもよいかも
   const { data: productTimeLimit } = useQueryUserProductTimeLimitAll(
     1,
@@ -84,6 +88,9 @@ export const Profile = () => {
                   <CalendarMonthIcon className="profile__calendarIcon" />
                 </Badge>
               </span>
+              <span onClick={() => router.push("/money-management")}>
+                <SavingsIcon className="profile__savingsIcon" />
+              </span>
             </div>
             <ModalCalendar
               open={modalCalendarFlag}
@@ -145,9 +152,24 @@ const profile = css`
     right: -14px;
     display: flex;
     align-items: center;
+
+    @media (max-width: 425px) {
+      padding: 0 8px;
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
   }
 
   .profile__calendarIcon {
+    width: 34px;
+    height: 34px;
+    cursor: pointer;
+  }
+
+  .profile__savingsIcon {
+    margin-left: 12px;
     width: 34px;
     height: 34px;
     cursor: pointer;

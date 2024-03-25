@@ -12,6 +12,11 @@ import { TUser } from "@/types/user";
 import { ReviewPostContext } from "@/provider/reviewPostProvider";
 import { DeleteImgStorage } from "@/utils/deleteImgStorage";
 import { BackdropContext } from "@/provider/backdropProvider";
+import { SelectBox } from "@/components/elements/selectBox";
+import { categoryMenuItem } from "@/constants/categoryMenuItem";
+import { CheckBox } from "@/components/elements/checkbox";
+import { PurchaseQuantityBox } from "@/components/common/purchaseQuantityBox";
+import { useMutateMoneyManagement } from "@/hooks/money-management/useMutateMoneyManagement";
 
 type Props = {
   type: "new" | "edit";
@@ -26,6 +31,7 @@ export const ReviewForm = memo(({ type, setOpen, user, review }: Props) => {
   const { setBackdropFlag } = useContext(BackdropContext);
   const { reviewPostMutation, updateReviewPostMutation } =
     useMutateReviewPost();
+  const { moneyManagementMutation } = useMutateMoneyManagement();
   const { onClickRegistration } = ImageRegistration();
   const { onChangeImageHandler, photoUrl, setPhotoUrl } = useChangeImage();
   const { deleteImg } = DeleteImgStorage();
@@ -33,11 +39,19 @@ export const ReviewForm = memo(({ type, setOpen, user, review }: Props) => {
     title: "",
     text: "",
     category: "",
+    price: 0,
   });
   const [reviewState, setReviewState] = useState(0.5);
 
+  const [management, setManagement] = useState(false);
+  const [quantity, setQuantity] = useState("1");
+  const [totalPrice, setTotalPrice] = useState(0);
+
   const [previewUrl, setPreviewUrl] = useState("");
   const { reviewPostValid } = ReviewPostValidation();
+  const currentDate = new Date();
+  // ISO 8601形式の文字列に変換
+  const formattedDate = currentDate.toISOString();
 
   useEffect(() => {
     if (!photoUrl) {
@@ -64,6 +78,7 @@ export const ReviewForm = memo(({ type, setOpen, user, review }: Props) => {
         title: reviewPostGlobal.title,
         text: reviewPostGlobal.text,
         category: reviewPostGlobal.category,
+        price: 0,
       });
       setPreviewUrl(reviewPostGlobal.image);
       setReviewState(reviewPostGlobal.review);
@@ -77,6 +92,7 @@ export const ReviewForm = memo(({ type, setOpen, user, review }: Props) => {
         title: reviewPostGlobal.title,
         text: "",
         category: "",
+        price: reviewPostGlobal.price,
       });
       setPreviewUrl(reviewPostGlobal.image);
     }
@@ -92,10 +108,21 @@ export const ReviewForm = memo(({ type, setOpen, user, review }: Props) => {
         image: file,
         review: reviewState,
       });
+      if (review && management) {
+        await moneyManagementMutation.mutateAsync({
+          title: postState.title,
+          category: postState.category,
+          quantity: Number(quantity),
+          unit_price: postState.price,
+          total_price: totalPrice,
+          updated_at: formattedDate,
+        });
+      }
       setPostState({
         title: "",
         text: "",
         category: "",
+        price: 0,
       });
       setReviewState(0.5);
     } catch (err) {
@@ -172,7 +199,7 @@ export const ReviewForm = memo(({ type, setOpen, user, review }: Props) => {
       </div>
 
       <div css={textBox}>
-        <TextBox
+        <SelectBox
           label="カテゴリー"
           value={postState.category}
           onChange={(e) =>
@@ -181,13 +208,30 @@ export const ReviewForm = memo(({ type, setOpen, user, review }: Props) => {
               category: e.target.value,
             })
           }
-          fullWidth
+          menuItem={categoryMenuItem}
         />
       </div>
 
       <div>
         <RatingBox reviewState={reviewState} setReviewState={setReviewState} />
       </div>
+
+      {review && (
+        <CheckBox
+          label="金額管理に追加する"
+          check={management}
+          onChange={(e) => setManagement(e.target.checked)}
+        />
+      )}
+
+      {management && (
+        <PurchaseQuantityBox
+          price={postState.price}
+          quantity={quantity}
+          setQuantity={setQuantity}
+          setTotalPrice={setTotalPrice}
+        />
+      )}
 
       <ButtonBox onChange={onChangeImageHandler} upload />
 
