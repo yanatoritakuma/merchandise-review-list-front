@@ -9,6 +9,7 @@ import { PricesByCategoryBox } from "@/components/money-management/pricesByCateg
 import { colorsCategory } from "@/constants/categoryMenuItem";
 import { DateSelectBox } from "@/components/common/dateSelectBox";
 import { ButtonBox } from "@/components/elements/buttonBox";
+import { ModalInputManagement } from "@/components/money-management/modalInputManagement";
 
 const Index = () => {
   const queryClient = useQueryClient();
@@ -16,6 +17,8 @@ const Index = () => {
   const [pieChartCategory, setPieChartCategory] = useState([""]);
   const [currentYearMonth, setCurrentYearMonth] = useState<Date>(new Date());
   const [tabSelected, setTabSelected] = useState(false);
+  const [modalInputFlag, setModalInputFlag] = useState(false);
+  const [updateFlag, setUpdateFlag] = useState(false);
 
   const date = new Date(currentYearMonth);
   const year = date.getFullYear();
@@ -30,6 +33,14 @@ const Index = () => {
     setPieChartCategory([""]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [yearMonth, tabSelected]);
+
+  useEffect(() => {
+    if (updateFlag && !modalInputFlag) {
+      refetch();
+      setUpdateFlag(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [modalInputFlag]);
 
   const pieChartData = [
     { name: "food", value: Number(data?.food.itemTotalPrice) },
@@ -82,7 +93,14 @@ const Index = () => {
               合計金額: {data?.totalPrice.toLocaleString()}円
             </h4>
             <div className="moneyManagementBox__addBox">
-              <ButtonBox>管理に追加</ButtonBox>
+              <ButtonBox onClick={() => setModalInputFlag(true)}>
+                管理に追加
+              </ButtonBox>
+              <ModalInputManagement
+                open={modalInputFlag}
+                setOpen={setModalInputFlag}
+                setUpdateFlag={setUpdateFlag}
+              />
             </div>
             <PricesByCategoryBox
               pieChartCategory={pieChartCategory}
