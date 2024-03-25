@@ -59,6 +59,7 @@ export const ModalInputManagement = memo(
         quantity: Number(inputManagement.quantity),
         unit_price: Number(inputManagement.unitPrice),
         total_price: Number(inputManagement.totalPrice),
+        updated_at: String(date?.toISOString()), // ISO 8601形式の文字列に変換
       };
 
       if (moneyManagementRegisterValidation(reqMoneyManagementMutation)) {

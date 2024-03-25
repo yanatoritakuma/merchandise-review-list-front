@@ -4,6 +4,7 @@ export type TReqMoneyManagementMutation = {
   quantity: number;
   unit_price: number;
   total_price: number;
+  updated_at: string;
 };
 
 export type TResMoneyManagement = {

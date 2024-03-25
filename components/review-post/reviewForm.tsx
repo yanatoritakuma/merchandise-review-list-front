@@ -49,6 +49,9 @@ export const ReviewForm = memo(({ type, setOpen, user, review }: Props) => {
 
   const [previewUrl, setPreviewUrl] = useState("");
   const { reviewPostValid } = ReviewPostValidation();
+  const currentDate = new Date();
+  // ISO 8601形式の文字列に変換
+  const formattedDate = currentDate.toISOString();
 
   useEffect(() => {
     if (!photoUrl) {
@@ -112,6 +115,7 @@ export const ReviewForm = memo(({ type, setOpen, user, review }: Props) => {
           quantity: Number(quantity),
           unit_price: postState.price,
           total_price: totalPrice,
+          updated_at: formattedDate,
         });
       }
       setPostState({

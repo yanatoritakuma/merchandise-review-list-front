@@ -2,7 +2,7 @@ import { TReqMoneyManagementMutation } from "@/types/moneyManagement";
 import { Validation } from "@/utils/validations/validation";
 
 export const MoneyManagementValidation = () => {
-  const { required, number } = Validation();
+  const { required, number, below } = Validation();
 
   const moneyManagementRegisterValidation = (
     reqMoneyManagementMutation: TReqMoneyManagementMutation
@@ -20,6 +20,11 @@ export const MoneyManagementValidation = () => {
 
     // 英数字チェック
     if (number(String(reqMoneyManagementMutation.total_price), "値段")) {
+      return false;
+    }
+
+    // 以下チェック
+    if (below(reqMoneyManagementMutation.title, "商品名", 50)) {
       return false;
     }
 
