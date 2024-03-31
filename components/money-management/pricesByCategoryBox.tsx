@@ -1,17 +1,20 @@
 import { memo } from "react";
 import { css } from "@emotion/react";
-import { useQueryClient } from "@tanstack/react-query";
 import { TableBox } from "@/components/elements/tableBox";
-import { TResMoneyManagement } from "@/types/moneyManagement";
+import {
+  TManagementRowData,
+  TResMoneyManagement,
+} from "@/types/moneyManagement";
 import { colorsCategory } from "@/constants/categoryMenuItem";
 
 type Props = {
   pieChartCategory: string[];
   moneyManagements: TResMoneyManagement | undefined;
+  onClickRow: (data: TManagementRowData) => void;
 };
 
 export const PricesByCategoryBox = memo(
-  ({ pieChartCategory, moneyManagements }: Props) => {
+  ({ pieChartCategory, moneyManagements, onClickRow }: Props) => {
     const categoryByDetails = () => {
       const options: Intl.DateTimeFormatOptions = {
         year: "numeric",
@@ -28,8 +31,10 @@ export const PricesByCategoryBox = memo(
         moneyManagements?.food.items?.map((item) => {
           const date = new Date(item.updated_at);
           return {
+            id: item.id,
             date: date.toLocaleString("ja-JP", options),
             name: item.title,
+            category: "food",
             unitPrice: item.unit_price,
             quantity: item.quantity,
             totalPrice: item.total_price,
@@ -40,8 +45,10 @@ export const PricesByCategoryBox = memo(
         moneyManagements?.drink.items?.map((item) => {
           const date = new Date(item.updated_at);
           return {
+            id: item.id,
             date: date.toLocaleString("ja-JP", options),
             name: item.title,
+            category: "drink",
             unitPrice: item.unit_price,
             quantity: item.quantity,
             totalPrice: item.total_price,
@@ -52,8 +59,10 @@ export const PricesByCategoryBox = memo(
         moneyManagements?.book.items?.map((item) => {
           const date = new Date(item.updated_at);
           return {
+            id: item.id,
             date: date.toLocaleString("ja-JP", options),
             name: item.title,
+            category: "book",
             unitPrice: item.unit_price,
             quantity: item.quantity,
             totalPrice: item.total_price,
@@ -64,8 +73,10 @@ export const PricesByCategoryBox = memo(
         moneyManagements?.fashion.items?.map((item) => {
           const date = new Date(item.updated_at);
           return {
+            id: item.id,
             date: date.toLocaleString("ja-JP", options),
             name: item.title,
+            category: "fashion",
             unitPrice: item.unit_price,
             quantity: item.quantity,
             totalPrice: item.total_price,
@@ -76,8 +87,10 @@ export const PricesByCategoryBox = memo(
         moneyManagements?.furniture.items?.map((item) => {
           const date = new Date(item.updated_at);
           return {
+            id: item.id,
             date: date.toLocaleString("ja-JP", options),
             name: item.title,
+            category: "furniture",
             unitPrice: item.unit_price,
             quantity: item.quantity,
             totalPrice: item.total_price,
@@ -88,8 +101,10 @@ export const PricesByCategoryBox = memo(
         moneyManagements?.gamesToys.items?.map((item) => {
           const date = new Date(item.updated_at);
           return {
+            id: item.id,
             date: date.toLocaleString("ja-JP", options),
             name: item.title,
+            category: "gamesToys",
             unitPrice: item.unit_price,
             quantity: item.quantity,
             totalPrice: item.total_price,
@@ -100,8 +115,10 @@ export const PricesByCategoryBox = memo(
         moneyManagements?.beauty.items?.map((item) => {
           const date = new Date(item.updated_at);
           return {
+            id: item.id,
             date: date.toLocaleString("ja-JP", options),
             name: item.title,
+            category: "beauty",
             unitPrice: item.unit_price,
             quantity: item.quantity,
             totalPrice: item.total_price,
@@ -112,8 +129,10 @@ export const PricesByCategoryBox = memo(
         moneyManagements?.everyDayItems.items?.map((item) => {
           const date = new Date(item.updated_at);
           return {
+            id: item.id,
             date: date.toLocaleString("ja-JP", options),
             name: item.title,
+            category: "everyDayItems",
             unitPrice: item.unit_price,
             quantity: item.quantity,
             totalPrice: item.total_price,
@@ -124,8 +143,10 @@ export const PricesByCategoryBox = memo(
         moneyManagements?.other.items?.map((item) => {
           const date = new Date(item.updated_at);
           return {
+            id: item.id,
             date: date.toLocaleString("ja-JP", options),
             name: item.title,
+            category: "other",
             unitPrice: item.unit_price,
             quantity: item.quantity,
             totalPrice: item.total_price,
@@ -210,6 +231,8 @@ export const PricesByCategoryBox = memo(
           tableDetailHeads={["日付", "商品名", "値段", "個数", "合計金額"]}
           tableDetails
           colors={colorsCategory}
+          onClickRow={onClickRow}
+          hiddenItem={[0, 3]}
         />
       </section>
     );

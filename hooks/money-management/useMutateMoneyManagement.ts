@@ -34,7 +34,32 @@ export const useMutateMoneyManagement = () => {
     }
   );
 
+  const updateMoneyManagementMutation = useMutation(
+    async (reqMoneyManagement: TReqMoneyManagementMutation) =>
+      await axios.put(
+        `${process.env.NEXT_PUBLIC_API_URL}/moneyManagement/${reqMoneyManagement.id}`,
+        reqMoneyManagement
+      ),
+    {
+      onSuccess: () => {
+        setBackdropFlag(false);
+        setMessage({
+          text: "編集完了",
+          type: "success",
+        });
+      },
+      onError: () => {
+        setBackdropFlag(false);
+        setMessage({
+          text: "編集失敗しました。",
+          type: "error",
+        });
+      },
+    }
+  );
+
   return {
     moneyManagementMutation,
+    updateMoneyManagementMutation,
   };
 };

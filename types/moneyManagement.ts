@@ -1,4 +1,5 @@
 export type TReqMoneyManagementMutation = {
+  id?: number;
   title: string;
   category: string;
   quantity: number;
@@ -34,4 +35,14 @@ type TMoneyManagements = {
   total_price: number;
   unit_price: number;
   updated_at: string;
+};
+
+export type TManagementRowData = {
+  id: number;
+  date: string;
+  name: string;
+  category: string;
+  quantity: number;
+  totalPrice: number;
+  unitPrice: number;
 };

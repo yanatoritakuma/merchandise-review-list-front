@@ -10,6 +10,7 @@ import { colorsCategory } from "@/constants/categoryMenuItem";
 import { DateSelectBox } from "@/components/common/dateSelectBox";
 import { ButtonBox } from "@/components/elements/buttonBox";
 import { ModalInputManagement } from "@/components/money-management/modalInputManagement";
+import { TManagementRowData } from "@/types/moneyManagement";
 
 const Index = () => {
   const queryClient = useQueryClient();
@@ -19,6 +20,9 @@ const Index = () => {
   const [tabSelected, setTabSelected] = useState(false);
   const [modalInputFlag, setModalInputFlag] = useState(false);
   const [updateFlag, setUpdateFlag] = useState(false);
+  const [modalUpdateFlag, setModalUpdateFlag] = useState(false);
+  const [updateManagement, setUpdateManagement] =
+    useState<TManagementRowData | null>(null);
 
   const date = new Date(currentYearMonth);
   const year = date.getFullYear();
@@ -27,6 +31,12 @@ const Index = () => {
 
   const { data, isLoading, refetch, isFetching } =
     useQueryGetMyMoneyManagements(yearMonth, tabSelected);
+
+  const onClickRow = (data: TManagementRowData) => {
+    setUpdateManagement(data);
+    setModalInputFlag(true);
+    setModalUpdateFlag(true);
+  };
 
   useEffect(() => {
     refetch();
@@ -100,11 +110,15 @@ const Index = () => {
                 open={modalInputFlag}
                 setOpen={setModalInputFlag}
                 setUpdateFlag={setUpdateFlag}
+                updateManagement={updateManagement}
+                modalUpdateFlag={modalUpdateFlag}
+                setModalUpdateFlag={setModalUpdateFlag}
               />
             </div>
             <PricesByCategoryBox
               pieChartCategory={pieChartCategory}
               moneyManagements={data}
+              onClickRow={onClickRow}
             />
           </>
         ) : (

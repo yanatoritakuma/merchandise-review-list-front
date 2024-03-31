@@ -14,16 +14,23 @@ import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import RedeemIcon from "@mui/icons-material/Redeem";
 import ProductionQuantityLimitsIcon from "@mui/icons-material/ProductionQuantityLimits";
 import { MoneyManagementValidation } from "@/utils/validations/moneyManagementValidation";
-import { TReqMoneyManagementMutation } from "@/types/moneyManagement";
+import {
+  TManagementRowData,
+  TReqMoneyManagementMutation,
+} from "@/types/moneyManagement";
 import { useMutateMoneyManagement } from "@/hooks/money-management/useMutateMoneyManagement";
 
 type Props = {
   open: boolean;
   setOpen: (value: React.SetStateAction<boolean>) => void;
   setUpdateFlag: React.Dispatch<React.SetStateAction<boolean>>;
+  updateManagement: TManagementRowData | null;
+  modalUpdateFlag: boolean;
+  setModalUpdateFlag: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 type TInputManagement = {
+  id: number;
   title: string;
   category: string;
   unitPrice: string;
@@ -32,18 +39,28 @@ type TInputManagement = {
 };
 
 export const ModalInputManagement = memo(
-  ({ open, setOpen, setUpdateFlag }: Props) => {
+  ({
+    open,
+    setOpen,
+    setUpdateFlag,
+    updateManagement,
+    modalUpdateFlag,
+    setModalUpdateFlag,
+  }: Props) => {
     const { moneyManagementRegisterValidation } = MoneyManagementValidation();
-    const { moneyManagementMutation } = useMutateMoneyManagement();
+    const { moneyManagementMutation, updateMoneyManagementMutation } =
+      useMutateMoneyManagement();
     const now = dayjs(); // 現在の日時を取得
     const [date, setDate] = useState<Dayjs | null>(now);
     const [inputManagement, setInputManagement] = useState<TInputManagement>({
+      id: 0,
       title: "",
       category: "",
       unitPrice: "",
       quantity: "",
       totalPrice: "",
     });
+    console.log("inputManagement", inputManagement);
 
     useEffect(() => {
       const toatal =
@@ -51,6 +68,47 @@ export const ModalInputManagement = memo(
       setInputManagement({ ...inputManagement, totalPrice: String(toatal) });
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [inputManagement.unitPrice, inputManagement.quantity]);
+
+    const convertDate = (dateStr: string) => {
+      // 日本語の日付文字列をハイフンで分割し、年月日を取得する
+      const [year, month, day] = dateStr.split(/[年月日]/);
+
+      // 各部分を2桁の数字にフォーマットし、'-'で結合する
+      const formattedDateStr = `${year}-${month.padStart(
+        2,
+        "0"
+      )}-${day.padStart(2, "0")}`;
+
+      return formattedDateStr;
+    };
+
+    useEffect(() => {
+      if (updateManagement !== null) {
+        setInputManagement({
+          id: updateManagement.id,
+          title: updateManagement.name,
+          category: updateManagement.category,
+          unitPrice: String(updateManagement.unitPrice),
+          quantity: String(updateManagement.quantity),
+          totalPrice: String(updateManagement.totalPrice),
+        });
+
+        setDate(dayjs(convertDate(updateManagement.date)));
+      }
+    }, [updateManagement]);
+
+    const onClose = () => {
+      setOpen(false);
+      setInputManagement({
+        id: 0,
+        title: "",
+        category: "",
+        unitPrice: "",
+        quantity: "",
+        totalPrice: "",
+      });
+      setModalUpdateFlag(false);
+    };
 
     const onClickMoneyManagementRegister = () => {
       const reqMoneyManagementMutation: TReqMoneyManagementMutation = {
@@ -66,6 +124,7 @@ export const ModalInputManagement = memo(
         moneyManagementMutation.mutate(reqMoneyManagementMutation);
 
         setInputManagement({
+          id: 0,
           title: "",
           category: "",
           unitPrice: "",
@@ -77,8 +136,38 @@ export const ModalInputManagement = memo(
       }
     };
 
+    const onClickMoneyManagementUpdate = async () => {
+      const reqMoneyManagementMutation: TReqMoneyManagementMutation = {
+        id: inputManagement.id,
+        title: inputManagement.title,
+        category: inputManagement.category,
+        quantity: Number(inputManagement.quantity),
+        unit_price: Number(inputManagement.unitPrice),
+        total_price: Number(inputManagement.totalPrice),
+        updated_at: String(date?.toISOString()), // ISO 8601形式の文字列に変換
+      };
+
+      if (moneyManagementRegisterValidation(reqMoneyManagementMutation)) {
+        try {
+          await updateMoneyManagementMutation.mutateAsync({
+            id: reqMoneyManagementMutation.id,
+            title: reqMoneyManagementMutation.title,
+            category: reqMoneyManagementMutation.category,
+            quantity: reqMoneyManagementMutation.quantity,
+            unit_price: reqMoneyManagementMutation.unit_price,
+            total_price: reqMoneyManagementMutation.total_price,
+            updated_at: reqMoneyManagementMutation.updated_at,
+          });
+        } catch (err) {
+          console.error("err:", err);
+        }
+
+        setUpdateFlag(true);
+      }
+    };
+
     return (
-      <Modal open={open} onClose={() => setOpen(false)}>
+      <Modal open={open} onClose={onClose}>
         <div css={modalInputManagementBox}>
           <div className="modalInputManagementBox__inputBox">
             <span className="modalInputManagementBox__inputIconBox">
@@ -90,7 +179,7 @@ export const ModalInputManagement = memo(
               onChange={(e) =>
                 setInputManagement({
                   ...inputManagement,
-                  unitPrice: e.target.value,
+                  unitPrice: e.target?.value,
                 })
               }
               fullWidth
@@ -162,9 +251,22 @@ export const ModalInputManagement = memo(
             </span>
           )}
 
-          <ButtonBox onClick={() => onClickMoneyManagementRegister()}>
-            登録
-          </ButtonBox>
+          {!modalUpdateFlag ? (
+            <span className="modalInputManagementBox__btnBox">
+              <ButtonBox onClick={() => onClickMoneyManagementRegister()}>
+                登録
+              </ButtonBox>
+            </span>
+          ) : (
+            <span className="modalInputManagementBox__btnBox">
+              <ButtonBox onClick={() => onClickMoneyManagementUpdate()}>
+                更新
+              </ButtonBox>
+              <ButtonBox className="deleteBtn" onClick={() => alert("delete")}>
+                削除
+              </ButtonBox>
+            </span>
+          )}
         </div>
       </Modal>
     );
@@ -201,15 +303,18 @@ const modalInputManagementBox = css`
 
   .modalInputManagementBox__dateBox {
     width: 100%;
-    div {
-      width: 100%;
-    }
   }
 
-  button {
-    margin: 20px auto;
-    display: block;
-    width: 50%;
+  .modalInputManagementBox__btnBox {
+    button {
+      margin: 20px auto;
+      display: block;
+      width: 50%;
+    }
+
+    .deleteBtn {
+      background-color: #e9546b;
+    }
   }
 
   .modalInputManagementBox__totalPrice {

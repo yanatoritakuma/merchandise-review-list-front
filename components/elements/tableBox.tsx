@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { css } from "@emotion/react";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
@@ -18,12 +18,14 @@ type RowData = {
   [key: string]: any;
 };
 
-type Props<T> = {
+type Props<T, U> = {
   tableHeads: string[];
   tableDatas: T[]; // 詳細を表示する場合は、オブジェクトにdetails[]を追加する
   tableDetailHeads?: string[];
   tableDetails?: boolean;
   colors?: string[];
+  onClickRow?: (data: U) => void;
+  hiddenItem?: number[];
 };
 
 export const TableBox = <T extends RowData, U extends RowData>({
@@ -32,7 +34,9 @@ export const TableBox = <T extends RowData, U extends RowData>({
   tableDetailHeads,
   tableDetails,
   colors,
-}: Props<T>) => {
+  onClickRow,
+  hiddenItem,
+}: Props<T, U>) => {
   const Row = ({
     row,
     details,
@@ -95,12 +99,22 @@ export const TableBox = <T extends RowData, U extends RowData>({
                     </TableHead>
                     <TableBody>
                       {details?.map((detail, index) => (
-                        <TableRow key={index}>
-                          {Object.values(detail).map((value, detailInd) => (
-                            <TableCell key={detailInd} align="center">
-                              {value?.toLocaleString()}
-                            </TableCell>
-                          ))}
+                        <TableRow
+                          key={index}
+                          onClick={() => onClickRow && onClickRow(detail)}
+                        >
+                          {Object.values(detail).map(
+                            (value, detailInd) =>
+                              !hiddenItem?.includes(detailInd) && ( // hiddenItemに含まれていない場合にのみ表示
+                                <TableCell
+                                  className="detail"
+                                  key={detailInd}
+                                  align="center"
+                                >
+                                  {value?.toLocaleString()}
+                                </TableCell>
+                              )
+                          )}
                         </TableRow>
                       ))}
                     </TableBody>
@@ -148,4 +162,8 @@ const tableDetailsBox = css`
   overflow-x: auto;
   width: 100%;
   min-width: 500px;
+
+  .detail {
+    cursor: pointer;
+  }
 `;
