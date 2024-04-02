@@ -58,8 +58,32 @@ export const useMutateMoneyManagement = () => {
     }
   );
 
+  const deleteMoneyManagementMutation = useMutation(
+    async (id: number) =>
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/moneyManagement/${id}`
+      ),
+    {
+      onSuccess: () => {
+        setBackdropFlag(false);
+        setMessage({
+          text: "削除完了",
+          type: "success",
+        });
+      },
+      onError: () => {
+        setBackdropFlag(false);
+        setMessage({
+          text: "削除失敗しました。",
+          type: "error",
+        });
+      },
+    }
+  );
+
   return {
     moneyManagementMutation,
     updateMoneyManagementMutation,
+    deleteMoneyManagementMutation,
   };
 };

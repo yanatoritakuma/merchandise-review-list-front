@@ -48,8 +48,11 @@ export const ModalInputManagement = memo(
     setModalUpdateFlag,
   }: Props) => {
     const { moneyManagementRegisterValidation } = MoneyManagementValidation();
-    const { moneyManagementMutation, updateMoneyManagementMutation } =
-      useMutateMoneyManagement();
+    const {
+      moneyManagementMutation,
+      updateMoneyManagementMutation,
+      deleteMoneyManagementMutation,
+    } = useMutateMoneyManagement();
     const now = dayjs(); // 現在の日時を取得
     const [date, setDate] = useState<Dayjs | null>(now);
     const [inputManagement, setInputManagement] = useState<TInputManagement>({
@@ -60,7 +63,6 @@ export const ModalInputManagement = memo(
       quantity: "",
       totalPrice: "",
     });
-    console.log("inputManagement", inputManagement);
 
     useEffect(() => {
       const toatal =
@@ -166,6 +168,14 @@ export const ModalInputManagement = memo(
       }
     };
 
+    const onClickDeleteMoneyManagement = () => {
+      try {
+        deleteMoneyManagementMutation.mutateAsync(inputManagement.id);
+      } catch (err) {
+        console.log("err", err);
+      }
+    };
+
     return (
       <Modal open={open} onClose={onClose}>
         <div css={modalInputManagementBox}>
@@ -262,7 +272,10 @@ export const ModalInputManagement = memo(
               <ButtonBox onClick={() => onClickMoneyManagementUpdate()}>
                 更新
               </ButtonBox>
-              <ButtonBox className="deleteBtn" onClick={() => alert("delete")}>
+              <ButtonBox
+                className="deleteBtn"
+                onClick={() => onClickDeleteMoneyManagement()}
+              >
                 削除
               </ButtonBox>
             </span>
