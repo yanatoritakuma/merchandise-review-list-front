@@ -19,6 +19,7 @@ import {
   TReqMoneyManagementMutation,
 } from "@/types/moneyManagement";
 import { useMutateMoneyManagement } from "@/hooks/money-management/useMutateMoneyManagement";
+import { ConfirmButtonBox } from "@/components/elements/confirmButtonBox";
 
 type Props = {
   open: boolean;
@@ -109,6 +110,7 @@ export const ModalInputManagement = memo(
         quantity: "",
         totalPrice: "",
       });
+      setDate(now);
       setModalUpdateFlag(false);
     };
 
@@ -160,17 +162,17 @@ export const ModalInputManagement = memo(
             total_price: reqMoneyManagementMutation.total_price,
             updated_at: reqMoneyManagementMutation.updated_at,
           });
+          setUpdateFlag(true);
         } catch (err) {
-          console.error("err:", err);
+          console.error("err", err);
         }
-
-        setUpdateFlag(true);
       }
     };
 
     const onClickDeleteMoneyManagement = () => {
       try {
         deleteMoneyManagementMutation.mutateAsync(inputManagement.id);
+        setUpdateFlag(true);
       } catch (err) {
         console.log("err", err);
       }
@@ -272,12 +274,18 @@ export const ModalInputManagement = memo(
               <ButtonBox onClick={() => onClickMoneyManagementUpdate()}>
                 更新
               </ButtonBox>
-              <ButtonBox
-                className="deleteBtn"
+
+              <ConfirmButtonBox
+                dialogTitle="本当に削除しますか？"
+                dialogContentText="この操作は取り消しできません。"
+                decisionText="削除"
+                cancelText="やめる"
+                decisionColor="error"
                 onClick={() => onClickDeleteMoneyManagement()}
+                className="deleteBtn"
               >
                 削除
-              </ButtonBox>
+              </ConfirmButtonBox>
             </span>
           )}
         </div>
