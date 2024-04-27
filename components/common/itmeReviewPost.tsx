@@ -16,6 +16,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useQueryClient } from "@tanstack/react-query";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 import { ModalComment } from "./modalComment";
+import { categoryConvertJapanese } from "@/utils/categoryConvertJapanese";
 
 type Props = {
   reviewPost: TReviewPosts;
@@ -76,6 +77,7 @@ export const ItmeReviewPost = memo(({ reviewPost }: Props) => {
       category: selectPost.category,
       image: selectPost.image,
       review: selectPost.review,
+      price: 0,
     });
   };
 
@@ -152,7 +154,7 @@ export const ItmeReviewPost = memo(({ reviewPost }: Props) => {
       </div>
       <div className="itemCartBox__textBox">
         <h5>カテゴリー</h5>
-        <p>{reviewPost.category}</p>
+        <p>{categoryConvertJapanese(reviewPost.category)}</p>
       </div>
       <span className="itemCartBox__reviewBox">
         レビュー:

@@ -17,18 +17,16 @@ type Props = {
 
 export const SelectBox = memo(({ label, value, onChange, menuItem }: Props) => {
   return (
-    <Box>
-      <FormControl fullWidth>
-        <InputLabel>{label}</InputLabel>
-        <Select value={value} label={label} onChange={onChange}>
-          {menuItem.map((items, index) => (
-            <MenuItem key={index} value={items.value}>
-              {items.item}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </Box>
+    <FormControl fullWidth>
+      <InputLabel>{label}</InputLabel>
+      <Select value={value} label={label} onChange={onChange}>
+        {menuItem.map((items, index) => (
+          <MenuItem key={index} value={items.value}>
+            {items.item}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   );
 });
 

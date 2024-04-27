@@ -11,10 +11,20 @@ type Props = {
   variant?: "text" | "contained" | "outlined";
   disabled?: boolean;
   size?: "small" | "medium" | "large";
+  className?: string;
 };
 
 export const ButtonBox = memo(
-  ({ children, onClick, upload, onChange, variant, disabled, size }: Props) => {
+  ({
+    children,
+    onClick,
+    upload,
+    onChange,
+    variant,
+    disabled,
+    size,
+    className,
+  }: Props) => {
     return (
       <>
         {!upload ? (
@@ -23,6 +33,7 @@ export const ButtonBox = memo(
             variant={variant !== undefined ? variant : "contained"}
             disabled={disabled}
             size={size}
+            className={className}
           >
             {children}
           </Button>
