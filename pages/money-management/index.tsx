@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { css } from "@emotion/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { TUser } from "@/types/user";
@@ -11,6 +11,7 @@ import { DateSelectBox } from "@/components/common/dateSelectBox";
 import { ButtonBox } from "@/components/elements/buttonBox";
 import { ModalInputManagement } from "@/components/money-management/modalInputManagement";
 import { TManagementRowData } from "@/types/moneyManagement";
+import { ModalInputBudget } from "@/components/money-management/modalInputBudget";
 
 const Index = () => {
   const queryClient = useQueryClient();
@@ -19,6 +20,7 @@ const Index = () => {
   const [currentYearMonth, setCurrentYearMonth] = useState<Date>(new Date());
   const [tabSelected, setTabSelected] = useState(false);
   const [modalInputFlag, setModalInputFlag] = useState(false);
+  const [modalInputBudgetFlag, setModalInputBudgetFlag] = useState(false);
   const [updateFlag, setUpdateFlag] = useState(false);
   const [modalUpdateFlag, setModalUpdateFlag] = useState(false);
   const [updateManagement, setUpdateManagement] =
@@ -106,6 +108,12 @@ const Index = () => {
               <ButtonBox onClick={() => setModalInputFlag(true)}>
                 管理に追加
               </ButtonBox>
+              <ButtonBox
+                onClick={() => setModalInputBudgetFlag(true)}
+                className="moneyManagementBox__budgetButoon"
+              >
+                予算額設定
+              </ButtonBox>
               <ModalInputManagement
                 open={modalInputFlag}
                 setOpen={setModalInputFlag}
@@ -113,6 +121,11 @@ const Index = () => {
                 updateManagement={updateManagement}
                 modalUpdateFlag={modalUpdateFlag}
                 setModalUpdateFlag={setModalUpdateFlag}
+              />
+              <ModalInputBudget
+                open={modalInputBudgetFlag}
+                setOpen={setModalInputBudgetFlag}
+                setUpdateFlag={setUpdateFlag}
               />
             </div>
             <PricesByCategoryBox
@@ -243,5 +256,13 @@ const moneyManagementBox = css`
     margin: 8px 0;
     padding: 0 12px;
     text-align: end;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .moneyManagementBox__budgetButoon {
+    margin-left: 14px;
+    background-color: #a8c97f;
   }
 `;
