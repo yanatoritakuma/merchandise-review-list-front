@@ -1,4 +1,4 @@
-import { ChangeEvent, memo, useEffect, useState } from "react";
+import { memo, useState } from "react";
 import { css } from "@emotion/react";
 import { Modal } from "@mui/material";
 import { TextBox } from "@/components/elements/textBox";
@@ -60,6 +60,7 @@ export const ModalInputBudget = memo(
         every_dayItems: Number(inputBudget.everyDayItems),
         other: Number(inputBudget.other),
       };
+
       budgetMutation.mutate(reqInputBudget);
       setInputBudget({
         month: "",
@@ -77,7 +78,7 @@ export const ModalInputBudget = memo(
       });
     };
 
-    useEffect(() => {
+    const onBlurInputBudget = () => {
       const total =
         Number(inputBudget.food) +
         Number(inputBudget.drink) +
@@ -90,7 +91,7 @@ export const ModalInputBudget = memo(
         Number(inputBudget.other);
 
       setInputBudget({ ...inputBudget, totalPrice: String(total) });
-    }, [inputBudget]);
+    };
 
     return (
       <Modal open={open} onClose={onClose}>
@@ -143,6 +144,7 @@ export const ModalInputBudget = memo(
                   food: e.target?.value,
                 })
               }
+              onBlur={onBlurInputBudget}
             />
           </div>
 
@@ -158,6 +160,7 @@ export const ModalInputBudget = memo(
                   drink: e.target?.value,
                 })
               }
+              onBlur={onBlurInputBudget}
             />
           </div>
 
@@ -172,6 +175,7 @@ export const ModalInputBudget = memo(
                   book: e.target?.value,
                 })
               }
+              onBlur={onBlurInputBudget}
             />
           </div>
 
@@ -187,6 +191,7 @@ export const ModalInputBudget = memo(
                   fashion: e.target?.value,
                 })
               }
+              onBlur={onBlurInputBudget}
             />
           </div>
 
@@ -202,6 +207,7 @@ export const ModalInputBudget = memo(
                   furniture: e.target?.value,
                 })
               }
+              onBlur={onBlurInputBudget}
             />
           </div>
 
@@ -216,6 +222,7 @@ export const ModalInputBudget = memo(
                   gamesToys: e.target?.value,
                 })
               }
+              onBlur={onBlurInputBudget}
             />
           </div>
 
@@ -230,6 +237,7 @@ export const ModalInputBudget = memo(
                   beauty: e.target?.value,
                 })
               }
+              onBlur={onBlurInputBudget}
             />
           </div>
 
@@ -244,6 +252,7 @@ export const ModalInputBudget = memo(
                   everyDayItems: e.target?.value,
                 })
               }
+              onBlur={onBlurInputBudget}
             />
           </div>
           <div css={textBox}>
@@ -257,6 +266,7 @@ export const ModalInputBudget = memo(
                   other: e.target?.value,
                 })
               }
+              onBlur={onBlurInputBudget}
             />
           </div>
           <ButtonBox onClick={() => onClickSetBudget()} css={setBuuton}>
