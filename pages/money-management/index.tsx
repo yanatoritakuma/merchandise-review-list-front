@@ -78,6 +78,7 @@ const Index = () => {
         tabSelected={tabSelected}
         setTabSelected={setTabSelected}
       />
+
       {user !== undefined ? (
         !isLoading && !isFetching ? (
           <>
