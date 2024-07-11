@@ -133,6 +133,8 @@ const Index = () => {
               pieChartCategory={pieChartCategory}
               moneyManagements={data}
               onClickRow={onClickRow}
+              year={year}
+              month={month}
             />
           </>
         ) : (

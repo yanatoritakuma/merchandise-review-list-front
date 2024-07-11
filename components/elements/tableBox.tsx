@@ -48,7 +48,6 @@ export const TableBox = <T extends RowData, U extends RowData>({
   }) => {
     const [open, setOpen] = useState(false);
 
-    console.log(row);
     return (
       <Fragment>
         <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
