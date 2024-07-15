@@ -6,20 +6,17 @@ import {
   TResMoneyManagement,
 } from "@/types/moneyManagement";
 import { colorsCategory } from "@/constants/categoryMenuItem";
-import { useQueryBudget } from "@/hooks/budget/useQueryBudget";
+import { TResBudget } from "@/types/budget";
 
 type Props = {
   pieChartCategory: string[];
   moneyManagements: TResMoneyManagement | undefined;
   onClickRow: (data: TManagementRowData) => void;
-  year: number;
-  month: number;
+  budget: TResBudget | undefined;
 };
 
 export const PricesByCategoryBox = memo(
-  ({ pieChartCategory, moneyManagements, onClickRow, year, month }: Props) => {
-    const { data } = useQueryBudget(year, month);
-    console.log(data);
+  ({ pieChartCategory, moneyManagements, onClickRow, budget }: Props) => {
     const categoryByDetails = () => {
       const options: Intl.DateTimeFormatOptions = {
         year: "numeric",
@@ -177,63 +174,63 @@ export const PricesByCategoryBox = memo(
         price: moneyManagements?.food.itemTotalPrice,
         ratio: pieChartCategory[0],
         details: categoryByDetails().food,
-        budget: data?.budget.food,
+        budget: budget?.budget.food,
       },
       {
         category: "飲料",
         price: moneyManagements?.drink.itemTotalPrice,
         ratio: pieChartCategory[1],
         details: categoryByDetails().drink,
-        budget: data?.budget.drink,
+        budget: budget?.budget.drink,
       },
       {
         category: "本",
         price: moneyManagements?.book.itemTotalPrice,
         ratio: pieChartCategory[2],
         details: categoryByDetails().book,
-        budget: data?.budget.book,
+        budget: budget?.budget.book,
       },
       {
         category: "ファッション",
         price: moneyManagements?.fashion.itemTotalPrice,
         ratio: pieChartCategory[3],
         details: categoryByDetails().fashion,
-        budget: data?.budget.fashion,
+        budget: budget?.budget.fashion,
       },
       {
         category: "家具",
         price: moneyManagements?.furniture.itemTotalPrice,
         ratio: pieChartCategory[4],
         details: categoryByDetails().furniture,
-        budget: data?.budget.furniture,
+        budget: budget?.budget.furniture,
       },
       {
         category: "ゲーム・おもちゃ",
         price: moneyManagements?.gamesToys.itemTotalPrice,
         ratio: pieChartCategory[5],
         details: categoryByDetails().gamesToys,
-        budget: data?.budget.games_toys,
+        budget: budget?.budget.games_toys,
       },
       {
         category: "美容",
         price: moneyManagements?.beauty.itemTotalPrice,
         ratio: pieChartCategory[6],
         details: categoryByDetails().beauty,
-        budget: data?.budget.beauty,
+        budget: budget?.budget.beauty,
       },
       {
         category: "日用品",
         price: moneyManagements?.everyDayItems.itemTotalPrice,
         ratio: pieChartCategory[7],
         details: categoryByDetails().everyDayItems,
-        budget: data?.budget.every_dayItems,
+        budget: budget?.budget.every_dayItems,
       },
       {
         category: "その他",
         price: moneyManagements?.other.itemTotalPrice,
         ratio: pieChartCategory[8],
         details: categoryByDetails().other,
-        budget: data?.budget.other,
+        budget: budget?.budget.other,
       },
     ];
 

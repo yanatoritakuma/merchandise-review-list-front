@@ -1,4 +1,4 @@
-import { SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { css } from "@emotion/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { TUser } from "@/types/user";
@@ -12,6 +12,7 @@ import { ButtonBox } from "@/components/elements/buttonBox";
 import { ModalInputManagement } from "@/components/money-management/modalInputManagement";
 import { TManagementRowData } from "@/types/moneyManagement";
 import { ModalInputBudget } from "@/components/money-management/modalInputBudget";
+import { useQueryBudget } from "@/hooks/budget/useQueryBudget";
 
 const Index = () => {
   const queryClient = useQueryClient();
@@ -34,11 +35,17 @@ const Index = () => {
   const { data, isLoading, refetch, isFetching } =
     useQueryGetMyMoneyManagements(yearMonth, tabSelected);
 
+  const { data: budget, refetch: budgetRefetch } = useQueryBudget(year, month);
+
   const onClickRow = (data: TManagementRowData) => {
     setUpdateManagement(data);
     setModalInputFlag(true);
     setModalUpdateFlag(true);
   };
+
+  useEffect(() => {
+    budgetRefetch();
+  }, [currentYearMonth]);
 
   useEffect(() => {
     refetch();
@@ -133,8 +140,7 @@ const Index = () => {
               pieChartCategory={pieChartCategory}
               moneyManagements={data}
               onClickRow={onClickRow}
-              year={year}
-              month={month}
+              budget={budget}
             />
           </>
         ) : (
