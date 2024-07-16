@@ -223,7 +223,7 @@ export const PricesByCategoryBox = memo(
         price: moneyManagements?.everyDayItems.itemTotalPrice,
         ratio: pieChartCategory[7],
         details: categoryByDetails().everyDayItems,
-        budget: budget?.budget.every_dayItems,
+        budget: budget?.budget.every_day_items,
       },
       {
         category: "その他",

@@ -1,4 +1,5 @@
 export type TReqBudget = {
+  id?: number;
   month: string;
   year: string;
   total_price: number;
@@ -9,7 +10,7 @@ export type TReqBudget = {
   furniture: number;
   games_toys: number;
   beauty: number;
-  every_dayItems: number;
+  every_day_items: number;
   other: number;
 };
 
@@ -26,7 +27,7 @@ export type TResBudget = {
     furniture: number;
     games_toys: number;
     beauty: number;
-    every_dayItems: number;
+    every_day_items: number;
     other: number;
     notice: boolean;
     created_at: Date;

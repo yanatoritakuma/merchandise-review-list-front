@@ -40,7 +40,32 @@ export const useMutateBudget = () => {
     }
   );
 
+  const updateBudgetMutation = useMutation(
+    async (reqBudget: TReqBudget) =>
+      await axios.put(
+        `${process.env.NEXT_PUBLIC_API_URL}/budget/${reqBudget.id}`,
+        reqBudget
+      ),
+    {
+      onSuccess: () => {
+        setBackdropFlag(false);
+        setMessage({
+          text: "予算金額を更新しました。",
+          type: "success",
+        });
+      },
+      onError: () => {
+        setBackdropFlag(false);
+        setMessage({
+          text: "予算金額更新に失敗しました。",
+          type: "error",
+        });
+      },
+    }
+  );
+
   return {
     budgetMutation,
+    updateBudgetMutation,
   };
 };

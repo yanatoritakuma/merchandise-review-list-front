@@ -16,29 +16,60 @@ import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
 import PaletteIcon from "@mui/icons-material/Palette";
 import WbIncandescentIcon from "@mui/icons-material/WbIncandescent";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import { TResBudget } from "@/types/budget";
 
 type Props = {
   open: boolean;
   setOpen: (value: React.SetStateAction<boolean>) => void;
-  setUpdateFlag: React.Dispatch<React.SetStateAction<boolean>>;
+  budget: TResBudget | undefined;
+  year: number;
+  month: number;
 };
 
 export const ModalInputBudget = memo(
-  ({ open, setOpen, setUpdateFlag }: Props) => {
-    const { budgetMutation } = useMutateBudget();
+  ({ open, setOpen, budget, year, month }: Props) => {
+    const { budgetMutation, updateBudgetMutation } = useMutateBudget();
     const [inputBudget, setInputBudget] = useState({
-      month: "",
-      year: "",
-      totalPrice: "",
-      food: "",
-      drink: "",
-      book: "",
-      fashion: "",
-      furniture: "",
-      gamesToys: "",
-      beauty: "",
-      everyDayItems: "",
-      other: "",
+      id: budget?.budget.id,
+      month: String(month),
+      year: String(year),
+      totalPrice: budget !== undefined ? budget.budget.total_price : "",
+      food:
+        budget !== undefined && budget.budget.food !== 0
+          ? budget.budget.food
+          : "",
+      drink:
+        budget !== undefined && budget.budget.drink !== 0
+          ? budget.budget.drink
+          : "",
+      book:
+        budget !== undefined && budget.budget.book !== 0
+          ? budget.budget.book
+          : "",
+      fashion:
+        budget !== undefined && budget.budget.fashion !== 0
+          ? budget.budget.fashion
+          : "",
+      furniture:
+        budget !== undefined && budget.budget.furniture !== 0
+          ? budget.budget.furniture
+          : "",
+      gamesToys:
+        budget !== undefined && budget.budget.games_toys !== 0
+          ? budget.budget.games_toys
+          : "",
+      beauty:
+        budget !== undefined && budget.budget.beauty !== 0
+          ? budget.budget.beauty
+          : "",
+      everyDayItems:
+        budget !== undefined && budget.budget.every_day_items !== 0
+          ? budget.budget.every_day_items
+          : "",
+      other:
+        budget !== undefined && budget.budget.other !== 0
+          ? budget.budget.other
+          : "",
     });
 
     const onClose = () => {
@@ -47,6 +78,7 @@ export const ModalInputBudget = memo(
 
     const onClickSetBudget = () => {
       const reqInputBudget = {
+        id: budget?.budget.id,
         month: inputBudget.month,
         year: inputBudget.year,
         total_price: Number(inputBudget.totalPrice),
@@ -57,25 +89,31 @@ export const ModalInputBudget = memo(
         furniture: Number(inputBudget.furniture),
         games_toys: Number(inputBudget.gamesToys),
         beauty: Number(inputBudget.beauty),
-        every_dayItems: Number(inputBudget.everyDayItems),
+        every_day_items: Number(inputBudget.everyDayItems),
         other: Number(inputBudget.other),
       };
 
-      budgetMutation.mutate(reqInputBudget);
-      setInputBudget({
-        month: "",
-        year: "",
-        totalPrice: "",
-        food: "",
-        drink: "",
-        book: "",
-        fashion: "",
-        furniture: "",
-        gamesToys: "",
-        beauty: "",
-        everyDayItems: "",
-        other: "",
-      });
+      if (budget?.budget.id === 0) {
+        budgetMutation.mutate(reqInputBudget);
+
+        setInputBudget({
+          id: 0,
+          month: "",
+          year: "",
+          totalPrice: "",
+          food: "",
+          drink: "",
+          book: "",
+          fashion: "",
+          furniture: "",
+          gamesToys: "",
+          beauty: "",
+          everyDayItems: "",
+          other: "",
+        });
+      } else {
+        updateBudgetMutation.mutate(reqInputBudget);
+      }
     };
 
     const onBlurInputBudget = () => {
@@ -137,7 +175,7 @@ export const ModalInputBudget = memo(
 
             <TextBox
               label={categoryMenuItem[0].item}
-              value={inputBudget.food}
+              value={String(inputBudget.food)}
               onChange={(e) =>
                 setInputBudget({
                   ...inputBudget,
@@ -270,7 +308,7 @@ export const ModalInputBudget = memo(
             />
           </div>
           <ButtonBox onClick={() => onClickSetBudget()} css={setBuuton}>
-            登録
+            {budget?.budget.id === 0 ? "登録" : "更新"}
           </ButtonBox>
         </div>
       </Modal>

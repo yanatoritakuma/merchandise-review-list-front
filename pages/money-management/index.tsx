@@ -45,7 +45,7 @@ const Index = () => {
 
   useEffect(() => {
     budgetRefetch();
-  }, [currentYearMonth]);
+  }, [currentYearMonth, modalInputBudgetFlag]);
 
   useEffect(() => {
     refetch();
@@ -133,7 +133,9 @@ const Index = () => {
               <ModalInputBudget
                 open={modalInputBudgetFlag}
                 setOpen={setModalInputBudgetFlag}
-                setUpdateFlag={setUpdateFlag}
+                budget={budget}
+                year={year}
+                month={month}
               />
             </div>
             <PricesByCategoryBox
