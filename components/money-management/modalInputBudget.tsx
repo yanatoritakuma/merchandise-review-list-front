@@ -17,6 +17,7 @@ import PaletteIcon from "@mui/icons-material/Palette";
 import WbIncandescentIcon from "@mui/icons-material/WbIncandescent";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { TResBudget } from "@/types/budget";
+import { BudgetValidation } from "@/utils/validations/budgetValidation";
 
 type Props = {
   open: boolean;
@@ -29,6 +30,7 @@ type Props = {
 export const ModalInputBudget = memo(
   ({ open, setOpen, budget, year, month }: Props) => {
     const { budgetMutation, updateBudgetMutation } = useMutateBudget();
+    const { budgetValidation } = BudgetValidation();
     const [inputBudget, setInputBudget] = useState({
       id: budget?.budget.id,
       month: String(month),
@@ -94,7 +96,8 @@ export const ModalInputBudget = memo(
       };
 
       if (budget?.budget.id === 0) {
-        budgetMutation.mutate(reqInputBudget);
+        budgetValidation(reqInputBudget) &&
+          budgetMutation.mutate(reqInputBudget);
 
         setInputBudget({
           id: 0,
@@ -112,7 +115,8 @@ export const ModalInputBudget = memo(
           other: "",
         });
       } else {
-        updateBudgetMutation.mutate(reqInputBudget);
+        budgetValidation(reqInputBudget) &&
+          updateBudgetMutation.mutate(reqInputBudget);
       }
     };
 
@@ -165,9 +169,15 @@ export const ModalInputBudget = memo(
 
           <div css={totalPriceBox}>
             <h4 className="totalPriceBox__text">合計金額</h4>
-            <span className="totalPriceBox__price">
-              ¥{Number(inputBudget.totalPrice).toLocaleString()}
-            </span>
+            {inputBudget.totalPrice !== "NaN" ? (
+              <span className="totalPriceBox__price">
+                ¥{Number(inputBudget.totalPrice).toLocaleString()}
+              </span>
+            ) : (
+              <span className="totalPriceBox__price_error">
+                金額には、半角数字を入力してください。
+              </span>
+            )}
           </div>
 
           <div css={textBox}>
@@ -361,6 +371,11 @@ const totalPriceBox = css`
 
   .totalPriceBox__price {
     font-size: 24px;
+  }
+
+  .totalPriceBox__price_error {
+    color: #e9546b;
+    font-size: 16px;
   }
 `;
 
