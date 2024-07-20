@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { css } from "@emotion/react";
 import { Modal } from "@mui/material";
 import { TextBox } from "@/components/elements/textBox";
@@ -73,6 +73,52 @@ export const ModalInputBudget = memo(
           ? budget.budget.other
           : "",
     });
+
+    useEffect(() => {
+      setInputBudget({
+        ...inputBudget,
+        id: budget?.budget.id,
+        month: String(month),
+        year: String(year),
+        totalPrice: budget !== undefined ? budget.budget.total_price : "",
+        food:
+          budget !== undefined && budget.budget.food !== 0
+            ? budget.budget.food
+            : "",
+        drink:
+          budget !== undefined && budget.budget.drink !== 0
+            ? budget.budget.drink
+            : "",
+        book:
+          budget !== undefined && budget.budget.book !== 0
+            ? budget.budget.book
+            : "",
+        fashion:
+          budget !== undefined && budget.budget.fashion !== 0
+            ? budget.budget.fashion
+            : "",
+        furniture:
+          budget !== undefined && budget.budget.furniture !== 0
+            ? budget.budget.furniture
+            : "",
+        gamesToys:
+          budget !== undefined && budget.budget.games_toys !== 0
+            ? budget.budget.games_toys
+            : "",
+        beauty:
+          budget !== undefined && budget.budget.beauty !== 0
+            ? budget.budget.beauty
+            : "",
+        everyDayItems:
+          budget !== undefined && budget.budget.every_day_items !== 0
+            ? budget.budget.every_day_items
+            : "",
+        other:
+          budget !== undefined && budget.budget.other !== 0
+            ? budget.budget.other
+            : "",
+      });
+    }, [budget]);
 
     const onClose = () => {
       setOpen(false);
