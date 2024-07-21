@@ -20,7 +20,7 @@ export const useMutateMoneyManagement = () => {
       onSuccess: () => {
         setBackdropFlag(false);
         setMessage({
-          text: "金額管理に追加しました。",
+          text: "支出に追加しました。",
           type: "success",
         });
       },

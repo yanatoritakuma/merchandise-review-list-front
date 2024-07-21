@@ -37,7 +37,10 @@ const Index = () => {
   const { data, isLoading, refetch, isFetching } =
     useQueryGetMyMoneyManagements(yearMonth, tabSelected);
 
-  const { data: budget, refetch: budgetRefetch } = useQueryBudget(year, month);
+  const { data: budget, refetch: budgetRefetch } = useQueryBudget(
+    year,
+    !tabSelected ? month : "all"
+  );
 
   const onClickRow = (data: TManagementRowData) => {
     setUpdateManagement(data);
@@ -51,6 +54,7 @@ const Index = () => {
 
   useEffect(() => {
     refetch();
+    budgetRefetch();
     setPieChartCategory([""]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [yearMonth, tabSelected]);
@@ -92,6 +96,9 @@ const Index = () => {
     },
     { name: "other", value: Number(budget?.budget.other) },
   ];
+
+  const remainingBalance =
+    Number(budget?.budget.total_price) - Number(data?.totalPrice);
 
   return (
     <main css={moneyManagementBox}>
@@ -138,16 +145,25 @@ const Index = () => {
                 ? `支出合計金額:${data?.totalPrice.toLocaleString()}円`
                 : `予算合計金額:${budget?.budget.total_price.toLocaleString()}円`}
             </h4>
+
+            <p className="moneyManagementBox__remainingBalance">
+              残り使える金額
+              {remainingBalance.toLocaleString()}円
+            </p>
+
             <div className="moneyManagementBox__addBox">
               <ButtonBox onClick={() => setModalInputFlag(true)}>
-                管理に追加
+                支出に追加
               </ButtonBox>
-              <ButtonBox
-                onClick={() => setModalInputBudgetFlag(true)}
-                className="moneyManagementBox__budgetButoon"
-              >
-                予算額設定
-              </ButtonBox>
+              {!tabSelected && (
+                <ButtonBox
+                  onClick={() => setModalInputBudgetFlag(true)}
+                  className="moneyManagementBox__budgetButoon"
+                >
+                  予算額設定
+                </ButtonBox>
+              )}
+
               <ModalInputManagement
                 open={modalInputFlag}
                 setOpen={setModalInputFlag}
@@ -216,6 +232,13 @@ const moneyManagementBox = css`
     padding: 0 14px;
     max-width: 400px;
     font-size: 20px;
+  }
+
+  .moneyManagementBox__remainingBalance {
+    margin: 20px auto;
+    padding: 0 14px;
+    max-width: 400px;
+    font-size: 18px;
   }
 
   .moneyManagementBox__pieChartTextBox {

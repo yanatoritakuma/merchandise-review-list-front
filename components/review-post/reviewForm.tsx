@@ -218,7 +218,7 @@ export const ReviewForm = memo(({ type, setOpen, user, review }: Props) => {
 
       {review && (
         <CheckBox
-          label="金額管理に追加する"
+          label="支出に追加する"
           check={management}
           onChange={(e) => setManagement(e.target.checked)}
         />
