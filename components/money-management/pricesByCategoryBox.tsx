@@ -6,15 +6,17 @@ import {
   TResMoneyManagement,
 } from "@/types/moneyManagement";
 import { colorsCategory } from "@/constants/categoryMenuItem";
+import { TResBudget } from "@/types/budget";
 
 type Props = {
   pieChartCategory: string[];
   moneyManagements: TResMoneyManagement | undefined;
   onClickRow: (data: TManagementRowData) => void;
+  budget: TResBudget | undefined;
 };
 
 export const PricesByCategoryBox = memo(
-  ({ pieChartCategory, moneyManagements, onClickRow }: Props) => {
+  ({ pieChartCategory, moneyManagements, onClickRow, budget }: Props) => {
     const categoryByDetails = () => {
       const options: Intl.DateTimeFormatOptions = {
         year: "numeric",
@@ -172,61 +174,70 @@ export const PricesByCategoryBox = memo(
         price: moneyManagements?.food.itemTotalPrice,
         ratio: pieChartCategory[0],
         details: categoryByDetails().food,
+        budget: budget?.budget.food,
       },
       {
         category: "飲料",
         price: moneyManagements?.drink.itemTotalPrice,
         ratio: pieChartCategory[1],
         details: categoryByDetails().drink,
+        budget: budget?.budget.drink,
       },
       {
         category: "本",
         price: moneyManagements?.book.itemTotalPrice,
         ratio: pieChartCategory[2],
         details: categoryByDetails().book,
+        budget: budget?.budget.book,
       },
       {
         category: "ファッション",
         price: moneyManagements?.fashion.itemTotalPrice,
         ratio: pieChartCategory[3],
         details: categoryByDetails().fashion,
+        budget: budget?.budget.fashion,
       },
       {
         category: "家具",
         price: moneyManagements?.furniture.itemTotalPrice,
         ratio: pieChartCategory[4],
         details: categoryByDetails().furniture,
+        budget: budget?.budget.furniture,
       },
       {
         category: "ゲーム・おもちゃ",
         price: moneyManagements?.gamesToys.itemTotalPrice,
         ratio: pieChartCategory[5],
         details: categoryByDetails().gamesToys,
+        budget: budget?.budget.games_toys,
       },
       {
         category: "美容",
         price: moneyManagements?.beauty.itemTotalPrice,
         ratio: pieChartCategory[6],
         details: categoryByDetails().beauty,
+        budget: budget?.budget.beauty,
       },
       {
         category: "日用品",
         price: moneyManagements?.everyDayItems.itemTotalPrice,
         ratio: pieChartCategory[7],
         details: categoryByDetails().everyDayItems,
+        budget: budget?.budget.every_day_items,
       },
       {
         category: "その他",
         price: moneyManagements?.other.itemTotalPrice,
         ratio: pieChartCategory[8],
         details: categoryByDetails().other,
+        budget: budget?.budget.other,
       },
     ];
 
     return (
       <section css={pricesByCategoryBox}>
         <TableBox
-          tableHeads={["カテゴリー", "金額", "割合"]}
+          tableHeads={["カテゴリー", "金額", "割合", "予算金額"]}
           tableDatas={tableDatas}
           tableDetailHeads={["日付", "商品名", "値段", "個数", "合計金額"]}
           tableDetails

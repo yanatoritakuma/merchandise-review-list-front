@@ -62,15 +62,23 @@ export const TableBox = <T extends RowData, U extends RowData>({
               </IconButton>
             </TableCell>
           )}
-          {Object.values(row).map((value, index) => (
-            <TableCell
-              key={index}
-              align={index !== 0 ? "right" : "center"}
-              style={{ color: color && color }}
-            >
-              {typeof value !== "object" && value?.toLocaleString()}
-            </TableCell>
-          ))}
+
+          {Object.values(row)
+            .map((value, index) => {
+              if (Array.isArray(value)) {
+                return null; // 配列の場合はセルをレンダリングしない
+              }
+              return (
+                <TableCell
+                  key={index}
+                  align={index !== 0 ? "right" : "center"}
+                  style={{ color: color && color }}
+                >
+                  {typeof value !== "object" && value?.toLocaleString()}
+                </TableCell>
+              );
+            })
+            .filter(Boolean)}
         </TableRow>
         {tableDetails !== undefined && (
           <TableRow>

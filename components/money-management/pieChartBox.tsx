@@ -34,7 +34,9 @@ export const PieChartBox = memo(
         const newLabels = data.map((entry) => {
           const percent =
             entry.value / data.reduce((acc, cur) => acc + cur.value, 0);
-          return `${(percent * 100).toFixed(0)}%`;
+          return !Number.isNaN(percent)
+            ? `${(percent * 100).toFixed(0)}%`
+            : "0%";
         });
         setPieChartCategory(newLabels);
       }

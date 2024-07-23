@@ -11,6 +11,9 @@ import { DateSelectBox } from "@/components/common/dateSelectBox";
 import { ButtonBox } from "@/components/elements/buttonBox";
 import { ModalInputManagement } from "@/components/money-management/modalInputManagement";
 import { TManagementRowData } from "@/types/moneyManagement";
+import { ModalInputBudget } from "@/components/money-management/modalInputBudget";
+import { useQueryBudget } from "@/hooks/budget/useQueryBudget";
+import { TabsBox } from "@/components/elements/tabsBox";
 
 const Index = () => {
   const queryClient = useQueryClient();
@@ -19,10 +22,12 @@ const Index = () => {
   const [currentYearMonth, setCurrentYearMonth] = useState<Date>(new Date());
   const [tabSelected, setTabSelected] = useState(false);
   const [modalInputFlag, setModalInputFlag] = useState(false);
+  const [modalInputBudgetFlag, setModalInputBudgetFlag] = useState(false);
   const [updateFlag, setUpdateFlag] = useState(false);
   const [modalUpdateFlag, setModalUpdateFlag] = useState(false);
   const [updateManagement, setUpdateManagement] =
     useState<TManagementRowData | null>(null);
+  const [selectTab, setSelectTab] = useState(0);
 
   const date = new Date(currentYearMonth);
   const year = date.getFullYear();
@@ -32,6 +37,11 @@ const Index = () => {
   const { data, isLoading, refetch, isFetching } =
     useQueryGetMyMoneyManagements(yearMonth, tabSelected);
 
+  const { data: budget, refetch: budgetRefetch } = useQueryBudget(
+    year,
+    !tabSelected ? month : "all"
+  );
+
   const onClickRow = (data: TManagementRowData) => {
     setUpdateManagement(data);
     setModalInputFlag(true);
@@ -39,7 +49,12 @@ const Index = () => {
   };
 
   useEffect(() => {
+    budgetRefetch();
+  }, [currentYearMonth, modalInputBudgetFlag]);
+
+  useEffect(() => {
     refetch();
+    budgetRefetch();
     setPieChartCategory([""]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [yearMonth, tabSelected]);
@@ -52,7 +67,7 @@ const Index = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalInputFlag]);
 
-  const pieChartData = [
+  const pieChartManagement = [
     { name: "food", value: Number(data?.food.itemTotalPrice) },
     { name: "drink", value: Number(data?.drink.itemTotalPrice) },
     { name: "book", value: Number(data?.book.itemTotalPrice) },
@@ -67,6 +82,24 @@ const Index = () => {
     { name: "other", value: Number(data?.other.itemTotalPrice) },
   ];
 
+  const pieChartBudget = [
+    { name: "food", value: Number(budget?.budget.food) },
+    { name: "drink", value: Number(budget?.budget.drink) },
+    { name: "book", value: Number(budget?.budget.book) },
+    { name: "fashion", value: Number(budget?.budget.fashion) },
+    { name: "furniture", value: Number(budget?.budget.furniture) },
+    { name: "gamesToys", value: Number(budget?.budget.games_toys) },
+    { name: "beauty", value: Number(budget?.budget.beauty) },
+    {
+      name: "everyDayItems",
+      value: Number(budget?.budget.every_day_items),
+    },
+    { name: "other", value: Number(budget?.budget.other) },
+  ];
+
+  const remainingBalance =
+    Number(budget?.budget.total_price) - Number(data?.totalPrice);
+
   return (
     <main css={moneyManagementBox}>
       <h2>お金の管理</h2>
@@ -76,13 +109,21 @@ const Index = () => {
         tabSelected={tabSelected}
         setTabSelected={setTabSelected}
       />
+      <div css={tabsBox}>
+        <TabsBox
+          labels={["支出", "予算"]}
+          selectTab={selectTab}
+          setSelectTab={setSelectTab}
+        />
+      </div>
+
       {user !== undefined ? (
         !isLoading && !isFetching ? (
           <>
             <div className="moneyManagementBox__TopBox">
               <div className="moneyManagementBox__pieChartBox">
                 <PieChartBox
-                  data={pieChartData}
+                  data={selectTab === 0 ? pieChartManagement : pieChartBudget}
                   colors={colorsCategory}
                   setPieChartCategory={setPieChartCategory}
                 />
@@ -100,12 +141,29 @@ const Index = () => {
               </ul>
             </div>
             <h4 className="moneyManagementBox__totalPrice">
-              合計金額: {data?.totalPrice.toLocaleString()}円
+              {selectTab === 0
+                ? `支出合計金額:${data?.totalPrice.toLocaleString()}円`
+                : `予算合計金額:${budget?.budget.total_price.toLocaleString()}円`}
             </h4>
+
+            <p className="moneyManagementBox__remainingBalance">
+              残り使える金額
+              {remainingBalance.toLocaleString()}円
+            </p>
+
             <div className="moneyManagementBox__addBox">
               <ButtonBox onClick={() => setModalInputFlag(true)}>
-                管理に追加
+                支出に追加
               </ButtonBox>
+              {!tabSelected && (
+                <ButtonBox
+                  onClick={() => setModalInputBudgetFlag(true)}
+                  className="moneyManagementBox__budgetButoon"
+                >
+                  予算額設定
+                </ButtonBox>
+              )}
+
               <ModalInputManagement
                 open={modalInputFlag}
                 setOpen={setModalInputFlag}
@@ -114,11 +172,19 @@ const Index = () => {
                 modalUpdateFlag={modalUpdateFlag}
                 setModalUpdateFlag={setModalUpdateFlag}
               />
+              <ModalInputBudget
+                open={modalInputBudgetFlag}
+                setOpen={setModalInputBudgetFlag}
+                budget={budget}
+                year={year}
+                month={month}
+              />
             </div>
             <PricesByCategoryBox
               pieChartCategory={pieChartCategory}
               moneyManagements={data}
               onClickRow={onClickRow}
+              budget={budget}
             />
           </>
         ) : (
@@ -166,6 +232,13 @@ const moneyManagementBox = css`
     padding: 0 14px;
     max-width: 400px;
     font-size: 20px;
+  }
+
+  .moneyManagementBox__remainingBalance {
+    margin: 20px auto;
+    padding: 0 14px;
+    max-width: 400px;
+    font-size: 18px;
   }
 
   .moneyManagementBox__pieChartTextBox {
@@ -243,5 +316,18 @@ const moneyManagementBox = css`
     margin: 8px 0;
     padding: 0 12px;
     text-align: end;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
   }
+
+  .moneyManagementBox__budgetButoon {
+    margin-left: 14px;
+    background-color: #a8c97f;
+  }
+`;
+
+const tabsBox = css`
+  width: fit-content;
+  margin: 10px auto;
 `;

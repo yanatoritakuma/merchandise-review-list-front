@@ -1,5 +1,5 @@
 import TextField from "@mui/material/TextField";
-import { memo, useState } from "react";
+import { FocusEventHandler, memo, useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
@@ -18,6 +18,7 @@ type Props = {
   multiline?: boolean;
   rows?: number;
   password?: boolean;
+  onBlur?: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
 };
 
 export const TextBox = memo(
@@ -30,6 +31,7 @@ export const TextBox = memo(
     multiline,
     rows,
     password,
+    onBlur,
   }: Props) => {
     const [displayPs, setDisplayPs] = useState(false);
     const handleMouseDownPassword = (
@@ -50,6 +52,7 @@ export const TextBox = memo(
             fullWidth={fullWidth}
             multiline={multiline}
             rows={rows}
+            onBlur={onBlur}
           />
         ) : (
           <FormControl
@@ -83,6 +86,7 @@ export const TextBox = memo(
                   </InputAdornment>
                 }
                 fullWidth={fullWidth}
+                onBlur={onBlur}
               />
             </Box>
           </FormControl>
