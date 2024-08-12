@@ -1,4 +1,5 @@
 import { ButtonBox } from "@/components/elements/buttonBox";
+import { HouseholdBudgetList } from "@/components/household-budget/HouseholdBudgetList";
 import { ModalCreateHouseholdBudget } from "@/components/household-budget/ModalCreateHouseholdBudget";
 import { useQueryUser } from "@/hooks/user/useQueryUser";
 import { css } from "@emotion/react";
@@ -22,6 +23,7 @@ const Index = () => {
             open={openCreateHouseholdBudget}
             setOpen={setOpenCreateHouseholdBudget}
           />
+          <HouseholdBudgetList />
         </>
       ) : (
         <>

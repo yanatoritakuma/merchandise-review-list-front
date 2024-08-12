@@ -118,6 +118,7 @@ export const ModalInputBudget = memo(
             ? budget.budget.other
             : "",
       });
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [budget]);
 
     const onClose = () => {
