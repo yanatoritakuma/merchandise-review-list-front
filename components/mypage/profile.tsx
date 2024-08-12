@@ -15,6 +15,7 @@ import { LikePost } from "@/components/mypage/likePost";
 import { useQueryUserProductTimeLimitAll } from "@/hooks/product/useQueryUserProductTimeLimitAll";
 import { ModalCalendar } from "@/components/mypage/modal/modalCalendar";
 import SavingsIcon from "@mui/icons-material/Savings";
+import Link from "next/link";
 
 export const Profile = () => {
   const { data: user, isLoading } = useQueryUser();
@@ -100,6 +101,7 @@ export const Profile = () => {
           <span className="profile__useDate">
             {formatDate(user?.created_at)}から利用しています
           </span>
+          <Link href="/household-budget">家計簿を作る</Link>
           <div>
             <div css={tabBox}>
               <TabsBox
