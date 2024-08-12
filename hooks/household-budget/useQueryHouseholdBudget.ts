@@ -10,7 +10,6 @@ export const useQueryHouseholdBudget = (page: number, pageSize: number) => {
     );
     return data;
   };
-
   return useQuery({
     queryKey: ["householdBudgets"],
     queryFn: getHouseholdBudgets,
