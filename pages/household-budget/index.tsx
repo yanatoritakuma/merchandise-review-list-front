@@ -23,7 +23,9 @@ const Index = () => {
             open={openCreateHouseholdBudget}
             setOpen={setOpenCreateHouseholdBudget}
           />
-          <HouseholdBudgetList />
+          <HouseholdBudgetList
+            openCreateHouseholdBudget={openCreateHouseholdBudget}
+          />
         </>
       ) : (
         <>
