@@ -3,6 +3,7 @@ import { css } from "@emotion/react";
 import { memo, useEffect, useState } from "react";
 import { PaginationBox } from "@/components/common/paginationBox";
 import { countPages } from "@/utils/countPages";
+import Link from "next/link";
 
 type Props = {
   openCreateHouseholdBudget: boolean;
@@ -22,9 +23,9 @@ export const HouseholdBudgetList = memo(
     return (
       <div css={listBox}>
         {budgetLists?.householdBudgets?.map((list) => (
-          <div key={list.id}>
+          <Link href={`/household-budget/list?id=${list.id}`} key={list.id}>
             <h3>{list.title}</h3>
-          </div>
+          </Link>
         ))}
 
         <PaginationBox
