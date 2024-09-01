@@ -23,7 +23,10 @@ export const HouseholdBudgetList = memo(
     return (
       <div css={listBox}>
         {budgetLists?.householdBudgets?.map((list) => (
-          <Link href={`/household-budget/list?id=${list.id}`} key={list.id}>
+          <Link
+            href={`/household-budget/list?title=${list.title}&id=${list.id}`}
+            key={list.id}
+          >
             <h3>{list.title}</h3>
           </Link>
         ))}
