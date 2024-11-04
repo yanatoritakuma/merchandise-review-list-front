@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { Button } from "@mui/material";
 import { useMutatehouseholdBudgetEstimateItem } from "@/hooks/household-budget-estimate-item/useMutatehouseholdBudgetEstimateItem";
+import { useQueryGetMyHouseholdBudgetEstimateItem } from "@/hooks/household-budget-estimate-item/useQueryGetMyHouseholdBudgetEstimateItem";
 
 const Index = () => {
   const { data: user } = useQueryUser();
@@ -29,6 +30,10 @@ const Index = () => {
       console.error(error);
     }
   };
+
+  const { data } = useQueryGetMyHouseholdBudgetEstimateItem(2, 2024, 9);
+
+  console.log(data);
 
   return (
     <main css={householdBudget}>
