@@ -5,11 +5,15 @@ import Link from "next/link";
 import { Button } from "@mui/material";
 import { useMutatehouseholdBudgetEstimateItem } from "@/hooks/household-budget-estimate-item/useMutatehouseholdBudgetEstimateItem";
 import { useQueryGetMyHouseholdBudgetEstimateItem } from "@/hooks/household-budget-estimate-item/useQueryGetMyHouseholdBudgetEstimateItem";
+import { DateSelectBox } from "@/components/common/dateSelectBox";
+import { useEffect, useState } from "react";
 
 const Index = () => {
   const { data: user } = useQueryUser();
   const router = useRouter();
   const { query } = router;
+  const [currentYearMonth, setCurrentYearMonth] = useState<Date>(new Date());
+  const [tabSelected, setTabSelected] = useState(false);
 
   const { householdBudgetEstimateItemMutation } =
     useMutatehouseholdBudgetEstimateItem();
@@ -31,7 +35,18 @@ const Index = () => {
     }
   };
 
-  const { data } = useQueryGetMyHouseholdBudgetEstimateItem(2, 2024, 9);
+  const { data, refetch } = useQueryGetMyHouseholdBudgetEstimateItem(
+    Number(query.id),
+    currentYearMonth.getFullYear(),
+    currentYearMonth.getMonth() + 1
+  );
+
+  // 年月日変更後に家計簿予算を再取得
+  useEffect(() => {
+    if (!isNaN(Number(query.id))) {
+      refetch();
+    }
+  }, [currentYearMonth]);
 
   console.log(data);
 
@@ -40,6 +55,12 @@ const Index = () => {
       {user !== undefined ? (
         <>
           <h1>{query.title}</h1>
+          <DateSelectBox
+            currentYearMonth={currentYearMonth}
+            setCurrentYearMonth={setCurrentYearMonth}
+            tabSelected={tabSelected}
+            setTabSelected={setTabSelected}
+          />
           <Button onClick={() => onClickBudgetEstimateItemMutation()}>
             追加
           </Button>

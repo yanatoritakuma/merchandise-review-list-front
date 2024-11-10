@@ -16,6 +16,7 @@ export const useQueryGetMyHouseholdBudgetEstimateItem = (
   return useQuery({
     queryKey: ["getMyHouseholdBudgetEstimateItem"],
     queryFn: getBudget,
+    enabled: !isNaN(householdBudgetId),
     onError: (err: TError) => {
       if (err.response.status === 401 || err.response.status === 403) {
         console.error("予算の取得に失敗しました。");
