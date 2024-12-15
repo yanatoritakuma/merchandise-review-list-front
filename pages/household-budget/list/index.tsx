@@ -7,6 +7,9 @@ import { useMutatehouseholdBudgetEstimateItem } from "@/hooks/household-budget-e
 import { useQueryGetMyHouseholdBudgetEstimateItem } from "@/hooks/household-budget-estimate-item/useQueryGetMyHouseholdBudgetEstimateItem";
 import { DateSelectBox } from "@/components/common/dateSelectBox";
 import { useEffect, useState } from "react";
+import { ButtonBox } from "@/components/elements/buttonBox";
+import { ModalInputBudget } from "@/components/money-management/modalInputBudget";
+import { ModalEstimate } from "@/components/household-budget/ModalEstimate";
 
 const Index = () => {
   const { data: user } = useQueryUser();
@@ -14,6 +17,7 @@ const Index = () => {
   const { query } = router;
   const [currentYearMonth, setCurrentYearMonth] = useState<Date>(new Date());
   const [tabSelected, setTabSelected] = useState(false);
+  const [modalInputBudgetFlag, setModalInputBudgetFlag] = useState(false);
 
   const { householdBudgetEstimateItemMutation } =
     useMutatehouseholdBudgetEstimateItem();
@@ -22,9 +26,6 @@ const Index = () => {
     const reqEstimateItem = {
       year: 2024,
       month: 9,
-      name: "コーラ2",
-      amount: 1,
-      fixed_cost: false,
       category_id: 1,
       household_budget_id: Number(query.id),
     };
@@ -64,6 +65,19 @@ const Index = () => {
           <Button onClick={() => onClickBudgetEstimateItemMutation()}>
             追加
           </Button>
+          <ButtonBox
+            onClick={() => setModalInputBudgetFlag(true)}
+            className="estimateItemButoon"
+          >
+            予算額設定
+          </ButtonBox>
+
+          <ModalEstimate
+            open={modalInputBudgetFlag}
+            setOpen={setModalInputBudgetFlag}
+            year={"2024"}
+            month={"12"}
+          />
         </>
       ) : (
         <>
@@ -85,5 +99,10 @@ const householdBudget = css`
 
   h1 {
     text-align: center;
+  }
+
+  .estimateItemButoon {
+    margin-left: 14px;
+    background-color: #a8c97f;
   }
 `;
